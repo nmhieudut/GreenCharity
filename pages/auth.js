@@ -1,0 +1,294 @@
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Heading,
+  Image,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useColorModeValue
+} from "@chakra-ui/react";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { FiFacebook } from "react-icons/fi";
+import { ImEye } from "react-icons/im";
+import { RiEyeCloseLine } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import { color } from "src/constants/color";
+import { wrapper } from "src/store";
+import { AuthActions } from "src/store/auth/action";
+
+export const getStaticProps = wrapper.getStaticProps(
+  store =>
+    ({ req, res, ...etc }) => {
+      const userData = store.getState().auth;
+      console.log("--------", userData);
+      if (userData.currentUser) {
+        return {
+          redirect: {
+            destination: "/",
+            permanent: false
+          }
+        };
+      }
+      return {
+        props: {}
+      };
+    }
+);
+
+export default function Auth() {
+  const bg = useColorModeValue("pink.400", "gray.800");
+  const formBg = useColorModeValue("white", "gray.800");
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [show, setShow] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    phoneNumber: "",
+    email: "",
+    password: ""
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleShow = () => setShow(!show);
+
+  const handleChange = e => {
+    setForm({
+      ...form,
+      [e.target.id]: e.target.value
+    });
+  };
+
+  const handleLogin = e => {
+    e.preventDefault();
+    dispatch(AuthActions.setCurrentUserAction({ user: { name: "Hieu" } }));
+    router.push("/");
+    console.log("Dang nhap");
+  };
+
+  const handleSignUp = e => {
+    e.preventDefault();
+    console.log("Dang ky");
+  };
+
+  console.log("form", form);
+
+  const loginWithGoogle = () => {
+    firebase
+      .auth()
+      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(userCred => {
+        console.log(userCred);
+      });
+  };
+
+  const loginWithFacebook = () => {};
+
+  return (
+    <>
+      <Head>
+        <title>Login</title>
+      </Head>
+      <Stack minH={"100vh"} direction={{ base: "column", md: "row" }} bg={bg}>
+        <div className="container">
+          <div className="flex h-full flex-col lg:flex-row lg:items-center">
+            <Flex flex={1}>
+              <Image
+                alt={"Login Image"}
+                objectFit={"cover"}
+                src={"/images/banner.png"}
+              />
+            </Flex>
+            <Box
+              className="flex-1 flex flex-col border-2 rounded-lg pb-12"
+              bg={formBg}
+            >
+              <Tabs isLazy isFitted variant="enclosed">
+                <TabList>
+                  <Tab _selected={{ color: "white", bg: color.PRIMARY }}>
+                    Đăng nhập
+                  </Tab>
+                  <Tab _selected={{ color: "white", bg: color.PRIMARY }}>
+                    Đăng ký
+                  </Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <div className="px-4 pt-4 flex flex-col">
+                      <Heading fontSize={"2xl"}>Đăng nhập</Heading>
+                      <form className="my-4" onSubmit={handleLogin}>
+                        <FormControl id="email" isRequired>
+                          <FormLabel>Email</FormLabel>
+                          <Input
+                            onChange={handleChange}
+                            isRequired
+                            className="my-2"
+                            focusBorderColor={color.PRIMARY}
+                            type="email"
+                          />
+                        </FormControl>
+
+                        <div className="my-4" />
+                        <FormControl id="password" isRequired>
+                          <FormLabel>Password</FormLabel>
+                          <InputGroup size="md">
+                            <Input
+                              onChange={handleChange}
+                              isRequired
+                              className="my-2"
+                              focusBorderColor={color.PRIMARY}
+                              pr="4.5rem"
+                              type={show ? "text" : "password"}
+                              placeholder="Enter password"
+                            />
+                            <InputRightElement className="my-2">
+                              <span
+                                className="cursor-pointer"
+                                onClick={handleShow}
+                              >
+                                {show ? (
+                                  <RiEyeCloseLine color={color.PRIMARY} />
+                                ) : (
+                                  <ImEye color={color.PRIMARY} />
+                                )}
+                              </span>
+                            </InputRightElement>
+                          </InputGroup>
+                        </FormControl>
+                        <Divider className="my-4" />
+                        <div className="w-full">
+                          <Button w="full" colorScheme="pink" type="submit">
+                            Đăng nhập
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+                  </TabPanel>
+                  <TabPanel>
+                    <div className="px-4 pt-4 flex flex-col">
+                      <Heading fontSize={"2xl"}>Đăng ký</Heading>
+                      <form className="my-4" onSubmit={handleSignUp}>
+                        <div className="flex flex-col md:flex-row">
+                          <FormControl className="flex-1" id="name" isRequired>
+                            <FormLabel>Họ và tên</FormLabel>
+                            <Input
+                              onChange={handleChange}
+                              className="my-2"
+                              focusBorderColor={color.PRIMARY}
+                              type="text"
+                            />
+                          </FormControl>
+                          <div className="m-2"></div>
+                          <FormControl className="flex-1" id="phone" isRequired>
+                            <FormLabel>Số điện thoại</FormLabel>
+                            <Input
+                              onChange={handleChange}
+                              isRequired
+                              className="my-2"
+                              focusBorderColor={color.PRIMARY}
+                              type="number"
+                            />
+                          </FormControl>
+                        </div>
+
+                        <div className="my-4" />
+                        <FormControl id="email" isRequired>
+                          <FormLabel>Email</FormLabel>
+                          <Input
+                            onChange={handleChange}
+                            isRequired
+                            className="my-2"
+                            focusBorderColor={color.PRIMARY}
+                            type="email"
+                          />
+                          <FormHelperText>
+                            Chúng tôi sẽ không chia sẻ email của bạn.
+                          </FormHelperText>
+                        </FormControl>
+
+                        <div className="my-4" />
+                        <FormControl id="password" isRequired>
+                          <FormLabel>Password</FormLabel>
+                          <InputGroup size="md">
+                            <Input
+                              onChange={handleChange}
+                              isRequired
+                              className="my-2"
+                              focusBorderColor={color.PRIMARY}
+                              pr="4.5rem"
+                              type={show ? "text" : "password"}
+                              placeholder="Enter password"
+                            />
+                            <InputRightElement className="my-2">
+                              <span
+                                className="h-full"
+                                className="cursor-pointer"
+                                onClick={handleShow}
+                              >
+                                {show ? (
+                                  <RiEyeCloseLine color={color.PRIMARY} />
+                                ) : (
+                                  <ImEye color={color.PRIMARY} />
+                                )}
+                              </span>
+                            </InputRightElement>
+                          </InputGroup>
+                        </FormControl>
+                        <Divider className="my-4" />
+                        <div className="w-full">
+                          <Button w="full" colorScheme="pink" type="submit">
+                            Đăng ký
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+              <span className="text-center mb-4">Hoặc</span>
+              <div className="px-8 flex flex-col md:flex-row">
+                <Button
+                  w="full"
+                  onClick={loginWithGoogle}
+                  colorScheme="telegram"
+                  py={4}
+                  variant="outline"
+                  leftIcon={<FcGoogle size="1.5rem" />}
+                >
+                  Google
+                </Button>
+                <div className="m-2"></div>
+                <Button
+                  w="full"
+                  colorScheme="facebook"
+                  py={4}
+                  leftIcon={<FiFacebook size="1.5rem" />}
+                >
+                  Facebook
+                </Button>
+              </div>
+            </Box>
+          </div>
+        </div>
+      </Stack>
+    </>
+  );
+}
