@@ -1,5 +1,6 @@
 .menu-item {
   position: relative;
+  transition: all .5s ease;
   &:hover {
     color: $primary;
   }
@@ -10,7 +11,7 @@
   position: absolute;
   background-color: $primary;
   left: 50%;
-  bottom: 0;
+  bottom: -5px;
   width: 100%;
   height: 2px;
   transform-origin: center;

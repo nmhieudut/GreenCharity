@@ -10,7 +10,7 @@ export const LSManager = {
   },
   removeToken: () => {
     if (typeof window !== "undefined")
-      return localStorage.remove("access-token");
+      return localStorage.removeItem("access-token");
   },
 
   // clear all data in local storage

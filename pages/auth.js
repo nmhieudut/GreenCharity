@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Divider,
   Flex,
   FormControl,
@@ -17,48 +18,32 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
   useColorModeValue
 } from "@chakra-ui/react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { FiFacebook } from "react-icons/fi";
 import { ImEye } from "react-icons/im";
 import { RiEyeCloseLine } from "react-icons/ri";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { color } from "src/constants/color";
-import { wrapper } from "src/store";
+import { LoginWithGoogle } from "src/services/auth";
 import { AuthActions } from "src/store/auth/action";
-
-export const getStaticProps = wrapper.getStaticProps(
-  store =>
-    ({ req, res, ...etc }) => {
-      const userData = store.getState().auth;
-      console.log("--------", userData);
-      if (userData.currentUser) {
-        return {
-          redirect: {
-            destination: "/",
-            permanent: false
-          }
-        };
-      }
-      return {
-        props: {}
-      };
-    }
-);
+import { LSManager } from "src/utils/localstorage";
 
 export default function Auth() {
-  const bg = useColorModeValue("pink.400", "gray.800");
+  const bg = useColorModeValue("pink.200", "gray.800");
   const formBg = useColorModeValue("white", "gray.800");
 
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const user = useSelector(state => state.auth.currentUser);
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -67,6 +52,30 @@ export default function Auth() {
     password: ""
   });
   const [submitting, setSubmitting] = useState(false);
+  const [idToken, setIdToken] = useState();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(userCred => {
+      if (userCred) {
+        userCred.getIdToken().then(token => {
+          setIdToken(token);
+          LoginWithGoogle(token).then(res => {
+            console.log(res);
+            LSManager.setToken(res.data.token);
+            dispatch(AuthActions.setCurrentUserAction(res.data.user));
+            router.push("/");
+          });
+        });
+      }
+    });
+  }, [idToken]);
+  console.log("------------tuken", idToken);
 
   const handleShow = () => setShow(!show);
 
@@ -79,7 +88,7 @@ export default function Auth() {
 
   const handleLogin = e => {
     e.preventDefault();
-    dispatch(AuthActions.setCurrentUserAction({ user: { name: "Hieu" } }));
+    dispatch(AuthActions.setCurrentUserAction({ name: "Hieu" }));
     router.push("/");
     console.log("Dang nhap");
   };
@@ -96,7 +105,10 @@ export default function Auth() {
       .auth()
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(userCred => {
-        console.log(userCred);
+        console.log("++++", userCred);
+      })
+      .catch(e => {
+        console.log(e);
       });
   };
 
@@ -105,7 +117,8 @@ export default function Auth() {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Đăng nhập</title>
+        <link rel="icon" href="/images/thumbnail.png" />
       </Head>
       <Stack minH={"100vh"} direction={{ base: "column", md: "row" }} bg={bg}>
         <div className="container">
@@ -266,23 +279,24 @@ export default function Auth() {
               <span className="text-center mb-4">Hoặc</span>
               <div className="px-8 flex flex-col md:flex-row">
                 <Button
-                  w="full"
+                  w={"full"}
+                  variant={"outline"}
+                  leftIcon={<FcGoogle />}
                   onClick={loginWithGoogle}
-                  colorScheme="telegram"
-                  py={4}
-                  variant="outline"
-                  leftIcon={<FcGoogle size="1.5rem" />}
                 >
-                  Google
+                  <Center>
+                    <Text>Google</Text>
+                  </Center>
                 </Button>
                 <div className="m-2"></div>
                 <Button
-                  w="full"
-                  colorScheme="facebook"
-                  py={4}
-                  leftIcon={<FiFacebook size="1.5rem" />}
+                  w={"full"}
+                  colorScheme={"facebook"}
+                  leftIcon={<FaFacebook />}
                 >
-                  Facebook
+                  <Center>
+                    <Text>Facebook</Text>
+                  </Center>
                 </Button>
               </div>
             </Box>

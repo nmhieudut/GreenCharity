@@ -2,7 +2,7 @@ import axios from "axios";
 import { LSManager } from "src/utils/localstorage";
 
 const axiosClient = axios.create({
-  baseURL: `${process.env.REACT_APP_SERVER_URL}/api/v1`,
+  baseURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`,
   // timeout: 2000,
   headers: {
     "Access-Control-Allow-Origin": "*",

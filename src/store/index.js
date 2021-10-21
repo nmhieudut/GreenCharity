@@ -8,6 +8,7 @@ const reducer = (state, action) => {
       ...state, // use previous state
       ...action.payload // apply delta from hydration
     };
+    if (state.auth) nextState.auth = state.auth;
     return nextState;
   } else {
     return rootReducer(state, action);

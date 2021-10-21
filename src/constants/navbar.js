@@ -1,14 +1,14 @@
 export const navs = [
   {
     to: "/campaigns",
-    label: "Các chiến dịch"
+    label: "Các hoạt động"
   },
   {
     to: "/news",
     label: "Tin tức"
   },
   {
-    to: "/about-us",
+    to: "/about",
     label: "Về chúng tôi"
   }
 ];

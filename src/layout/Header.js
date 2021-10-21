@@ -27,6 +27,9 @@ import { color } from "src/constants/color";
 import { navs } from "src/constants/navbar";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { AuthActions } from "src/store/auth/action";
+import firebase from "firebase/compat/app";
+import { LSManager } from "src/utils/localstorage";
+import Cookies from "js-cookie";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -56,14 +59,27 @@ export default function Header() {
     };
   }, [wrapperRef, showLinks]);
 
-  const onLogout = () => {
-    dispatch(AuthActions.setCurrentUserAction({ user: null }));
+  const onLogout = async () => {
+    LSManager.removeToken();
+    dispatch(AuthActions.setCurrentUserAction(null));
     router.push("/");
+    await firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log("-----clearing cookie");
+        Object.keys(Cookies.get()).forEach(function (cookie) {
+          Cookies.remove(cookie);
+        });
+      })
+      .catch(error => {
+        // An error happened.
+      });
   };
 
   const Logo = () => {
     return (
-      <a href="/">
+      <a href="/#">
         <img src="/images/GreenCharity.png" width={120} alt="logo" />
       </a>
     );
@@ -139,15 +155,11 @@ export default function Header() {
                   as={Button}
                   px={4}
                   py={2}
-                  colorScheme="pink"
+                  outline="variant"
                   className="flex justify-between"
                   rightIcon={<AiFillCaretDown />}
                 >
-                  <Avatar
-                    size="xs"
-                    name="Dan Abrahmov"
-                    src="/images/thumbnail.png"
-                  />
+                  <Avatar size="xs" src={user.picture} name={user.name} />
                 </MenuButton>
                 <MenuList>
                   <div className="p-4">

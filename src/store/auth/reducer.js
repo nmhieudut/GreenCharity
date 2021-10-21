@@ -16,7 +16,7 @@ export default function authReducer(state = initialState, action) {
     case actionTypes.LOG_IN_FAILED:
       return { ...state, loading: false, error: action.payload.message };
     case actionTypes.SET_CURRENT_USER:
-      return { ...state, currentUser: action.payload.user };
+      return { ...state, currentUser: action.payload };
     default:
       return { ...state };
   }
