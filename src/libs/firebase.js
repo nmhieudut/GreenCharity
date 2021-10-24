@@ -1,5 +1,6 @@
 import firebase from "firebase/compat/app";
-import "firebase/auth";
+import "firebase/compat/auth";
+import "firebase/compat/storage";
 const firebaseConfig = {
   apiKey: "AIzaSyCZXS79Ct4wDnYhphQT-gUz9Ppx61xJRFU",
   authDomain: "greencharity-a3030.firebaseapp.com",
@@ -11,4 +12,5 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-export default firebase;
+const storage = firebase.storage();
+export { storage, firebase as default };

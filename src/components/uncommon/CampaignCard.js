@@ -79,11 +79,13 @@ export default function CampaignCard(props) {
           </Flex>
           <Progress color={color.PRIMARY} percent={percent} />
         </Stack>
-        <Flex justify="end" align={"end"}>
-          <Text fontSize={"xl"} fontWeight={600}>
-            {n(donated_amount).format("0,0")}
-          </Text>
-          /<Text>{n(amount).format("0,0")} VND</Text>
+        <Flex justify="end">
+          <Stack spacing={2} direction={["column", "row"]} align={"end"}>
+            <Text color={color.PRIMARY} fontSize={"xl"}>
+              {n(donated_amount).format("0,0")}
+            </Text>
+            <Text>/ {n(amount).format("0,0")} VND</Text>
+          </Stack>
         </Flex>
         <Stack my={4} direction={"row"} spacing={4} align={"start"}>
           <Avatar src={avatar} alt={"Author"} />

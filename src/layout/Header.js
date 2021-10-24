@@ -27,7 +27,7 @@ import { color } from "src/constants/color";
 import { navs } from "src/constants/navbar";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { AuthActions } from "src/store/auth/action";
-import firebase from "firebase/compat/app";
+import firebase from "src/libs/firebase";
 import { LSManager } from "src/utils/localstorage";
 import Cookies from "js-cookie";
 
@@ -59,11 +59,12 @@ export default function Header() {
     };
   }, [wrapperRef, showLinks]);
 
-  const onLogout = async () => {
+  const onLogout = () => {
+    console.log("herere");
     LSManager.removeToken();
     dispatch(AuthActions.setCurrentUserAction(null));
     router.push("/");
-    await firebase
+    firebase
       .auth()
       .signOut()
       .then(() => {

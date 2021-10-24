@@ -1,5 +1,9 @@
 export const navs = [
   {
+    to: "/",
+    label: "Trang chủ"
+  },
+  {
     to: "/campaigns",
     label: "Các hoạt động"
   },
@@ -10,5 +14,9 @@ export const navs = [
   {
     to: "/about",
     label: "Về chúng tôi"
+  },
+  {
+    to: "/campaigns/new",
+    label: "Tạo hoạt động"
   }
 ];

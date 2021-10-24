@@ -56,7 +56,7 @@ export default function Auth() {
 
   useEffect(() => {
     if (user) {
-      router.push("/");
+      router.back();
     }
   }, []);
 
@@ -67,15 +67,14 @@ export default function Auth() {
           setIdToken(token);
           LoginWithGoogle(token).then(res => {
             console.log(res);
-            LSManager.setToken(res.data.token);
-            dispatch(AuthActions.setCurrentUserAction(res.data.user));
-            router.push("/");
+            LSManager.setToken(res.token);
+            dispatch(AuthActions.setCurrentUserAction(res.user));
+            router.back();
           });
         });
       }
     });
   }, [idToken]);
-  console.log("------------tuken", idToken);
 
   const handleShow = () => setShow(!show);
 

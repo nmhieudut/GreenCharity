@@ -2,8 +2,8 @@ import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
   fonts: {
-    heading: "Quicksand",
-    body: "Be Vietnam"
+    heading: "Poppins",
+    body: "Quicksand"
   },
   styles: {
     global: {

@@ -76,26 +76,25 @@ export default function Home() {
           >
             <Box>
               <Text fontSize={"2xl"} color={color.PRIMARY} fontWeight={600}>
-                <CountUp end={30} duration={5} />
+                <CountUp end={30} duration={3} />
               </Text>
               <Text>Hoạt động thành công</Text>
             </Box>
             <Box>
               <Text fontSize={"2xl"} color={color.PRIMARY} fontWeight={600}>
-                <CountUp separator="," end={40000} duration={5} />
+                <CountUp separator="," end={40000} duration={3} />
               </Text>
               <Text>Lượt quyên góp</Text>
             </Box>
             <Box>
               <Text fontSize={"2xl"} color={color.PRIMARY} fontWeight={600}>
-                <CountUp separator="," end={14356000} duration={5} /> VND
+                <CountUp separator="," end={1435600000} duration={3} />
               </Text>
-              <Text>Được quyên góp</Text>
+              <Text>Đồng được quyên góp</Text>
             </Box>
           </Grid>
           <Stack spacing={6} direction={["column", "row"]}>
             <a href="/#current-campaigns">
-              {" "}
               <Button
                 size="lg"
                 rounded={"full"}
@@ -204,7 +203,7 @@ export default function Home() {
             >
               <FcConferenceCall size="3rem" />
               <Text py={4} fontWeight={600} fontSize={"xl"}>
-                TÔI MUỐN KHỞI ĐỘNG CHIẾN DỊCH
+                TÔI MUỐN THÔNG TIN TỚI CÁC NHÀ HẢO TÂM
               </Text>
             </Box>
             <Box px={6} pb={6} pt={"auto"}>
@@ -218,7 +217,7 @@ export default function Home() {
                 colorScheme={"pink"}
                 onClick={() => router.push("/campaigns/new")}
               >
-                Tạo hoạt động ngay
+                Tạo ngay
               </Button>
             </Box>
           </Flex>
@@ -239,7 +238,7 @@ export default function Home() {
             >
               <FcDonate size="3rem" />
               <Text py={4} fontWeight={600} fontSize={"xl"}>
-                TÔI MUỐN ỦNG HỘ
+                TÔI LÀ NHÀ HẢO TÂM
               </Text>
             </Box>
             <Box px={6} pb={6} mt="auto">
@@ -248,7 +247,7 @@ export default function Home() {
                 cảnh khó khăn có cuộc sống tốt đẹp hơn.
               </Text>
               <Button mt={10} w={"full"} colorScheme={"pink"}>
-                Ủng hộ các hoạt động ngay
+                Ủng hộ ngay
               </Button>
             </Box>
           </Flex>

@@ -53,7 +53,7 @@ export const campaigns = [
       name: "Hieu max Nho",
       avatar: "https://picsum.photos/200/300"
     },
-    finished_date: "10/18/2021",
+    finished_date: new Date("10/18/2021"),
     bank_account_number: "003219083219",
     amount: 1000000000,
     donated_amount: 124336523,
@@ -73,7 +73,7 @@ export const campaigns = [
       name: "Hieu max Nho",
       avatar: "https://picsum.photos/200/300"
     },
-    finished_date: "10/18/2021",
+    finished_date: new Date("10/18/2021"),
     bank_account_number: "003219083219",
     amount: 1000000000,
     donated_amount: 124336523,
@@ -94,7 +94,7 @@ export const campaigns = [
       name: "Hieu max Nho",
       avatar: "https://picsum.photos/200/300"
     },
-    finished_date: "10/18/2021",
+    finished_date: new Date("10/18/2021"),
     bank_account_number: "003219083219",
     amount: 1000000000,
     donated_amount: 124336523,

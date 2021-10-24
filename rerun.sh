@@ -1,0 +1,1 @@
+rm -rf .next/ && rm -rf node_modules/ && yarn && yarn dev
