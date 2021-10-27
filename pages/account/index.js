@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import Head from "next/head";
 import React from "react";
 import { useSelector } from "react-redux";
