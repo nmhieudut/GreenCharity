@@ -4,42 +4,100 @@ import {
   Button,
   Center,
   Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  SkeletonCircle,
+  SkeletonText,
   Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Tag,
   Text,
   useColorModeValue
 } from "@chakra-ui/react";
+import { format } from "date-fns";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaCcStripe } from "react-icons/fa";
 import Progress from "src/components/common/Progress";
 import SectionContainer from "src/components/common/SectionContainer";
 import { color } from "src/constants/color";
+import { CampaignService } from "src/services/campaign";
+import * as n from "numeral";
+import { DateUtils } from "src/utils/date";
+import CommentItem from "src/components/uncommon/CommentItem";
+import { AiOutlineComment } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import NeedLogin from "src/components/common/NeedLogin";
+import { CommentService } from "src/services/comment";
 
-export default function Detail() {
+export async function getServerSideProps(ctx) {
+  const { slug } = ctx.query;
+  const { res } = ctx;
+  try {
+    const { campaign } = await CampaignService.getById(slug);
+    console.log("==", campaign);
+    return {
+      props: {
+        campaign: campaign
+      }
+    };
+  } catch (e) {
+    res.writeHead(301, {
+      Location: "/404"
+    });
+    res.end();
+    return {
+      props: {
+        data: []
+      }
+    };
+  }
+}
+
+export default function Detail({ campaign }) {
   const router = useRouter();
+  const {
+    status,
+    amount,
+    donated_amount,
+    _id,
+    name,
+    image,
+    content,
+    finishedAt,
+    author,
+    createdAt
+  } = campaign;
+  console.log("author", author, finishedAt);
+  const isEnded = status === "ended";
   return (
     <SectionContainer>
       <Head>
-        <title>
-          Chung tay gây quỹ xây khu nội trú tiểu học Hồ Thầu, tỉnh Hà Giang để
-          các em yên tâm học hành
-        </title>
+        <title>{name}</title>
         <link rel="icon" href="/images/thumbnail.png" />
       </Head>
       <Text as={"h2"} py={4} fontSize={"4xl"} fontWeight={900}>
-        Chung tay gây quỹ xây khu nội trú tiểu học Hồ Thầu, tỉnh Hà Giang để các
-        em yên tâm học hành
+        {name}
       </Text>
-      <Text as={"i"}>12/12/2021</Text>
+      <Text as={"i"}>
+        Được tạo vào: {format(new Date(createdAt), "dd/MM/yyyy")}
+      </Text>
+      <Box mt={4}>
+        {isEnded ? (
+          <Tag colorScheme="red">Hoạt động đã kết thúc</Tag>
+        ) : (
+          <Tag colorScheme="purple">Hoạt động đang diễn ra</Tag>
+        )}
+      </Box>
       <Flex flexDirection={["column", "column", "row"]} spacing={8}>
         <Box flex={3} my={8} order={["2", "2", "1"]} mr={["0", "0", "8"]}>
-          <Tabs>
+          <Tabs isLazy>
             <TabList mb="1em">
               <Tab _selected={{ borderColor: color.PRIMARY }}>
                 Miếng trầu là đầu câu chuyện
@@ -51,13 +109,11 @@ export default function Detail() {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <p>one!</p>
+                <div dangerouslySetInnerHTML={{ __html: content }} />
               </TabPanel>
+              <TabPanel></TabPanel>
               <TabPanel>
-                <p>two!</p>
-              </TabPanel>
-              <TabPanel>
-                <p>three!</p>
+                <Comment campaignId={_id} />
               </TabPanel>
             </TabPanels>
           </Tabs>
@@ -90,30 +146,28 @@ export default function Detail() {
                 <Text fontSize={"xl"}>Đã quyên góp: </Text>
                 <Flex align={"end"}>
                   <Text fontSize={"xl"} fontWeight={600}>
-                    500.000 VND
+                    {n(donated_amount).format("0,0")}
                   </Text>
-                  /<Text>500.000.000 VND</Text>
+                  /<Text>{n(amount).format("0,0")} VND</Text>
                 </Flex>
               </Flex>
-              <Progress color={color.PRIMARY} percent={"25%"} />
+              <Progress
+                color={color.PRIMARY}
+                percent={`${((donated_amount / amount) * 100).toFixed(2)}%`}
+              />
             </Stack>
             <Stack my={2}>
               <Box>
                 <Text fontSize={"xl"}>Đạt được</Text>
                 <Text color={"gray.500"} as={"b"}>
-                  25%
-                </Text>
-              </Box>
-              <Box>
-                <Text fontSize={"xl"}>Lượt quyên góp</Text>
-                <Text color={"gray.500"} as={"b"}>
-                  4.023
+                  {((donated_amount / amount) * 100).toFixed(2)} %
                 </Text>
               </Box>
               <Box>
                 <Text fontSize={"xl"}>Ngày hết hạn</Text>
                 <Text color={"gray.500"} as={"b"}>
-                  12/12/2022 (Còn 12 ngày)
+                  {format(new Date(finishedAt), "dd / MM / yyyy")} (Còn{" "}
+                  {DateUtils.calculateDaysFromNow(finishedAt)} ngày)
                 </Text>
               </Box>
             </Stack>
@@ -122,11 +176,11 @@ export default function Detail() {
                 Mọi thông tin xin liên hệ với{" "}
               </Text>
               <Stack my={2} direction={"row"} spacing={4} align={"center"}>
-                <Avatar src="https://picsum.photos/200/300" alt={"Author"} />
+                <Avatar src={author.picture} alt={"Author"} />
                 <Stack direction={"column"} spacing={2} fontSize={"md"}>
-                  <b>Hieu Hoa Hong</b>
+                  <b>{author.name}</b>
                   <Text>
-                    Số điện thoại:&nbsp; <b>0905245054</b>
+                    Số điện thoại:&nbsp; <b>{author.phoneNumber}</b>
                   </Text>
                 </Stack>
               </Stack>
@@ -143,17 +197,16 @@ export default function Detail() {
               </Flex>
             </Box>
             <Text textAlign={"center"} my={2} fontSize={"lg"}>
-              Hoặc quyên góp qua{" "}
+              Hoặc quyên góp qua
             </Text>
             <Button
               my={2}
               w={"full"}
-              bg={color.PRIMARY}
               colorScheme={"pink"}
               leftIcon={
                 <svg
                   width="24"
-                  class="svg-icon fill-current momo__logo "
+                  className="svg-icon fill-current momo__logo "
                   viewBox="0 0 96 87"
                   fill="#fff"
                   xmlns="http://www.w3.org/2000/svg"
@@ -181,5 +234,78 @@ export default function Detail() {
         </Box>
       </Flex>
     </SectionContainer>
+  );
+}
+
+function Comment({ campaignId }) {
+  const [value, setValue] = useState("");
+  const [comments, setComments] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const user = useSelector(state => state.auth.currentUser);
+  console.log("--comments", comments, loading);
+  async function handleComment(e) {
+    e.preventDefault();
+    await CommentService.create(campaignId, value).then(res => {
+      console.log("cocn", res);
+      getComments();
+      setValue("");
+    });
+  }
+  async function getComments() {
+    setLoading(true);
+    await CampaignService.fetchComments(campaignId)
+      .then(res => {
+        console.log("res", res);
+        setComments(res);
+      })
+      .catch(e => {
+        console.log("e", e);
+      });
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    getComments();
+  }, []);
+
+  return (
+    <Box>
+      {loading ? (
+        <Box padding="4" rounded={"xl"} bg="gray.50" my={4}>
+          <SkeletonCircle size="10" />
+          <SkeletonText mt="4" noOfLines={4} spacing="4" />
+        </Box>
+      ) : (
+        comments?.map(comment => <CommentItem comment={comment} />)
+      )}
+      {comments?.length === 0 && <div>Chưa có bình luận nào</div>}
+      {user ? (
+        <form
+          onSubmit={handleComment}
+          className="p-4 rounded-xl bg-gray-50 my-4"
+        >
+          <FormControl isRequired>
+            <FormLabel htmlFor="name">Viết bình luận</FormLabel>
+            <Input
+              onChange={e => setValue(e.target.value)}
+              value={value}
+              id="name"
+              placeholder="name"
+              focusBorderColor={color.PRIMARY}
+            />
+          </FormControl>
+          <Button
+            mt={4}
+            colorScheme="purple"
+            type="submit"
+            rightIcon={<AiOutlineComment />}
+          >
+            Bình luận
+          </Button>
+        </form>
+      ) : (
+        <NeedLogin />
+      )}
+    </Box>
   );
 }

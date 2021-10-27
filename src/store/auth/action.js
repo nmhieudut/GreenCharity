@@ -5,10 +5,34 @@ export const AuthActions = {
       type: actionTypes.LOG_IN
     };
   },
-
-  signUpAction(payload) {
+  loginSuccessAction(payload) {
     return {
-      type: actionTypes.SIGN_UP,
+      type: actionTypes.LOG_IN_SUCCESS,
+      payload
+    };
+  },
+  loginFailedAction(payload) {
+    return {
+      type: actionTypes.LOG_IN_FAILED,
+      payload
+    };
+  },
+
+  signUpAction() {
+    return {
+      type: actionTypes.SIGN_UP
+    };
+  },
+
+  signUpSuccessAction(payload) {
+    return {
+      type: actionTypes.SIGN_UP_SUCCESS,
+      payload
+    };
+  },
+  signUpFailedAction(payload) {
+    return {
+      type: actionTypes.SIGN_UP_FAILED,
       payload
     };
   },

@@ -4,7 +4,6 @@ import {
   Button,
   Flex,
   HStack,
-  Image,
   Menu,
   MenuButton,
   MenuDivider,
@@ -20,16 +19,16 @@ import Hamburger from "hamburger-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { FaMoon, FaRegLightbulb } from "react-icons/fa";
 import { AiFillCaretDown } from "react-icons/ai";
+import { FaMoon, FaRegLightbulb } from "react-icons/fa";
+import { RiLogoutBoxRLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { color } from "src/constants/color";
 import { navs } from "src/constants/navbar";
-import { RiLogoutBoxRLine } from "react-icons/ri";
-import { AuthActions } from "src/store/auth/action";
 import firebase from "src/libs/firebase";
+import { AuthActions } from "src/store/auth/action";
+import removeCookie from "src/utils/cookie";
 import { LSManager } from "src/utils/localstorage";
-import Cookies from "js-cookie";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -69,9 +68,7 @@ export default function Header() {
       .signOut()
       .then(() => {
         console.log("-----clearing cookie");
-        Object.keys(Cookies.get()).forEach(function (cookie) {
-          Cookies.remove(cookie);
-        });
+        removeCookie();
       })
       .catch(error => {
         // An error happened.
@@ -99,9 +96,17 @@ export default function Header() {
   };
 
   const NavMenuItem = ({ href, label }) => {
+    const router = useRouter();
     return (
       <Link href={href}>
-        <a className="menu-item font-bold">{label}</a>
+        <a
+          className={
+            "menu-item font-bold " +
+            (router.pathname == href && "menu-item__active")
+          }
+        >
+          {label}
+        </a>
       </Link>
     );
   };
@@ -184,7 +189,7 @@ export default function Header() {
                 </MenuList>
               </Menu>
             ) : (
-              <Button colorScheme="pink" onClick={() => router.push("/auth")}>
+              <Button colorScheme="purple" onClick={() => router.push("/auth")}>
                 Đăng nhập / Đăng ký
               </Button>
             )}

@@ -2,15 +2,15 @@ import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
   fonts: {
-    heading: "Poppins",
-    body: "Quicksand"
+    heading: "Quicksand",
+    body: "Nunito"
   },
   styles: {
     global: {
       // styles for the `a`
       a: {
         _hover: {
-          color: "pink.500"
+          color: "purple.500"
         }
       }
     }

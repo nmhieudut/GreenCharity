@@ -16,19 +16,19 @@ import * as n from "numeral";
 import { BsClock } from "react-icons/bs";
 import { color } from "src/constants/color";
 import Progress from "../common/Progress";
+import { DateUtils } from "src/utils/date";
 
 export default function CampaignCard(props) {
   const {
     campaign: {
-      id,
-      photo,
+      _id,
+      image,
       tag,
-      title,
+      name,
       content,
       donated_amount,
       amount,
-      finished_date,
-      author: { name, avatar }
+      finishedAt
     },
     handleClick
   } = props;
@@ -41,18 +41,18 @@ export default function CampaignCard(props) {
       pb={4}
       className="transition duration-300"
       _hover={{ transform: "scale(1.05)" }}
-      onClick={() => handleClick(id)}
+      onClick={() => handleClick(_id)}
       bg={useColorModeValue("white", "gray.900")}
       boxShadow={"2xl"}
       rounded={"md"}
       overflow={"hidden"}
     >
       <Box bg={"gray.100"} mt={-6} mx={-6} mb={6} pos={"relative"}>
-        <Image src={photo} layout={"fill"} width="100%" height={300} />
+        <Image src={image} layout={"fill"} width="100%" height={300} />
       </Box>
       <Flex flexDirection={"column"} flex={1} px={4}>
         <Box>
-          <Tag mb={2} variant="solid" colorScheme="pink">
+          <Tag mb={2} variant="solid" colorScheme="purple">
             {tag}
           </Tag>
         </Box>
@@ -63,10 +63,10 @@ export default function CampaignCard(props) {
             fontFamily={"body"}
             _hover={{ color: color.PRIMARY }}
           >
-            {title}
+            {name}
           </Heading>
           <Text fontSize={"sm"} color={"gray.500"} className="line-clamp">
-            {content}
+            <div dangerouslySetInnerHTML={{ __html: content }} />
           </Text>
         </Stack>
       </Flex>
@@ -74,7 +74,7 @@ export default function CampaignCard(props) {
       <Box mt={"auto"} px={4}>
         <Stack my={4} w={"full"}>
           <Flex>
-            <Text>Đạt được: </Text>
+            <Text>Tiến độ: </Text>
             <Text className="mx-1">{percent}</Text>
           </Flex>
           <Progress color={color.PRIMARY} percent={percent} />
@@ -87,17 +87,9 @@ export default function CampaignCard(props) {
             <Text>/ {n(amount).format("0,0")} VND</Text>
           </Stack>
         </Flex>
-        <Stack my={4} direction={"row"} spacing={4} align={"start"}>
-          <Avatar src={avatar} alt={"Author"} />
-          <Stack direction={"column"} spacing={0} fontSize={"sm"}>
-            <Text color={"gray.500"}>Được tạo bởi</Text>
-            <b>{name}</b>
-          </Stack>
-        </Stack>
-        <Divider />
         <Flex color={"gray.500"} align="center" justify="end" mt={2}>
           <BsClock className="mr-2" />
-          <Text>12 ngày còn lại</Text>
+          <Text>{DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại</Text>
         </Flex>
       </Box>
     </Flex>

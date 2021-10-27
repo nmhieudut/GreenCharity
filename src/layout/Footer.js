@@ -67,7 +67,7 @@ const ListHeader = ({ children }) => {
 
 export default function LargeWithNewsletter() {
   return (
-    <SectionContainer>
+    <SectionContainer hasBg>
       <SimpleGrid
         templateColumns={{ sm: "1fr 1fr", md: "1fr 1fr 1fr" }}
         spacing={8}

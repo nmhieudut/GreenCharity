@@ -31,19 +31,24 @@ import { FcGoogle } from "react-icons/fc";
 import { ImEye } from "react-icons/im";
 import { RiEyeCloseLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
+import CustomAlert from "src/components/common/Alert";
 import { color } from "src/constants/color";
-import { LoginWithGoogle } from "src/services/auth";
+import { AuthService } from "src/services/auth";
 import { AuthActions } from "src/store/auth/action";
 import { LSManager } from "src/utils/localstorage";
 
 export default function Auth() {
-  const bg = useColorModeValue("pink.200", "gray.800");
+  const bg = useColorModeValue("purple.200", "gray.800");
   const formBg = useColorModeValue("white", "gray.800");
 
   const router = useRouter();
   const dispatch = useDispatch();
 
   const user = useSelector(state => state.auth.currentUser);
+  const loading = useSelector(state => state.auth.loading);
+  const logInError = useSelector(state => state.auth.logInError);
+  const signUpError = useSelector(state => state.auth.signUpError);
+
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -51,7 +56,7 @@ export default function Auth() {
     email: "",
     password: ""
   });
-  const [submitting, setSubmitting] = useState(false);
+  const { name, phoneNumber, email, password } = form;
   const [idToken, setIdToken] = useState();
 
   useEffect(() => {
@@ -65,7 +70,7 @@ export default function Auth() {
       if (userCred) {
         userCred.getIdToken().then(token => {
           setIdToken(token);
-          LoginWithGoogle(token).then(res => {
+          AuthService.loginWithGoogle(token).then(res => {
             console.log(res);
             LSManager.setToken(res.token);
             dispatch(AuthActions.setCurrentUserAction(res.user));
@@ -87,14 +92,34 @@ export default function Auth() {
 
   const handleLogin = e => {
     e.preventDefault();
-    dispatch(AuthActions.setCurrentUserAction({ name: "Hieu" }));
-    router.push("/");
-    console.log("Dang nhap");
+    dispatch(AuthActions.loginAction());
+    AuthService.login(email, password)
+      .then(res => {
+        console.log(res);
+        dispatch(AuthActions.loginSuccessAction(res.user));
+        LSManager.setToken(res.token);
+        router.push("/");
+      })
+      .catch(e => {
+        console.log({ e });
+        dispatch(AuthActions.loginFailedAction(e.response.data.message));
+      });
   };
 
   const handleSignUp = e => {
     e.preventDefault();
-    console.log("Dang ky");
+    dispatch(AuthActions.signUpAction());
+    AuthService.register(name, email, password, phoneNumber)
+      .then(res => {
+        console.log(res);
+        dispatch(AuthActions.signUpSuccessAction(res.user));
+        LSManager.setToken(res.token);
+        router.push("/");
+      })
+      .catch(e => {
+        console.log({ e });
+        dispatch(AuthActions.signUpFailedAction(e.response.data.message));
+      });
   };
 
   console.log("form", form);
@@ -184,10 +209,21 @@ export default function Auth() {
                               </span>
                             </InputRightElement>
                           </InputGroup>
+                          {logInError && (
+                            <Box py={2}>
+                              <CustomAlert label={logInError} status="error" />
+                            </Box>
+                          )}
                         </FormControl>
+
                         <Divider className="my-4" />
                         <div className="w-full">
-                          <Button w="full" colorScheme="pink" type="submit">
+                          <Button
+                            w="full"
+                            colorScheme="purple"
+                            type="submit"
+                            isLoading={loading}
+                          >
                             Đăng nhập
                           </Button>
                         </div>
@@ -209,7 +245,11 @@ export default function Auth() {
                             />
                           </FormControl>
                           <div className="m-2"></div>
-                          <FormControl className="flex-1" id="phone" isRequired>
+                          <FormControl
+                            className="flex-1"
+                            id="phoneNumber"
+                            isRequired
+                          >
                             <FormLabel>Số điện thoại</FormLabel>
                             <Input
                               onChange={handleChange}
@@ -263,10 +303,20 @@ export default function Auth() {
                               </span>
                             </InputRightElement>
                           </InputGroup>
+                          {signUpError && (
+                            <Box py={2}>
+                              <CustomAlert label={signUpError} status="error" />
+                            </Box>
+                          )}
                         </FormControl>
                         <Divider className="my-4" />
                         <div className="w-full">
-                          <Button w="full" colorScheme="pink" type="submit">
+                          <Button
+                            w="full"
+                            colorScheme="purple"
+                            type="submit"
+                            isLoading={loading}
+                          >
                             Đăng ký
                           </Button>
                         </div>
@@ -275,6 +325,7 @@ export default function Auth() {
                   </TabPanel>
                 </TabPanels>
               </Tabs>
+
               <span className="text-center mb-4">Hoặc</span>
               <div className="px-8 flex flex-col md:flex-row">
                 <Button

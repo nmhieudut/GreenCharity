@@ -1,6 +1,9 @@
 .menu-item {
   position: relative;
   transition: all .5s ease;
+  &__active {
+    color: $primary
+  }
   &:hover {
     color: $primary;
   }

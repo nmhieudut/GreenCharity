@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function News() {
-  return <div>News</div>;
+export default function news() {
+  return <div>Tin tức</div>;
 }
