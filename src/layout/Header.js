@@ -67,7 +67,6 @@ export default function Header() {
       .auth()
       .signOut()
       .then(() => {
-        console.log("-----clearing cookie");
         removeCookie();
       })
       .catch(error => {

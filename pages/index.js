@@ -42,12 +42,10 @@ export const getServerSideProps = async ctx => {
 };
 
 export default function Home({ campaigns }) {
-  const state = useSelector(state => state.auth);
   const router = useRouter();
   const directToDetailPage = id => {
     router.push(`/campaigns/${id}`);
   };
-  console.log("state", state);
   return (
     <div>
       <Head>

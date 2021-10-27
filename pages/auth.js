@@ -71,7 +71,6 @@ export default function Auth() {
         userCred.getIdToken().then(token => {
           setIdToken(token);
           AuthService.loginWithGoogle(token).then(res => {
-            console.log(res);
             LSManager.setToken(res.token);
             dispatch(AuthActions.setCurrentUserAction(res.user));
             router.back();
@@ -95,7 +94,6 @@ export default function Auth() {
     dispatch(AuthActions.loginAction());
     AuthService.login(email, password)
       .then(res => {
-        console.log(res);
         dispatch(AuthActions.loginSuccessAction(res.user));
         LSManager.setToken(res.token);
         router.push("/");
@@ -111,7 +109,6 @@ export default function Auth() {
     dispatch(AuthActions.signUpAction());
     AuthService.register(name, email, password, phoneNumber)
       .then(res => {
-        console.log(res);
         dispatch(AuthActions.signUpSuccessAction(res.user));
         LSManager.setToken(res.token);
         router.push("/");
@@ -122,15 +119,11 @@ export default function Auth() {
       });
   };
 
-  console.log("form", form);
-
   const loginWithGoogle = () => {
     firebase
       .auth()
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then(userCred => {
-        console.log("++++", userCred);
-      })
+      .then(userCred => {})
       .catch(e => {
         console.log(e);
       });

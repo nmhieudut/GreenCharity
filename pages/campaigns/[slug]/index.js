@@ -41,7 +41,6 @@ export async function getServerSideProps(ctx) {
   const { res } = ctx;
   try {
     const { campaign } = await CampaignService.getById(slug);
-    console.log("==", campaign);
     return {
       props: {
         campaign: campaign
@@ -74,7 +73,6 @@ export default function Detail({ campaign }) {
     author,
     createdAt
   } = campaign;
-  console.log("author", author, finishedAt);
   const isEnded = status === "ended";
   return (
     <SectionContainer>
@@ -242,11 +240,9 @@ function Comment({ campaignId }) {
   const [comments, setComments] = useState(null);
   const [loading, setLoading] = useState(false);
   const user = useSelector(state => state.auth.currentUser);
-  console.log("--comments", comments, loading);
   async function handleComment(e) {
     e.preventDefault();
     await CommentService.create(campaignId, value).then(res => {
-      console.log("cocn", res);
       getComments();
       setValue("");
     });
