@@ -12,23 +12,35 @@ import { AuthService } from "src/services/auth";
 import { wrapper } from "src/store";
 import { AuthActions } from "src/store/auth/action";
 import theme from "src/utils/theme";
+import "focus-visible/dist/focus-visible";
 import "../styles/globals.scss";
+import { Global, css } from "@emotion/react";
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
 
+const GlobalStyles = css`
+  .js-focus-visible :focus:not([data-focus-visible-added]) {
+    outline: none;
+    box-shadow: none;
+  }
+`;
+
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
+
   useEffect(() => {
     AuthService.verify()
       .then(res => {
         dispatch(AuthActions.setCurrentUserAction(res.data));
       })
-      .catch(e => console.log(e));
+      .catch(e => dispatch(AuthActions.setCurrentUserAction(null)));
   }, []);
+
   return (
     <ChakraProvider theme={theme}>
+      <Global styles={GlobalStyles} />
       <Layout>
         <Component {...pageProps} />
       </Layout>

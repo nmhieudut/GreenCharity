@@ -33,7 +33,12 @@ import { RiEyeCloseLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import CustomAlert from "src/components/common/Alert";
 import { color } from "src/constants/color";
+import {
+  facebookProvider,
+  googleProvider
+} from "src/constants/firebase-providers";
 import { AuthService } from "src/services/auth";
+import { firebaseService } from "src/services/firebase";
 import { AuthActions } from "src/store/auth/action";
 import { LSManager } from "src/utils/localstorage";
 
@@ -73,7 +78,7 @@ export default function Auth() {
           AuthService.loginWithGoogle(token).then(res => {
             LSManager.setToken(res.token);
             dispatch(AuthActions.setCurrentUserAction(res.user));
-            router.back();
+            router.push("/");
           });
         });
       }
@@ -120,16 +125,22 @@ export default function Auth() {
   };
 
   const loginWithGoogle = () => {
-    firebase
-      .auth()
-      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+    firebaseService
+      .socialMediaAuth(googleProvider)
       .then(userCred => {})
       .catch(e => {
         console.log(e);
       });
   };
 
-  const loginWithFacebook = () => {};
+  const loginWithFacebook = () => {
+    firebaseService
+      .socialMediaAuth(facebookProvider)
+      .then(userCred => {})
+      .catch(e => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
@@ -336,6 +347,7 @@ export default function Auth() {
                   w={"full"}
                   colorScheme={"facebook"}
                   leftIcon={<FaFacebook />}
+                  onClick={loginWithFacebook}
                 >
                   <Center>
                     <Text>Facebook</Text>

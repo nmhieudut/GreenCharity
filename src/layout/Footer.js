@@ -1,7 +1,6 @@
 import {
   Box,
   chakra,
-  Container,
   Link,
   SimpleGrid,
   Stack,

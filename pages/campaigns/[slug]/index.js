@@ -266,14 +266,6 @@ function Comment({ campaignId }) {
 
   return (
     <Box>
-      {loading ? (
-        <Box padding="4" rounded={"xl"} bg="gray.50" my={4}>
-          <SkeletonCircle size="10" />
-          <SkeletonText mt="4" noOfLines={4} spacing="4" />
-        </Box>
-      ) : (
-        comments?.map(comment => <CommentItem comment={comment} />)
-      )}
       {comments?.length === 0 && <div>Chưa có bình luận nào</div>}
       {user ? (
         <form
@@ -286,13 +278,14 @@ function Comment({ campaignId }) {
               onChange={e => setValue(e.target.value)}
               value={value}
               id="name"
-              placeholder="name"
+              placeholder="Cảm nghĩ của bạn"
               focusBorderColor={color.PRIMARY}
             />
           </FormControl>
           <Button
             mt={4}
             colorScheme="purple"
+            isLoading={loading}
             type="submit"
             rightIcon={<AiOutlineComment />}
           >
@@ -301,6 +294,14 @@ function Comment({ campaignId }) {
         </form>
       ) : (
         <NeedLogin />
+      )}
+      {loading ? (
+        <Box padding="4" rounded={"xl"} bg="gray.50" my={4}>
+          <SkeletonCircle size="10" />
+          <SkeletonText mt="4" noOfLines={4} spacing="4" />
+        </Box>
+      ) : (
+        comments?.map(comment => <CommentItem comment={comment} />)
       )}
     </Box>
   );

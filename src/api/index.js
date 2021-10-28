@@ -7,7 +7,9 @@ const Rest = {
   checkCurrentUser: "/auth/verify",
   // campaigns services
   campaigns: "/campaigns",
-  comments: "/comments"
+  comments: "/comments",
+  //user services
+  user: "/user"
 };
 
 export default Rest;
