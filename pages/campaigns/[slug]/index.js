@@ -75,7 +75,7 @@ export default function Detail({ campaign }) {
   } = campaign;
   const isEnded = status === "ended";
   return (
-    <SectionContainer>
+    <SectionContainer hasBreadcrumbs>
       <Head>
         <title>{name}</title>
         <link rel="icon" href="/images/thumbnail.png" />
@@ -120,6 +120,7 @@ export default function Detail({ campaign }) {
           className="border-2"
           order={["1", "1", "2"]}
           my={8}
+          h="max-content"
           ml={["0", "0", "8"]}
           flex={2}
           bg={useColorModeValue("white", "gray.800")}

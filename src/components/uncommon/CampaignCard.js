@@ -17,13 +17,14 @@ import { BsClock } from "react-icons/bs";
 import { color } from "src/constants/color";
 import Progress from "../common/Progress";
 import { DateUtils } from "src/utils/date";
+import { convertStatusToString } from "src/utils/status";
 
 export default function CampaignCard(props) {
   const {
     campaign: {
       _id,
       image,
-      tag,
+      status,
       name,
       content,
       donated_amount,
@@ -53,7 +54,7 @@ export default function CampaignCard(props) {
       <Flex flexDirection={"column"} flex={1} px={4}>
         <Box>
           <Tag mb={2} variant="solid" colorScheme="purple">
-            {tag}
+            {convertStatusToString(status)}
           </Tag>
         </Box>
         <Stack>
@@ -72,11 +73,7 @@ export default function CampaignCard(props) {
       </Flex>
 
       <Box mt={"auto"} px={4}>
-        <Stack my={4} w={"full"}>
-          <Flex>
-            <Text>Tiến độ: </Text>
-            <Text className="mx-1">{percent}</Text>
-          </Flex>
+        <Stack my={2} w={"full"}>
           <Progress color={color.PRIMARY} percent={percent} />
         </Stack>
         <Flex justify="end">

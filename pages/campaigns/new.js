@@ -23,25 +23,22 @@ import {
   useDisclosure
 } from "@chakra-ui/react";
 import { format } from "date-fns";
-import dynamic from "next/dynamic";
 import add from "date-fns/add";
 import { Form, Formik } from "formik";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Flatpickr from "react-flatpickr";
 import { BsPlusLg } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import NeedLogin from "src/components/common/NeedLogin";
 import SectionContainer from "src/components/common/SectionContainer";
+import ImgLoading from "src/components/common/Spinner/ImgLoading";
+import Editor from "src/components/uncommon/Editor";
 import { color } from "src/constants/color";
 import { storage } from "src/libs/firebase";
-import * as Yup from "yup";
-import ImgLoading from "src/components/common/Spinner/ImgLoading";
-import NeedLogin from "src/components/common/NeedLogin";
-import Editor from "src/components/uncommon/Editor";
-import { AuthService } from "src/services/auth";
 import { CampaignService } from "src/services/campaign";
+import * as Yup from "yup";
 
 // YUP
 const schema = Yup.object().shape({
@@ -124,7 +121,7 @@ function NewForm() {
   };
 
   return (
-    <SectionContainer>
+    <SectionContainer hasBreadcrumbs>
       <Heading
         textAlign="center"
         fontSize={{ base: "3xl", sm: "4xl", md: "5xl" }}

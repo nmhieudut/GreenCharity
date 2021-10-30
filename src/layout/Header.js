@@ -20,9 +20,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
+import { BsBrightnessHigh } from "react-icons/bs";
 import { FaMoon, FaRegLightbulb } from "react-icons/fa";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
+import BreadCrumbs from "src/components/common/BreadCrumbs";
 import { color } from "src/constants/color";
 import { navs } from "src/constants/navbar";
 import firebase from "src/libs/firebase";
@@ -59,7 +61,6 @@ export default function Header() {
   }, [wrapperRef, showLinks]);
 
   const onLogout = () => {
-    console.log("herere");
     LSManager.removeToken();
     dispatch(AuthActions.setCurrentUserAction(null));
     router.push("/");
@@ -124,7 +125,6 @@ export default function Header() {
       color={textColor}
       bg={bg}
       borderBottom={borderColor}
-      boxShadow="0 .5rem 1.5rem rgba(0,0,0,.1)"
     >
       <Flex
         className="container"
@@ -150,7 +150,7 @@ export default function Header() {
             >
               <Button color={color.primary} onClick={toggleColorMode}>
                 <span>
-                  {colorMode === "light" ? <FaMoon /> : <FaRegLightbulb />}
+                  {colorMode === "light" ? <FaMoon /> : <BsBrightnessHigh />}
                 </span>
               </Button>
             </Tooltip>
@@ -204,6 +204,12 @@ export default function Header() {
           </Stack>
         </Box>
       ) : null}
+      <BreadCrumbs
+        bg={useColorModeValue("white", "gray.800")}
+        py={4}
+        borderBottom={borderColor}
+        boxShadow="0 .5rem 1.5rem rgba(0,0,0,.1)"
+      />
     </Box>
   );
 }

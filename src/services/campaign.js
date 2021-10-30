@@ -43,14 +43,5 @@ export const CampaignService = {
     } catch (err) {
       return err;
     }
-  },
-  async commentPost(id, content) {
-    try {
-      return await axiosClient.post(`${Rest.campaigns}/${id}/comment`, {
-        content
-      });
-    } catch (err) {
-      return err;
-    }
   }
 };

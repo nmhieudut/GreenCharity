@@ -18,7 +18,7 @@ export const AuthService = {
     };
     return await axiosClient.post(Rest.register, userPayload);
   },
-  async verify() {
+  async verifyUser() {
     return await axiosClient.get(Rest.checkCurrentUser);
   },
   async loginWithGoogle(idToken) {

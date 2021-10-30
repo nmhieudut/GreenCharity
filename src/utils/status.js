@@ -1,5 +1,5 @@
-const convertStatusToString = () => {
-  switch (this.status) {
+const convertStatusToString = status => {
+  switch (status) {
     case "pending":
       return "Đang chờ xác nhận";
     case "active":

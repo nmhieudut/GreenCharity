@@ -16,7 +16,9 @@ a {
   text-decoration: none;
   font-family: "Quicksand", sans-serif !important;
 }
-
+label {
+  margin: 0 !important
+}
 * {
   box-sizing: border-box;
   scroll-behavior: smooth;

@@ -1,30 +1,94 @@
 import {
   Box,
+  Button,
+  FormControl,
+  FormLabel,
   Heading,
-  HStack,
   Image,
-  SimpleGrid,
-  Text,
-  useColorModeValue
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text
 } from "@chakra-ui/react";
+import { format } from "date-fns";
 import Head from "next/head";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import Flatpickr from "react-flatpickr";
+import { BiPhoneIncoming } from "react-icons/bi";
+import { FcCalendar, FcPhone } from "react-icons/fc";
+import { useDispatch, useSelector } from "react-redux";
+import CustomAlert from "src/components/common/Alert";
 import NeedLogin from "src/components/common/NeedLogin";
 import SectionContainer from "src/components/common/SectionContainer";
 import { color } from "src/constants/color";
+import { AuthService } from "src/services/auth";
+import { UserService } from "src/services/user";
+import { AuthActions } from "src/store/auth/action";
 
 function AccountPage({ user }) {
   console.log("----info", user);
+  const [info, setInfo] = useState({
+    name: user.name,
+    phoneNumber: user.phoneNumber,
+    dateOfBirth: user.dateOfBirth
+  });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const dispatch = useDispatch();
+  const { name, phoneNumber, dateOfBirth } = info;
+  const handleChange = (field, value) => {
+    setInfo({
+      ...info,
+      [field]: value
+    });
+  };
+  console.log("===", info);
+  const onUpdateInfo = async e => {
+    e.preventDefault();
+    setSuccess(false);
+    setLoading(true);
+    const res = await UserService.update(info);
+    console.log("===res", res);
+    if (res) {
+      setSuccess(true);
+      await AuthService.verifyUser()
+        .then(res => {
+          dispatch(AuthActions.setCurrentUserAction(res.data));
+        })
+        .catch(e => dispatch(AuthActions.setCurrentUserAction(null)));
+
+      setLoading(false);
+    }
+  };
   return (
-    <SectionContainer>
+    <SectionContainer hasBreadcrumbs>
+      <Heading
+        textAlign="center"
+        fontSize={{ base: "3xl", sm: "4xl", md: "5xl" }}
+        lineHeight={"110%"}
+        color={color.PRIMARY}
+      >
+        Cài đặt tài khoản
+      </Heading>
       <Box
         marginTop={{ base: "1", sm: "5" }}
         display="flex"
         flexDirection={{ base: "column", sm: "row" }}
         justifyContent="space-between"
       >
-        <Box display="flex" flex="1" marginRight="3" alignItems="center">
+        <Box
+          display="flex"
+          flex="1"
+          marginRight="3"
+          alignItems="center"
+          mt={12}
+        >
           <Box
             width={{ base: "100%", sm: "85%" }}
             zIndex="2"
@@ -32,6 +96,7 @@ function AccountPage({ user }) {
             marginTop="5%"
           >
             <Image
+              rounded="full"
               width="300px"
               height="auto"
               src={user.picture}
@@ -46,15 +111,131 @@ function AccountPage({ user }) {
           justifyContent="start"
           marginTop={{ base: "3", sm: "0" }}
         >
-          <Text as="b" fontSize={"3xl"} color={color.PRIMARY}>
-            {user.name}
-          </Text>
-          <Text as="b" fontSize={"3xl"} color={color.PRIMARY}>
-            {user.phoneNumber}
-          </Text>
-          <Text as="b" fontSize={"3xl"} color={color.PRIMARY}>
-            {user.name}
-          </Text>
+          <Tabs>
+            <TabList>
+              <Tab _selected={{ borderBottomColor: color.PRIMARY }}>
+                Thông tin cá nhân
+              </Tab>
+              <Tab _selected={{ borderBottomColor: color.PRIMARY }}>
+                Các hoạt động
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <Stack direction="column" spacing={8} maxW="3xl">
+                  <form onSubmit={onUpdateInfo}>
+                    <div className="my-8"></div>
+                    <FormControl className="flex flex-col md:flex-row md:items-center md:justify-between">
+                      <FormLabel className="w-36">EMAIL</FormLabel>
+                      <Input
+                        className="max-w-xl"
+                        value={user.email}
+                        focusBorderColor={color.PRIMARY}
+                        isReadOnly
+                      />
+                    </FormControl>
+                    <div className="my-8"></div>
+                    <FormControl
+                      className="flex flex-col md:flex-row md:items-center md:justify-between"
+                      isRequired
+                    >
+                      <FormLabel className="w-36">TÊN</FormLabel>
+                      <Input
+                        isDisabled={loading}
+                        className="max-w-xl"
+                        focusBorderColor={color.PRIMARY}
+                        value={name}
+                        onChange={e => handleChange("name", e.target.value)}
+                      />
+                    </FormControl>
+                    <div className="my-8"></div>
+                    <FormControl
+                      className="flex flex-col md:flex-row md:items-center md:justify-between"
+                      isRequired
+                    >
+                      <FormLabel className="w-36">SỐ ĐIỆN THOẠI</FormLabel>
+
+                      <InputGroup className="max-w-xl">
+                        <InputLeftElement
+                          pointerEvents="none"
+                          children={<FcPhone color="gray.300" />}
+                        />
+                        <Input
+                          isDisabled={loading}
+                          value={phoneNumber}
+                          placeholder="Nhập số điện thoại"
+                          focusBorderColor={color.PRIMARY}
+                          onChange={e =>
+                            handleChange("phoneNumber", e.target.value)
+                          }
+                        />
+                      </InputGroup>
+                    </FormControl>
+                    <div className="my-8"></div>
+                    <FormControl
+                      className="flex flex-col md:flex-row md:items-center md:justify-between"
+                      isRequired
+                    >
+                      <FormLabel className="w-36">Sinh nhật</FormLabel>
+                      <InputGroup className="max-w-xl">
+                        <InputLeftElement
+                          pointerEvents="none"
+                          children={<FcCalendar />}
+                        />
+                        <Flatpickr
+                          options={{ dateFormat: "Y/m/d" }}
+                          value={dateOfBirth}
+                          onChange={([date]) =>
+                            handleChange(
+                              "dateOfBirth",
+                              format(date, "yyyy/MM/dd")
+                            )
+                          }
+                          render={({ value, ...props }, ref) => {
+                            return (
+                              <Input
+                                isDisabled={loading}
+                                placeholder="Chọn ngày"
+                                focusBorderColor={color.PRIMARY}
+                                pl={10}
+                                value={value}
+                                ref={ref}
+                              />
+                            );
+                          }}
+                        />
+                      </InputGroup>
+                    </FormControl>
+                    <div className="mt-4"></div>
+                    {success && (
+                      <Box py={2}>
+                        <CustomAlert
+                          label="Cập nhật tài khoản thành công"
+                          status="success"
+                        />
+                      </Box>
+                    )}
+                    <div
+                      className="mt
+                    isDisable={loading}-8"
+                    ></div>
+                    <Box textAlign="right">
+                      <Button
+                        colorScheme={"purple"}
+                        type="submit"
+                        isLoading={loading}
+                      >
+                        Cập nhật
+                      </Button>
+                    </Box>
+                  </form>
+                </Stack>
+              </TabPanel>
+              <TabPanel>
+                <p>two!</p>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Box>
       </Box>
     </SectionContainer>

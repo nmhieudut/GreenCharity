@@ -55,7 +55,6 @@ export default function Home({ campaigns }) {
       </Head>
       <SectionContainer minH="100vh">
         <Stack
-          h="scree"
           textAlign={"center"}
           align={"center"}
           spacing={{ base: 4, md: 8 }}
