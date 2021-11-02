@@ -9,15 +9,12 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import CountUp from "react-countup";
 import { FcConferenceCall, FcDonate } from "react-icons/fc";
-import { useSelector } from "react-redux";
 import SectionContainer from "src/components/common/SectionContainer";
 import CampaignCard from "src/components/uncommon/CampaignCard";
 import { color } from "src/constants/color";
 import { CampaignService } from "src/services/campaign";
-import { wrapper } from "src/store";
 
 export const getServerSideProps = async ctx => {
   const { res } = ctx;
@@ -42,10 +39,6 @@ export const getServerSideProps = async ctx => {
 };
 
 export default function Home({ campaigns }) {
-  const router = useRouter();
-  const directToDetailPage = id => {
-    router.push(`/campaigns/${id}`);
-  };
   return (
     <div>
       <Head>
@@ -230,25 +223,11 @@ export default function Home({ campaigns }) {
         >
           Các hoạt động đang diễn ra 🔥
         </Heading>
-        <Grid
-          templateColumns={[
-            "repeat(1, 1fr)",
-            "repeat(1, 1fr)",
-            "repeat(2, 1fr)",
-            "repeat(3, 1fr)"
-          ]}
-          columnGap={4}
-          rowGap={8}
-          my={12}
-        >
+        <Box className="block md:flex md:-mx-2 my-12">
           {campaigns.map((campaign, index) => (
-            <CampaignCard
-              key={index}
-              campaign={campaign}
-              handleClick={directToDetailPage}
-            />
+            <CampaignCard key={index} campaign={campaign} />
           ))}
-        </Grid>
+        </Box>
         <Flex justify="center">
           <Button
             size="lg"

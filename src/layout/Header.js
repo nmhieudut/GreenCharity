@@ -30,7 +30,7 @@ import { navs } from "src/constants/navbar";
 import firebase from "src/libs/firebase";
 import { AuthActions } from "src/store/auth/action";
 import removeCookie from "src/utils/cookie";
-import { LSManager } from "src/utils/localstorage";
+import { LSManager } from "src/utils/storage";
 
 export default function Header() {
   const dispatch = useDispatch();

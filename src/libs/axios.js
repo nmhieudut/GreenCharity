@@ -1,7 +1,7 @@
 import axios from "axios";
-import { LSManager } from "src/utils/localstorage";
+import { LSManager } from "src/utils/storage";
 
-const axiosClient = axios.create({
+const _http = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`,
   // timeout: 2000,
   headers: {
@@ -13,7 +13,7 @@ const axiosClient = axios.create({
 });
 
 // Add a request interceptor
-axiosClient.interceptors.request.use(
+_http.interceptors.request.use(
   config => {
     const token = LSManager.getToken();
     if (token) {
@@ -24,12 +24,12 @@ axiosClient.interceptors.request.use(
   },
   error => {
     // Do something with request error
-    return Promise.reject(error);
+    return error;
   }
 );
 
 // Add a response interceptor
-axiosClient.interceptors.response.use(
+_http.interceptors.response.use(
   response => {
     if (response && response.data) {
       return response.data;
@@ -38,8 +38,8 @@ axiosClient.interceptors.response.use(
   },
   error => {
     // Do something with request error
-    return Promise.reject(error);
+    return error;
   }
 );
 
-export default axiosClient;
+export default _http;

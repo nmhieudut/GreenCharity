@@ -29,7 +29,7 @@ import Head from "next/head";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Flatpickr from "react-flatpickr";
-import { BsPlusLg } from "react-icons/bs";
+import { BsFillImageFill, BsPlusLg } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import NeedLogin from "src/components/common/NeedLogin";
 import SectionContainer from "src/components/common/SectionContainer";
@@ -50,7 +50,6 @@ const schema = Yup.object().shape({
   amount: Yup.number()
     .required("Nhập số tiền mong muốn")
     .min(100000, "Số tiền không được dưới 100.000 VND")
-    .max(1000000000, "Nhiều tiền quá để ăn chặn hay gì")
 });
 
 function NewForm() {
@@ -115,9 +114,11 @@ function NewForm() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleSubmit = values => {
-    CampaignService.create(values).then(res => {
-      console.log("res", res);
-    });
+    try {
+      CampaignService.create(values).then(res => {
+        console.log("res", res);
+      });
+    } catch (e) {}
   };
 
   return (
@@ -176,7 +177,7 @@ function NewForm() {
                 <div className="my-4" />
                 <FormControl isInvalid={errors.amount} isRequired>
                   <FormLabel>
-                    Số tiền muốn quyên góp (100.000 - 1.000.000.000 VND)
+                    Số tiền muốn quyên góp (ít nhất là 100.000 VND)
                   </FormLabel>
                   <InputGroup>
                     <Input
@@ -235,9 +236,10 @@ function NewForm() {
                         justify="center"
                         align="center"
                         w={"50%"}
+                        py={12}
                       >
-                        <BsPlusLg
-                          size="3rem"
+                        <BsFillImageFill
+                          size="2rem"
                           className="mb-4"
                           color={color.PRIMARY}
                         />

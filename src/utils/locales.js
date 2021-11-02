@@ -16,6 +16,8 @@ export const convertToBreadcrumbs = string => {
       return "Đăng nhập / đăng kí";
     case "account":
       return "Tài khoản";
+    case "404":
+      return "Không tìm thấy trang";
     default:
       return null;
   }

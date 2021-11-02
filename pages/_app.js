@@ -1,6 +1,8 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import { css, Global } from "@emotion/react";
 import "@fontsource/nunito/400.css";
 import "flatpickr/dist/themes/material_green.css";
+import "focus-visible/dist/focus-visible";
 import Router from "next/router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
@@ -8,14 +10,12 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Layout from "src/layout";
 import "src/libs/firebase";
-import { AuthService } from "src/services/auth";
+import { UserService } from "src/services/user";
 import { wrapper } from "src/store";
 import { AuthActions } from "src/store/auth/action";
+import { LSManager } from "src/utils/storage";
 import theme from "src/utils/theme";
-import "focus-visible/dist/focus-visible";
 import "../styles/globals.scss";
-import { Global, css } from "@emotion/react";
-import { LSManager } from "src/utils/localstorage";
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     if (LSManager.getToken()) {
-      AuthService.verifyUser()
+      UserService.getInfo()
         .then(res => {
           dispatch(AuthActions.setCurrentUserAction(res.data));
         })

@@ -1,47 +1,16 @@
-import axiosClient from "src/libs/axios";
+import _http from "src/libs/axios";
 import Rest from "src/api";
 
 export const CampaignService = {
-  async getById(id) {
-    try {
-      return await axiosClient.get(`${Rest.campaigns}/${id}`);
-    } catch (err) {
-      return err;
-    }
-  },
-  async fetchCampaigns(query, skip) {
-    try {
-      return await axiosClient.get(Rest.campaigns + "/search");
-    } catch (err) {
-      return err;
-    }
-  },
-  async fetchComments(id) {
-    try {
-      return await axiosClient.get(`${Rest.campaigns}/${id}/comments`);
-    } catch (err) {
-      return err;
-    }
-  },
-  async create(payload) {
-    try {
-      return await axiosClient.post(Rest.campaigns, payload);
-    } catch (err) {
-      return err;
-    }
-  },
-  async update(id, content) {
-    try {
-      return await axiosClient.put(`${Rest.campaigns}/${id}`, { content });
-    } catch (err) {
-      return err;
-    }
-  },
-  async delete(id) {
-    try {
-      return await axiosClient.delete(`${Rest.campaigns}/${id}`);
-    } catch (err) {
-      return err;
-    }
-  }
+  getById: id => _http.get(`${Rest.campaigns}/${id}`),
+
+  fetchCampaigns: (query, skip) => _http.get(Rest.campaigns + "/search"),
+
+  fetchComments: id => _http.get(`${Rest.campaigns}/${id}/comments`),
+
+  create: payload => _http.post(Rest.campaigns, payload),
+
+  update: (id, content) => _http.put(`${Rest.campaigns}/${id}`, { content }),
+
+  delete: id => _http.delete(`${Rest.campaigns}/${id}`)
 };

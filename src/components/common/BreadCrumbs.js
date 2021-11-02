@@ -8,15 +8,13 @@ import {
 } from "@chakra-ui/react";
 import { BiChevronRight } from "react-icons/bi";
 import { useRouter } from "next/router";
-import { convertToBreadcrumbs } from "src/utils/breadcrumbs";
+import { convertToBreadcrumbs } from "src/utils/locales";
 import { color } from "src/constants/color";
 
 export default function BreadCrumbs(props) {
   const router = useRouter();
-  console.log("---router", router);
   const { pathname } = router;
   const pathNames = pathname.split("/").filter(x => x);
-  console.log("---", pathNames);
   return (
     <>
       {pathNames.length > 0 && (
@@ -39,8 +37,8 @@ export default function BreadCrumbs(props) {
                     <Text key={index}>{convertToBreadcrumbs(name)}</Text>
                   </BreadcrumbItem>
                 ) : (
-                  <BreadcrumbItem>
-                    <BreadcrumbLink key={index} href={routeTo}>
+                  <BreadcrumbItem key={index}>
+                    <BreadcrumbLink href={routeTo}>
                       {convertToBreadcrumbs(name)}
                     </BreadcrumbLink>
                   </BreadcrumbItem>

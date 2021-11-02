@@ -40,7 +40,7 @@ import {
 import { AuthService } from "src/services/auth";
 import { firebaseService } from "src/services/firebase";
 import { AuthActions } from "src/store/auth/action";
-import { LSManager } from "src/utils/localstorage";
+import { LSManager } from "src/utils/storage";
 
 export default function Auth() {
   const bg = useColorModeValue("purple.200", "gray.800");

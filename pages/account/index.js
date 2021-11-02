@@ -32,7 +32,6 @@ import { UserService } from "src/services/user";
 import { AuthActions } from "src/store/auth/action";
 
 function AccountPage({ user }) {
-  console.log("----info", user);
   const [info, setInfo] = useState({
     name: user.name,
     phoneNumber: user.phoneNumber,
@@ -48,16 +47,14 @@ function AccountPage({ user }) {
       [field]: value
     });
   };
-  console.log("===", info);
   const onUpdateInfo = async e => {
     e.preventDefault();
     setSuccess(false);
     setLoading(true);
     const res = await UserService.update(info);
-    console.log("===res", res);
     if (res) {
       setSuccess(true);
-      await AuthService.verifyUser()
+      await UserService.getInfo()
         .then(res => {
           dispatch(AuthActions.setCurrentUserAction(res.data));
         })
@@ -79,26 +76,27 @@ function AccountPage({ user }) {
       <Box
         marginTop={{ base: "1", sm: "5" }}
         display="flex"
-        flexDirection={{ base: "column", sm: "row" }}
+        flexDirection={{ base: "column", md: "row" }}
         justifyContent="space-between"
       >
         <Box
           display="flex"
           flex="1"
-          marginRight="3"
+          justifyContent="center"
           alignItems="center"
           mt={12}
         >
           <Box
-            width={{ base: "100%", sm: "85%" }}
+            width={{ base: "50%", md: "85%" }}
             zIndex="2"
-            marginLeft={{ base: "0", sm: "5%" }}
-            marginTop="5%"
+            marginBottom="5%"
+            marginLeft={{ base: "0", md: "5%" }}
           >
             <Image
-              rounded="full"
-              width="300px"
-              height="auto"
+              className="h-56 w-full object-cover object-center"
+              layout={"fill"}
+              width="100%"
+              height={"auto"}
               src={user.picture}
               alt={user.name}
             />
@@ -109,12 +107,16 @@ function AccountPage({ user }) {
           flex="3"
           flexDirection="column"
           justifyContent="start"
-          marginTop={{ base: "3", sm: "0" }}
+          marginTop={{ base: "3", md: "0" }}
+          marginLeft={{ base: 0, md: "9" }}
         >
           <Tabs>
             <TabList>
               <Tab _selected={{ borderBottomColor: color.PRIMARY }}>
                 Thông tin cá nhân
+              </Tab>
+              <Tab _selected={{ borderBottomColor: color.PRIMARY }}>
+                Tài khoản ví
               </Tab>
               <Tab _selected={{ borderBottomColor: color.PRIMARY }}>
                 Các hoạt động
@@ -230,6 +232,9 @@ function AccountPage({ user }) {
                     </Box>
                   </form>
                 </Stack>
+              </TabPanel>
+              <TabPanel>
+                <p>Ví!</p>
               </TabPanel>
               <TabPanel>
                 <p>two!</p>

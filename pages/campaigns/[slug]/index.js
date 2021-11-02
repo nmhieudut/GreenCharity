@@ -35,28 +35,24 @@ import { AiOutlineComment } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import NeedLogin from "src/components/common/NeedLogin";
 import { CommentService } from "src/services/comment";
+import * as _ from "lodash";
 
 export async function getServerSideProps(ctx) {
   const { slug } = ctx.query;
   const { res } = ctx;
-  try {
-    const { campaign } = await CampaignService.getById(slug);
+
+  const { campaign } = await CampaignService.getById(slug);
+  if (!_.isEmpty(campaign)) {
     return {
       props: {
-        campaign: campaign
-      }
-    };
-  } catch (e) {
-    res.writeHead(301, {
-      Location: "/404"
-    });
-    res.end();
-    return {
-      props: {
-        data: []
+        campaign
       }
     };
   }
+  res.writeHead(301, {
+    Location: "/404"
+  });
+  res.end();
 }
 
 export default function Detail({ campaign }) {
