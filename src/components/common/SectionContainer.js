@@ -1,10 +1,12 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
+import Particle from "../uncommon/Particle";
 
 export default function SectionContainer({
   children,
   hasBg,
   hasBreadcrumbs,
+  hasParticle,
   ...rest
 }) {
   return (
@@ -14,6 +16,7 @@ export default function SectionContainer({
       {...rest}
     >
       {hasBreadcrumbs && <div className="h-12"></div>}
+      {hasParticle && <Particle />}
       <div className="container">{children}</div>
     </Box>
   );

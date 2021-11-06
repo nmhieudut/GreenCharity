@@ -1,4 +1,4 @@
-export const LSManager = {
+export const storage = {
   // token
   setToken: token => {
     if (typeof window !== "undefined")

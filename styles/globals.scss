@@ -14,10 +14,9 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-  font-family: "Quicksand", sans-serif !important;
 }
 label {
-  margin: 0 !important
+  margin: 0 !important;
 }
 * {
   box-sizing: border-box;
@@ -51,10 +50,17 @@ section {
 
 .line-clamp {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 button {
   outline: none !important;
+  font-family: "Inter", sans-serif !important;
+  font-weight: 400 !important;
+}
+
+.tsparticles-canvas-el {
+  position: absolute !important;
+  z-index: -1 !important;
 }

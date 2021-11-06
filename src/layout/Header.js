@@ -30,7 +30,7 @@ import { navs } from "src/constants/navbar";
 import firebase from "src/libs/firebase";
 import { AuthActions } from "src/store/auth/action";
 import removeCookie from "src/utils/cookie";
-import { LSManager } from "src/utils/storage";
+import { storage } from "src/utils/storage";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -61,7 +61,7 @@ export default function Header() {
   }, [wrapperRef, showLinks]);
 
   const onLogout = () => {
-    LSManager.removeToken();
+    storage.removeToken();
     dispatch(AuthActions.setCurrentUserAction(null));
     router.push("/");
     firebase
@@ -101,8 +101,7 @@ export default function Header() {
       <Link href={href}>
         <a
           className={
-            "menu-item font-bold " +
-            (router.pathname == href && "menu-item__active")
+            "menu-item " + (router.pathname == href && "menu-item__active")
           }
         >
           {label}

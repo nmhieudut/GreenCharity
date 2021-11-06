@@ -8,30 +8,31 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Spinner,
   Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
-  Tabs,
-  Text
+  Tabs
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Flatpickr from "react-flatpickr";
-import { BiPhoneIncoming } from "react-icons/bi";
 import { FcCalendar, FcPhone } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import CustomAlert from "src/components/common/Alert";
-import NeedLogin from "src/components/common/NeedLogin";
 import SectionContainer from "src/components/common/SectionContainer";
 import { color } from "src/constants/color";
-import { AuthService } from "src/services/auth";
+import withAuth from "src/HOCs/withAuth";
+import { storage } from "src/libs/firebase";
 import { UserService } from "src/services/user";
 import { AuthActions } from "src/store/auth/action";
 
-function AccountPage({ user }) {
+function AccountPage() {
+  const user = useSelector(state => state.auth.currentUser);
+
   const [info, setInfo] = useState({
     name: user.name,
     phoneNumber: user.phoneNumber,
@@ -39,32 +40,90 @@ function AccountPage({ user }) {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [imgLoading, setImgLoading] = useState(false);
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(user.picture);
+
   const dispatch = useDispatch();
   const { name, phoneNumber, dateOfBirth } = info;
+
+  const uploadButton = (
+    <div>
+      {imgLoading && (
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      )}
+    </div>
+  );
+
   const handleChange = (field, value) => {
     setInfo({
       ...info,
       [field]: value
     });
   };
+
+  useEffect(() => {
+    if (image) handleUpload();
+  }, [image]);
+
+  const handleImageChange = e => {
+    setImageUrl("");
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = () => {
+    setImgLoading(true);
+    const uploadTask = storage.ref(`avatars/${image.name}`).put(image);
+    uploadTask.on(
+      "state_changed",
+      snapshot => {},
+      error => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("avatars")
+          .child(image.name)
+          .getDownloadURL()
+          .then(url => {
+            setImageUrl(url);
+            setImgLoading(false);
+          });
+      }
+    );
+  };
+
   const onUpdateInfo = async e => {
     e.preventDefault();
     setSuccess(false);
     setLoading(true);
-    const res = await UserService.update(info);
+    const res = await UserService.update(
+      Object.assign(info, { picture: imageUrl })
+    );
     if (res) {
       setSuccess(true);
       await UserService.getInfo()
         .then(res => {
           dispatch(AuthActions.setCurrentUserAction(res.data));
         })
-        .catch(e => dispatch(AuthActions.setCurrentUserAction(null)));
-
-      setLoading(false);
+        .catch(() => dispatch(AuthActions.setCurrentUserAction(null)))
+        .finally(() => setLoading(false));
     }
   };
   return (
     <SectionContainer hasBreadcrumbs>
+      <Head>
+        <title>Tài khoản</title>
+        <link rel="icon" href="/images/thumbnail.png" />
+      </Head>
       <Heading
         textAlign="center"
         fontSize={{ base: "3xl", sm: "4xl", md: "5xl" }}
@@ -86,21 +145,25 @@ function AccountPage({ user }) {
           alignItems="center"
           mt={12}
         >
-          <Box
-            width={{ base: "50%", md: "85%" }}
-            zIndex="2"
-            marginBottom="5%"
-            marginLeft={{ base: "0", md: "5%" }}
-          >
-            <Image
-              className="h-56 w-full object-cover object-center"
-              layout={"fill"}
-              width="100%"
-              height={"auto"}
-              src={user.picture}
-              alt={user.name}
-            />
-          </Box>
+          <div class="bg-white px-4 py-5 rounded-lg shadow-xl text-center w-full">
+            <div class="mb-4">
+              {imageUrl ? (
+                <Image
+                  className="w-auto mx-auto object-cover object-center border"
+                  src={imageUrl}
+                  alt={user.name}
+                />
+              ) : (
+                uploadButton
+              )}
+            </div>
+            <label class="cursor-pointer mt-6">
+              <span class="mt-2 leading-normal px-4 py-2 bg-purple-500 text-sm rounded-md">
+                Chọn hình ảnh
+              </span>
+              <input type="file" class="hidden" onChange={handleImageChange} />
+            </label>
+          </div>
         </Box>
         <Box
           display="flex"
@@ -246,22 +309,4 @@ function AccountPage({ user }) {
     </SectionContainer>
   );
 }
-
-export default function Account() {
-  const user = useSelector(state => state.auth.currentUser);
-  return (
-    <>
-      <Head>
-        <title>Tài khoản</title>
-        <link rel="icon" href="/images/thumbnail.png" />
-      </Head>
-      {user ? (
-        <AccountPage user={user} />
-      ) : (
-        <Box h={"100vh"}>
-          <NeedLogin />
-        </Box>
-      )}
-    </>
-  );
-}
+export default withAuth(AccountPage);

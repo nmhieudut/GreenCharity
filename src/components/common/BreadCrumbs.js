@@ -33,8 +33,12 @@ export default function BreadCrumbs(props) {
                 const routeTo = `/${pathNames.slice(0, index + 1).join("/")}`;
                 const isLast = index === pathNames.length - 1;
                 return isLast ? (
-                  <BreadcrumbItem isCurrentPage color={color.PRIMARY}>
-                    <Text key={index}>{convertToBreadcrumbs(name)}</Text>
+                  <BreadcrumbItem
+                    key={index}
+                    isCurrentPage
+                    color={color.PRIMARY}
+                  >
+                    <Text>{convertToBreadcrumbs(name)}</Text>
                   </BreadcrumbItem>
                 ) : (
                   <BreadcrumbItem key={index}>

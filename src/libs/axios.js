@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LSManager } from "src/utils/storage";
+import { storage } from "src/utils/storage";
 
 const _http = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`,
@@ -15,7 +15,7 @@ const _http = axios.create({
 // Add a request interceptor
 _http.interceptors.request.use(
   config => {
-    const token = LSManager.getToken();
+    const token = storage.getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

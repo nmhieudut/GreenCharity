@@ -40,7 +40,7 @@ import {
 import { AuthService } from "src/services/auth";
 import { firebaseService } from "src/services/firebase";
 import { AuthActions } from "src/store/auth/action";
-import { LSManager } from "src/utils/storage";
+import { storage } from "src/utils/storage";
 
 export default function Auth() {
   const bg = useColorModeValue("purple.200", "gray.800");
@@ -76,7 +76,7 @@ export default function Auth() {
         userCred.getIdToken().then(token => {
           setIdToken(token);
           AuthService.loginWithGoogle(token).then(res => {
-            LSManager.setToken(res.token);
+            storage.setToken(res.token);
             dispatch(AuthActions.setCurrentUserAction(res.user));
             router.push("/");
           });
@@ -100,7 +100,7 @@ export default function Auth() {
     AuthService.login(email, password)
       .then(res => {
         dispatch(AuthActions.loginSuccessAction(res.user));
-        LSManager.setToken(res.token);
+        storage.setToken(res.token);
         router.push("/");
       })
       .catch(e => {
@@ -115,7 +115,7 @@ export default function Auth() {
     AuthService.register(name, email, password, phoneNumber)
       .then(res => {
         dispatch(AuthActions.signUpSuccessAction(res.user));
-        LSManager.setToken(res.token);
+        storage.setToken(res.token);
         router.push("/");
       })
       .catch(e => {

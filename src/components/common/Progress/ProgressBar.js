@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Progress({ color, percent, ...rest }) {
+export default function ProgressBar({ color, percent, ...rest }) {
   return (
     <div className="bar">
       <div

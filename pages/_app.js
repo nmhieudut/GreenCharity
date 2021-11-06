@@ -1,19 +1,20 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { css, Global } from "@emotion/react";
-import "@fontsource/nunito/400.css";
+import "@fontsource/inter/400.css";
 import "flatpickr/dist/themes/material_green.css";
 import "focus-visible/dist/focus-visible";
 import Router from "next/router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { useDispatch } from "react-redux";
 import Layout from "src/layout";
 import "src/libs/firebase";
 import { UserService } from "src/services/user";
 import { wrapper } from "src/store";
 import { AuthActions } from "src/store/auth/action";
-import { LSManager } from "src/utils/storage";
+import { storage } from "src/utils/storage";
 import theme from "src/utils/theme";
 import "../styles/globals.scss";
 
@@ -28,11 +29,13 @@ const GlobalStyles = css`
   }
 `;
 
+const queryClient = new QueryClient();
+
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (LSManager.getToken()) {
+    if (storage.getToken()) {
       UserService.getInfo()
         .then(res => {
           dispatch(AuthActions.setCurrentUserAction(res.data));
@@ -43,10 +46,12 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ChakraProvider theme={theme}>
-      <Global styles={GlobalStyles} />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <QueryClientProvider client={queryClient}>
+        <Global styles={GlobalStyles} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </QueryClientProvider>
     </ChakraProvider>
   );
 }

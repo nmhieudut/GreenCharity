@@ -1,24 +1,20 @@
 import {
-  Avatar,
   Box,
-  Center,
-  Divider,
   Flex,
   Heading,
   Image,
-  Spacer,
+  Link,
   Stack,
   Tag,
   Text,
-  useColorModeValue,
-  Link
+  useColorModeValue
 } from "@chakra-ui/react";
 import * as n from "numeral";
 import { BsClock } from "react-icons/bs";
 import { color } from "src/constants/color";
-import Progress from "../common/Progress";
 import { DateUtils } from "src/utils/date";
 import { convertStatusToString } from "src/utils/status";
+import ProgressBar from "../Progress/ProgressBar";
 
 export default function CampaignCard(props) {
   const {
@@ -39,21 +35,30 @@ export default function CampaignCard(props) {
       href={`/campaigns/${_id}`}
       cursor={"pointer"}
       flexDir={"column"}
-      className="transition duration-300 w-full lg:w-1/3 md:mx-2 mb-4 md:mb-0"
-      _hover={{ transform: "scale(1.05)" }}
+      className="transition duration-300 md:mx-2 mb-8"
+      _hover={{ boxShadow: "xl" }}
       bg={useColorModeValue("white", "gray.900")}
     >
-      <Box className="w-full  mb-4 md:mb-0">
-        <Box className="rounded-lg overflow-hidden shadow relative">
+      <Box className="w-full mb-4 md:mb-0">
+        <Box className="rounded-lg overflow-hidden shadow">
           <Image
             className="h-56 w-full object-cover object-center"
             src={image}
             layout={"fill"}
-            width="100%"
-            height={300}
+            width={600}
           />
           <Box className="p-4 h-auto md:h-40 lg:h-40">
-            <Tag mb={2} variant="solid" colorScheme="purple">
+            <Tag
+              mb={2}
+              variant="solid"
+              colorScheme={
+                status === "pending"
+                  ? "blue"
+                  : status === "active"
+                  ? "purple"
+                  : "red"
+              }
+            >
               {convertStatusToString(status)}
             </Tag>
             <Stack>
@@ -64,14 +69,14 @@ export default function CampaignCard(props) {
               >
                 {name}
               </Heading>
-              <Text className="line-clamp text-gray-600 text-sm leading-relaxed block md:text-xs lg:text-sm">
+              <Box className="line-clamp text-gray-600 text-sm leading-relaxed block md:text-xs lg:text-sm">
                 <div dangerouslySetInnerHTML={{ __html: content }} />
-              </Text>
+              </Box>
             </Stack>
           </Box>
           <Box mt={"auto"} px={4} mb={4}>
             <Stack my={2} w={"full"}>
-              <Progress color={color.PRIMARY} percent={percent} />
+              <ProgressBar color={color.PRIMARY} percent={percent} />
             </Stack>
             <Flex justify="end">
               <Stack spacing={2} direction={["column", "row"]} align={"end"}>

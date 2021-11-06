@@ -1,35 +1,29 @@
-import { Box, Button, Heading, Input, Select } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  SkeletonCircle,
+  SkeletonText,
+  Text
+} from "@chakra-ui/react";
 import Head from "next/head";
 import React from "react";
+import { useQuery } from "react-query";
+import CampaignItem from "src/components/common/Campaign/CampaignItem";
+import CampaignItemSkeleton from "src/components/common/Campaign/CampaignItemSkeleton";
+import Search from "src/components/common/Search";
 import SectionContainer from "src/components/common/SectionContainer";
 import { color } from "src/constants/color";
+import { options } from "src/constants/filter";
 import { CampaignService } from "src/services/campaign";
-import { MdArrowDropDown } from "react-icons/md";
 
-export async function getServerSideProps(ctx) {
-  const { res } = ctx;
-
-  const { campaigns } = await CampaignService.fetchCampaigns();
-  if (campaigns) {
-    return {
-      props: {
-        campaigns
-      }
-    };
-  }
-  res.writeHead(301, {
-    Location: "/404"
-  });
-  res.end();
-  return {
-    props: {
-      data: []
-    }
+export default function Campaigns({ total, campaigns }) {
+  const [query, setQuery] = React.useState("");
+  const [status, setStatus] = React.useState("");
+  const handleSearch = async (query, status) => {
+    setQuery(query);
+    setStatus(status);
   };
-}
-
-export default function Campaigns({ campaigns }) {
-  console.log("-=--=-", campaigns);
   return (
     <>
       <Head>
@@ -38,36 +32,51 @@ export default function Campaigns({ campaigns }) {
       </Head>
       <Box bg={color.PRIMARY}>
         <SectionContainer hasBreadcrumbs>
-          <form>
-            <Heading className="text-center font-bold text-white text-4xl">
-              Tìm kiếm các hoạt động thiện nguyện ngay
-              <p className="mx-auto font-normal text-sm my-6 max-w-lg">
-                Nhập tên hoạt động và chọn trạng thái của các hoạt động đó (đang
-                diễn ra, kết thúc)
-              </p>
-              <div className="sm:flex items-center bg-white rounded-lg overflow-hidden justify-between px-2 py-1">
-                <input
-                  className="text-base text-gray-400 flex-grow outline-none px-2 "
-                  type="text"
-                  placeholder="Nhập từ khóa ở đây..."
-                />
-                <div className="sm:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
-                  <select
-                    defaultValue="active"
-                    class="text-base text-gray-800 outline-none border-2 px-4 py-2 rounded-lg"
-                  >
-                    <option value="active">Đang diễn ra</option>
-                    <option value="ended">Đã kết thúc</option>
-                  </select>
-                  <Button type="submit" colorScheme="purple" p={4}>
-                    Tìm kiếm
-                  </Button>
-                </div>
-              </div>
-            </Heading>
-          </form>
+          <Heading className="text-center font-bold text-white text-4xl">
+            Tìm kiếm các hoạt động thiện nguyện ngay
+            <p className="mx-auto font-normal text-sm my-6 max-w-lg">
+              Nhập tên hoạt động và chọn trạng thái của các hoạt động đó (đang
+              diễn ra, kết thúc)
+            </p>
+            <Search hasOptions options={options} onSearch={handleSearch} />
+          </Heading>
         </SectionContainer>
       </Box>
+      <SectionContainer>
+        <CampaignsList query={query} status={status} />
+      </SectionContainer>
     </>
   );
 }
+
+const CampaignsList = ({ query, status }) => {
+  const { data, isLoading, isError, error } = useQuery(
+    ["campaigns", query, status],
+    () => CampaignService.fetchCampaigns(query, status)
+  );
+  const { total, campaigns } = data || {};
+  console.log("----", data, isLoading, error, query, status);
+
+  return (
+    <div>
+      {isError && <div>Có gì đó không ổn, thử lại ngay</div>}
+      {isLoading &&
+        Array.from({ length: 3 }, (_, i) => <CampaignItemSkeleton />)}
+      {campaigns && (
+        <Box>
+          <Text as={"h6"}>Hiển thị {total} kết quả</Text>
+          <Box py={12}>
+            {campaigns.map(campaign => (
+              <CampaignItem key={campaign._id} data={campaign} />
+            ))}
+          </Box>
+        </Box>
+      )}
+      {campaigns?.length === 0 && (
+        <Flex justify="center" align="center">
+          Không có hoạt động tương ứng
+        </Flex>
+      )}
+    </div>
+  );
+};
