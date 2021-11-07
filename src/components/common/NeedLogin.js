@@ -1,5 +1,6 @@
-import { Flex, Text, Button, Box } from "@chakra-ui/react";
+import { Flex, Text, Box } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import Button from "src/components/common/Button";
 
 export default function NeedLogin() {
   const router = useRouter();

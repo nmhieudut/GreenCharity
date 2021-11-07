@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Center,
   Divider,
   Flex,
@@ -41,6 +40,7 @@ import { AuthService } from "src/services/auth";
 import { firebaseService } from "src/services/firebase";
 import { AuthActions } from "src/store/auth/action";
 import { storage } from "src/utils/storage";
+import Button from "src/components/common/Button";
 
 export default function Auth() {
   const bg = useColorModeValue("purple.200", "gray.800");
@@ -77,7 +77,7 @@ export default function Auth() {
           setIdToken(token);
           AuthService.loginWithGoogle(token).then(res => {
             storage.setToken(res.token);
-            dispatch(AuthActions.setCurrentUserAction(res.user));
+            dispatch(AuthActions.setCurrentUserSuccessAction(res.user));
             router.push("/");
           });
         });
@@ -101,7 +101,7 @@ export default function Auth() {
       .then(res => {
         dispatch(AuthActions.loginSuccessAction(res.user));
         storage.setToken(res.token);
-        router.push("/");
+        router.back();
       })
       .catch(e => {
         console.log({ e });
@@ -116,7 +116,7 @@ export default function Auth() {
       .then(res => {
         dispatch(AuthActions.signUpSuccessAction(res.user));
         storage.setToken(res.token);
-        router.push("/");
+        router.back();
       })
       .catch(e => {
         console.log({ e });
@@ -295,8 +295,7 @@ export default function Auth() {
                             />
                             <InputRightElement className="my-2">
                               <span
-                                className="h-full"
-                                className="cursor-pointer"
+                                className="h-full cursor-pointer"
                                 onClick={handleShow}
                               >
                                 {show ? (
@@ -329,10 +328,10 @@ export default function Auth() {
                   </TabPanel>
                 </TabPanels>
               </Tabs>
-
               <span className="text-center mb-4">Hoặc</span>
               <div className="px-8 flex flex-col md:flex-row">
                 <Button
+                  nolinear="true"
                   w={"full"}
                   variant={"outline"}
                   leftIcon={<FcGoogle />}
@@ -345,6 +344,7 @@ export default function Auth() {
                 <div className="m-2"></div>
                 <Button
                   w={"full"}
+                  nolinear="true"
                   colorScheme={"facebook"}
                   leftIcon={<FaFacebook />}
                   onClick={loginWithFacebook}

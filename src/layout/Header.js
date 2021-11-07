@@ -62,7 +62,7 @@ export default function Header() {
 
   const onLogout = () => {
     storage.removeToken();
-    dispatch(AuthActions.setCurrentUserAction(null));
+    dispatch(AuthActions.setCurrentUserSuccessAction(null));
     router.push("/");
     firebase
       .auth()
@@ -147,7 +147,11 @@ export default function Header() {
               placement="bottom-end"
               label={colorMode === "light" ? "Nền tối" : "Nền sáng"}
             >
-              <Button color={color.primary} onClick={toggleColorMode}>
+              <Button
+                color={color.primary}
+                nolinear="true"
+                onClick={toggleColorMode}
+              >
                 <span>
                   {colorMode === "light" ? <FaMoon /> : <BsBrightnessHigh />}
                 </span>
@@ -156,6 +160,7 @@ export default function Header() {
             {user ? (
               <Menu isLazy>
                 <MenuButton
+                  nolinear="true"
                   as={Button}
                   px={4}
                   py={2}
@@ -204,7 +209,7 @@ export default function Header() {
         </Box>
       ) : null}
       <BreadCrumbs
-        bg={useColorModeValue("white", "gray.800")}
+        bg={bg}
         py={4}
         borderBottom={borderColor}
         boxShadow="0 .5rem 1.5rem rgba(0,0,0,.1)"

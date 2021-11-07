@@ -41,10 +41,20 @@ export const AuthActions = {
     return { type: actionTypes.SIGN_OUT };
   },
 
-  setCurrentUserAction(payload) {
+  setCurrentUserAction() {
     return {
-      type: actionTypes.SET_CURRENT_USER,
+      type: actionTypes.SET_CURRENT_USER
+    };
+  },
+  setCurrentUserSuccessAction(payload) {
+    return {
+      type: actionTypes.SET_CURRENT_USER_SUCCESS,
       payload
+    };
+  },
+  setCurrentUserFailedAction() {
+    return {
+      type: actionTypes.SET_CURRENT_USER_FAILED
     };
   }
 };

@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   FormControl,
   FormLabel,
   Heading,
@@ -110,11 +109,12 @@ function AccountPage() {
     );
     if (res) {
       setSuccess(true);
+      dispatch(AuthActions.setCurrentUserAction());
       await UserService.getInfo()
         .then(res => {
-          dispatch(AuthActions.setCurrentUserAction(res.data));
+          dispatch(AuthActions.setCurrentUserSuccessAction(res.data));
         })
-        .catch(() => dispatch(AuthActions.setCurrentUserAction(null)))
+        .catch(e => dispatch(AuthActions.setCurrentUserFailedAction()))
         .finally(() => setLoading(false));
     }
   };

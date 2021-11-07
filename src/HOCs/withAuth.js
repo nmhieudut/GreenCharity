@@ -7,7 +7,9 @@ const withAuth = WrappedComponent => {
     // checks whether we are on client / browser or server.
     if (typeof window !== "undefined") {
       const user = useSelector(state => state.auth.currentUser);
-      if (!user) {
+      const loading = useSelector(state => state.auth.loading);
+      if (loading && !user) return <div>Loading.....</div>;
+      if (!user && !loading) {
         return (
           <Box h={"100vh"}>
             <NeedLogin />

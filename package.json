@@ -38,6 +38,7 @@
     "react-flatpickr": "^3.10.7",
     "react-hook-form": "^7.18.0",
     "react-icons": "^4.3.1",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-particles-js": "^3.5.3",
     "react-query": "^3.30.0",
     "react-redux": "^7.2.5",
@@ -51,6 +52,7 @@
     "autoprefixer": "^10.3.5",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
+    "eslint-config-prettier": "^8.3.0",
     "postcss": "^8.3.7",
     "tailwindcss": "^2.2.15"
   }

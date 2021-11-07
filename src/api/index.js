@@ -5,11 +5,19 @@ const Rest = {
   loginFB: "/auth/facebook",
   register: "/auth/register",
   checkCurrentUser: "/auth/verify",
+
   // campaigns services
   campaigns: "/campaigns",
   comments: "/comments",
+
   //user services
-  user: "/user"
+  user: "/user",
+
+  //wallet services
+  wallet: "wallet",
+
+  //checkout
+  checkout: "/checkout"
 };
 
 export default Rest;

@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Button,
   Center,
   Flex,
   FormControl,
@@ -20,30 +19,27 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import { format } from "date-fns";
+import * as _ from "lodash";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import * as n from "numeral";
 import React, { useEffect, useState } from "react";
+import { AiOutlineComment, AiOutlineLeft } from "react-icons/ai";
 import { FaCcStripe } from "react-icons/fa";
+import { RiEditLine } from "react-icons/ri";
+import { useSelector } from "react-redux";
+import Button from "src/components/common/Button";
+import { CampaignForm } from "src/components/common/Campaign/CampaignForm";
+import CommentItem from "src/components/common/Campaign/CommentItem";
+import NeedLogin from "src/components/common/NeedLogin";
 import ProgressBar from "src/components/common/Progress/ProgressBar";
 import SectionContainer from "src/components/common/SectionContainer";
 import { color } from "src/constants/color";
 import { CampaignService } from "src/services/campaign";
-import * as n from "numeral";
-import { DateUtils } from "src/utils/date";
-import CommentItem from "src/components/common/Campaign/CommentItem";
-import { AiOutlineComment, AiOutlineLeft } from "react-icons/ai";
-import { useSelector } from "react-redux";
-import NeedLogin from "src/components/common/NeedLogin";
 import { CommentService } from "src/services/comment";
-import * as _ from "lodash";
-import { RiEditLine } from "react-icons/ri";
-import { CampaignForm } from "src/components/common/Campaign/CampaignForm";
+import { DateUtils } from "src/utils/date";
 
 export async function getServerSideProps(ctx) {
-  const { slug } = ctx.query;
-  const { res } = ctx;
-
-  const { campaign } = await CampaignService.getById(slug);
+  const { campaign } = await CampaignService.getById(ctx.query.slug);
   if (!_.isEmpty(campaign)) {
     return {
       props: {
@@ -51,14 +47,14 @@ export async function getServerSideProps(ctx) {
       }
     };
   }
-  res.writeHead(301, {
-    Location: "/404"
-  });
-  res.end();
+  return {
+    notFound: true
+  };
 }
 
 export default function Detail({ campaign }) {
   const [canEdit, setCanEdit] = useState(false);
+  const bg = useColorModeValue("white", "gray.800");
   const user = useSelector(state => state.auth.currentUser);
   const {
     status,
@@ -139,23 +135,18 @@ export default function Detail({ campaign }) {
               h="max-content"
               ml={["0", "0", "8"]}
               flex={2}
-              bg={useColorModeValue("white", "gray.800")}
+              bg={bg}
               boxShadow={"2xl"}
               rounded={"md"}
               overflow={"hidden"}
             >
-              <Stack
-                textAlign={"center"}
-                p={6}
-                color={useColorModeValue("gray.800", "white")}
-                align={"center"}
-              >
+              <Stack textAlign={"center"} p={6} align={"center"}>
                 <Text fontSize={"xl"} color={color.PRIMARY} fontWeight={600}>
                   THÔNG TIN QUYÊN GÓP
                 </Text>
               </Stack>
 
-              <Box bg={useColorModeValue("gray.50", "gray.900")} px={6} py={2}>
+              <Box bg={bg} px={6} py={2}>
                 <Stack my={4} w={"full"}>
                   <Flex justify={"space-between"}>
                     <Flex align={"end"}>
@@ -214,6 +205,7 @@ export default function Detail({ campaign }) {
                   Hoặc quyên góp qua
                 </Text>
                 <Button
+                  nolinear="true"
                   my={2}
                   w={"full"}
                   colorScheme={"pink"}
@@ -235,6 +227,7 @@ export default function Detail({ campaign }) {
                   Momo
                 </Button>
                 <Button
+                  nolinear="true"
                   my={2}
                   w={"full"}
                   colorScheme={"gray"}
@@ -331,7 +324,9 @@ function Comment({ campaignId }) {
           <SkeletonText mt="4" noOfLines={4} spacing="4" />
         </Box>
       ) : (
-        comments?.map(comment => <CommentItem comment={comment} />)
+        comments?.map(comment => (
+          <CommentItem key={comment._id} comment={comment} />
+        ))
       )}
     </Box>
   );

@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Divider,
   Flex,
   FormControl,
@@ -35,6 +34,7 @@ import Editor from "src/components/uncommon/Editor";
 import { color } from "src/constants/color";
 import { storage } from "src/libs/firebase";
 import { CampaignService } from "src/services/campaign";
+import Button from "src/components/common/Button";
 import * as Yup from "yup";
 // YUP
 const schema = Yup.object().shape({
@@ -277,16 +277,15 @@ export function CampaignForm({ isEdited, initialValues }) {
                   </InputGroup>
                   <FormErrorMessage>{errors.content}</FormErrorMessage>
                 </FormControl>
-                <Button onClick={onOpen}>Xem trước bài đăng</Button>
+                <Button colorScheme="purple" onClick={onOpen}>
+                  Xem trước bài đăng
+                </Button>
               </Box>
             </Stack>
             <Divider my={4} />
-            <Stack spacing={6} direction={["column", "row"]}>
-              <Button colorScheme="purple" type="submit">
-                {isEdited ? "Cập nhật hoạt động" : "Tạo hoạt động"}
-              </Button>
-              <Button variant="outline">Hủy</Button>
-            </Stack>
+            <Button colorScheme="purple" type="submit">
+              {isEdited ? "Cập nhật hoạt động" : "Tạo hoạt động"}
+            </Button>
 
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
@@ -297,7 +296,7 @@ export function CampaignForm({ isEdited, initialValues }) {
                   <div dangerouslySetInnerHTML={{ __html: values.content }} />
                 </ModalBody>
                 <ModalFooter>
-                  <Button colorScheme="blue" onClick={onClose}>
+                  <Button colorScheme="purple" onClick={onClose}>
                     Đóng
                   </Button>
                 </ModalFooter>

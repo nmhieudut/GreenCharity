@@ -8,12 +8,14 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import GlobalSpinner from "src/components/common/Spinner/GlobalSpinner";
 import Layout from "src/layout";
 import "src/libs/firebase";
 import { UserService } from "src/services/user";
 import { wrapper } from "src/store";
 import { AuthActions } from "src/store/auth/action";
+import { ModalActions } from "src/store/modal/action";
 import { storage } from "src/utils/storage";
 import theme from "src/utils/theme";
 import "../styles/globals.scss";
@@ -33,15 +35,24 @@ const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
+  const globalLoading = useSelector(state => state.modal.globalLoading);
 
   useEffect(() => {
-    if (storage.getToken()) {
-      UserService.getInfo()
-        .then(res => {
-          dispatch(AuthActions.setCurrentUserAction(res.data));
-        })
-        .catch(e => dispatch(AuthActions.setCurrentUserAction(null)));
-    }
+    const verifyUser = async () => {
+      if (storage.getToken()) {
+        dispatch(AuthActions.setCurrentUserAction());
+        dispatch(ModalActions.setModalOn());
+        await UserService.getInfo()
+          .then(res => {
+            dispatch(AuthActions.setCurrentUserSuccessAction(res.data));
+          })
+          .catch(e => dispatch(AuthActions.setCurrentUserFailedAction()))
+          .finally(() => {
+            dispatch(ModalActions.setModalOff());
+          });
+      }
+    };
+    verifyUser();
   }, []);
 
   return (
@@ -50,6 +61,7 @@ function MyApp({ Component, pageProps }) {
         <Global styles={GlobalStyles} />
         <Layout>
           <Component {...pageProps} />
+          {globalLoading && <GlobalSpinner />}
         </Layout>
       </QueryClientProvider>
     </ChakraProvider>

@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Flex,
   Grid,
   Heading,
@@ -15,6 +14,7 @@ import CountUp from "react-countup";
 import { FcConferenceCall, FcDonate } from "react-icons/fc";
 import { color } from "src/constants/color";
 import { CampaignService } from "src/services/campaign";
+import Button from "src/components/common/Button";
 
 const SectionContainer = dynamic(() =>
   import("src/components/common/SectionContainer")
@@ -24,7 +24,6 @@ const CampaignCard = dynamic(() =>
 );
 
 export const getServerSideProps = async ctx => {
-  const { res } = ctx;
   try {
     const { campaigns } = await CampaignService.fetchCampaigns();
     return {
@@ -33,20 +32,15 @@ export const getServerSideProps = async ctx => {
       }
     };
   } catch (e) {
-    res.writeHead(301, {
-      Location: "/404"
-    });
-    res.end();
     return {
-      props: {
-        campaigns: []
-      }
+      notFound: true
     };
   }
 };
 
 export default function Home({ campaigns }) {
   const router = useRouter();
+  const bg = useColorModeValue("white", "gray.800");
   return (
     <>
       <Head>
@@ -95,7 +89,7 @@ export default function Home({ campaigns }) {
               <Box fontSize={"2xl"} color={color.PRIMARY} fontWeight={600}>
                 <CountUp end={30} duration={3} />
               </Box>
-              <Text>Hoạt động thành công</Text>
+              <Text>Hoạt động</Text>
             </Box>
             <Box>
               <Box fontSize={"2xl"} color={color.PRIMARY} fontWeight={600}>
@@ -125,6 +119,7 @@ export default function Home({ campaigns }) {
 
             <a href="/#get-started">
               <Button
+                nolinear="true"
                 size="lg"
                 colorScheme={"purple"}
                 rounded={"full"}
@@ -163,7 +158,7 @@ export default function Home({ campaigns }) {
           <Flex
             direction="column"
             className="border-2"
-            bg={useColorModeValue("white", "gray.800")}
+            bg={bg}
             boxShadow={"2xl"}
             rounded={"md"}
             overflow={"hidden"}
@@ -198,7 +193,7 @@ export default function Home({ campaigns }) {
           <Flex
             direction="column"
             className="border-2"
-            bg={useColorModeValue("white", "gray.800")}
+            bg={bg}
             boxShadow={"2xl"}
             rounded={"md"}
             overflow={"hidden"}
@@ -243,6 +238,7 @@ export default function Home({ campaigns }) {
         </Box>
         <Flex justify="center">
           <Button
+            nolinear="true"
             size="lg"
             px={6}
             variant="outline"

@@ -1,12 +1,18 @@
-import { Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { Flex, Heading, Text } from "@chakra-ui/react";
+import Button from "src/components/common/Button";
 import { useRouter } from "next/router";
 import SectionContainer from "src/components/common/SectionContainer";
 import { color } from "src/constants/color";
+import Head from "next/head";
 
 export default function NotFound() {
   const router = useRouter();
   return (
     <SectionContainer>
+      <Head>
+        <title>Không tìm thấy trang</title>
+        <link rel="icon" href="/images/thumbnail.png" />
+      </Head>
       <Flex
         flexDir="column"
         h="100vh"
@@ -33,7 +39,6 @@ export default function NotFound() {
 
         <Button
           colorScheme="purple"
-          bgGradient="linear(to-r, purple.400, purple.500, purple.600)"
           color="white"
           variant="solid"
           onClick={() => router.push("/")}

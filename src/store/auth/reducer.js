@@ -23,7 +23,11 @@ export default function authReducer(state = initialState, action) {
     case actionTypes.SIGN_UP_FAILED:
       return { ...state, loading: false, signUpError: action.payload };
     case actionTypes.SET_CURRENT_USER:
+      return { ...state, loading: true };
+    case actionTypes.SET_CURRENT_USER_SUCCESS:
       return { ...state, loading: false, currentUser: action.payload };
+    case actionTypes.SET_CURRENT_USER_FAILED:
+      return { ...state, loading: false, currentUser: null };
     default:
       return { ...state };
   }

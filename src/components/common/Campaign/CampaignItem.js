@@ -31,6 +31,7 @@ export default function CampaignItem({
   }
 }) {
   const percent = `${((donated_amount / amount) * 100).toFixed(2)}%`;
+  console.log("---", _id);
   return (
     <Box
       bg={useColorModeValue("white", "gray.900")}
@@ -74,16 +75,6 @@ export default function CampaignItem({
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>
-          <div className="grid grid-cols-2 mt-4 my-auto">
-            <div className="mr-2 col-start-9">
-              <Box className="flex items-center">
-                <BsClock className="mr-2" />
-                <Text>
-                  {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
-                </Text>
-              </Box>
-            </div>
-          </div>
           <Text textAlign="right" fontSize={"md"} fontWeight="bold">
             {percent}
           </Text>
@@ -103,13 +94,24 @@ export default function CampaignItem({
               <Text>/ {n(amount).format("0,0")} VND</Text>
             </Stack>
           </Flex>
-          <Link
-            className="flex items-center text-blue-700"
-            href={`/campaigns/${_id}`}
-          >
-            <i> Xem chi tiết </i>
-            <AiOutlineDoubleRight className="ml-2" />
-          </Link>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 mt-4 my-auto">
+            <div className="flex justify-end sm:justify-start ">
+              <Box className="flex items-center">
+                <BsClock className="mr-1" />
+                <Text>
+                  {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
+                </Text>
+              </Box>
+            </div>
+            <Link
+              className="flex items-center justify-end text-blue-700"
+              href={`/campaigns/${_id}`}
+            >
+              <i> Xem chi tiết </i>
+              <AiOutlineDoubleRight className="ml-1" />
+            </Link>
+          </div>
         </div>
       </div>
     </Box>
