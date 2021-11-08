@@ -3,6 +3,8 @@ import {
   Flex,
   Grid,
   Heading,
+  Image,
+  Link,
   Stack,
   Text,
   useColorModeValue
@@ -105,7 +107,7 @@ export default function Home({ campaigns }) {
             </Box>
           </Grid>
           <Stack spacing={6} direction={["column", "row"]}>
-            <a href="/#current-campaigns">
+            <Link href="/#current-campaigns">
               <Button
                 size="lg"
                 rounded={"full"}
@@ -115,9 +117,9 @@ export default function Home({ campaigns }) {
               >
                 Tìm hiểu
               </Button>
-            </a>
+            </Link>
 
-            <a href="/#get-started">
+            <Link href="/#get-started">
               <Button
                 nolinear="true"
                 size="lg"
@@ -128,10 +130,10 @@ export default function Home({ campaigns }) {
               >
                 Bắt đầu ngay
               </Button>
-            </a>
+            </Link>
           </Stack>
           <Flex w={"full"} justify={"center"}>
-            <img src="/images/hero.png" alt="hero" width="60%" />
+            <Image src="/images/hero.png" alt="hero" width="60%" />
           </Flex>
         </Stack>
       </SectionContainer>

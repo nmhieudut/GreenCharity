@@ -9,12 +9,9 @@ export default function SectionContainer({
   hasParticle,
   ...rest
 }) {
+  const bg = useColorModeValue("gray.100", "gray.700");
   return (
-    <Box
-      as={"section"}
-      bg={hasBg && useColorModeValue("gray.100", "gray.700")}
-      {...rest}
-    >
+    <Box as={"section"} bg={hasBg && bg} {...rest}>
       {hasBreadcrumbs && <div className="h-12"></div>}
       {hasParticle && <Particle />}
       <div className="container">{children}</div>

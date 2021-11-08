@@ -186,7 +186,7 @@ export function CampaignForm({ isEdited, initialValues }) {
                       focusBorderColor={color.PRIMARY}
                       type="number"
                     />
-                    <InputRightAddon children="VND" />
+                    <InputRightAddon>VND</InputRightAddon>
                   </InputGroup>
                   <FormErrorMessage>{errors.amount}</FormErrorMessage>
                 </FormControl>

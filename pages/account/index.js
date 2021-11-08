@@ -22,6 +22,7 @@ import Flatpickr from "react-flatpickr";
 import { FcCalendar, FcPhone } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import CustomAlert from "src/components/common/Alert";
+import Button from "src/components/common/Button";
 import SectionContainer from "src/components/common/SectionContainer";
 import { color } from "src/constants/color";
 import withAuth from "src/HOCs/withAuth";
@@ -145,8 +146,8 @@ function AccountPage() {
           alignItems="center"
           mt={12}
         >
-          <div class="bg-white px-4 py-5 rounded-lg shadow-xl text-center w-full">
-            <div class="mb-4">
+          <div className="bg-white px-4 py-5 rounded-lg shadow-xl text-center w-full">
+            <div className="mb-4">
               {imageUrl ? (
                 <Image
                   className="w-auto mx-auto object-cover object-center border"
@@ -157,11 +158,15 @@ function AccountPage() {
                 uploadButton
               )}
             </div>
-            <label class="cursor-pointer mt-6">
-              <span class="mt-2 leading-normal px-4 py-2 bg-purple-500 text-sm rounded-md">
+            <label className="cursor-pointer mt-6">
+              <span className="mt-2 leading-normal px-4 py-2 bg-purple-500 text-sm rounded-md">
                 Chọn hình ảnh
               </span>
-              <input type="file" class="hidden" onChange={handleImageChange} />
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleImageChange}
+              />
             </label>
           </div>
         </Box>
@@ -221,10 +226,9 @@ function AccountPage() {
                       <FormLabel className="w-36">SỐ ĐIỆN THOẠI</FormLabel>
 
                       <InputGroup className="max-w-xl">
-                        <InputLeftElement
-                          pointerEvents="none"
-                          children={<FcPhone color="gray.300" />}
-                        />
+                        <InputLeftElement pointerEvents="none">
+                          <FcPhone color="gray.300" />
+                        </InputLeftElement>
                         <Input
                           isDisabled={loading}
                           value={phoneNumber}
@@ -243,10 +247,9 @@ function AccountPage() {
                     >
                       <FormLabel className="w-36">Sinh nhật</FormLabel>
                       <InputGroup className="max-w-xl">
-                        <InputLeftElement
-                          pointerEvents="none"
-                          children={<FcCalendar />}
-                        />
+                        <InputLeftElement pointerEvents="none">
+                          <FcCalendar />
+                        </InputLeftElement>
                         <Flatpickr
                           options={{ dateFormat: "Y/m/d" }}
                           value={dateOfBirth}

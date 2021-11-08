@@ -17,8 +17,8 @@ export default function CampaignItemSkeleton() {
       <div className="grid grid-cols-1 sm:grid-cols-12">
         <div className="col-span-0 sm:col-span-3 text-center">
           <Skeleton height="full">
-            <div>contents wrapped</div>
-            <div>won't be visible</div>
+            <div></div>
+            <div></div>
           </Skeleton>
         </div>
         <div className="col-span-12 sm:col-start-4 sm:col-end-13 p-4 sm:p-8">
