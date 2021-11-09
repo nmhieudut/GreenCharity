@@ -19,6 +19,7 @@ import ProgressBar from "../Progress/ProgressBar";
 export default function CampaignCard(props) {
   const {
     campaign: {
+      slug,
       _id,
       image,
       status,
@@ -32,7 +33,7 @@ export default function CampaignCard(props) {
   const percent = `${((donated_amount / amount) * 100).toFixed(2)}%`;
   return (
     <Link
-      href={`/campaigns/${_id}`}
+      href={`/campaigns/${slug}`}
       cursor={"pointer"}
       flexDir={"column"}
       className="transition duration-300 md:mx-2 mb-8"

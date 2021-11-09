@@ -102,7 +102,6 @@ export function CampaignForm({ isEdited, initialValues }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleSubmit = values => {
-    console.log("---here", values);
     try {
       if (!isEdited) {
         return CampaignService.create(values).then(res => {
@@ -116,7 +115,7 @@ export function CampaignForm({ isEdited, initialValues }) {
   };
 
   return (
-    <SectionContainer hasBreadcrumbs>
+    <SectionContainer>
       <Heading
         textAlign="center"
         fontSize={{ base: "3xl", sm: "4xl", md: "5xl" }}

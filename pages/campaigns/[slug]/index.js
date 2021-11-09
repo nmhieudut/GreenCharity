@@ -6,6 +6,8 @@ import {
   FormControl,
   FormLabel,
   Input,
+  InputGroup,
+  InputRightAddon,
   SkeletonCircle,
   SkeletonText,
   Stack,
@@ -71,7 +73,7 @@ export default function Detail({ campaign }) {
   const isEnded = status === "ended";
   const isOwner = user?.id === author._id;
   return (
-    <SectionContainer hasBreadcrumbs>
+    <SectionContainer>
       <Head>
         <title>{name}</title>
         <link rel="icon" href="/images/thumbnail.png" />
@@ -202,8 +204,25 @@ export default function Detail({ campaign }) {
                   </Flex>
                 </Box>
                 <Text textAlign={"center"} my={2} fontSize={"lg"}>
-                  Hoặc quyên góp qua
+                  Hoặc quyên góp ngay
                 </Text>
+                <form onSubmit={() => {}}>
+                  <FormControl id="amount" isRequired>
+                    <FormLabel>Số tiền mong muốn</FormLabel>
+                    <InputGroup>
+                      <Input
+                        type="number"
+                        placeholder="Nhập số tiền tại đây"
+                        focusBorderColor={color.PRIMARY}
+                      />
+                      <InputRightAddon>VND</InputRightAddon>
+                    </InputGroup>
+                  </FormControl>
+                  <Button w="full" mt={4} colorScheme={"pink"} type="submit">
+                    Quyên góp
+                  </Button>
+                </form>
+
                 <Button
                   nolinear="true"
                   my={2}

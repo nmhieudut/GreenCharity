@@ -120,7 +120,7 @@ function AccountPage() {
     }
   };
   return (
-    <SectionContainer hasBreadcrumbs>
+    <SectionContainer>
       <Head>
         <title>Tài khoản</title>
         <link rel="icon" href="/images/thumbnail.png" />

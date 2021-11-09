@@ -4,13 +4,13 @@ import {
   Grid,
   Heading,
   Image,
-  Link,
   Stack,
   Text,
   useColorModeValue
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import CountUp from "react-countup";
 import { FcConferenceCall, FcDonate } from "react-icons/fc";
@@ -107,7 +107,7 @@ export default function Home({ campaigns }) {
             </Box>
           </Grid>
           <Stack spacing={6} direction={["column", "row"]}>
-            <Link href="/#current-campaigns">
+            <Link passHref href="/#current-campaigns">
               <Button
                 size="lg"
                 rounded={"full"}
@@ -119,7 +119,7 @@ export default function Home({ campaigns }) {
               </Button>
             </Link>
 
-            <Link href="/#get-started">
+            <Link passHref href="/#get-started">
               <Button
                 nolinear="true"
                 size="lg"

@@ -31,7 +31,7 @@ export default function Campaigns({ total, campaigns }) {
         <link rel="icon" href="/images/thumbnail.png" />
       </Head>
       <Box bg={color.PRIMARY}>
-        <SectionContainer hasBreadcrumbs>
+        <SectionContainer>
           <Heading className="text-center font-bold text-white text-4xl">
             Tìm kiếm các hoạt động thiện nguyện ngay
             <p className="mx-auto font-normal text-sm my-6 max-w-lg">

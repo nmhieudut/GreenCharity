@@ -2,7 +2,6 @@ import {
   Box,
   Flex,
   Image,
-  Link,
   Stack,
   Tag,
   Text,
@@ -16,6 +15,8 @@ import { convertStatusToString } from "src/utils/status";
 import * as n from "numeral";
 import ProgressBar from "../Progress/ProgressBar";
 import { AiOutlineDoubleRight } from "react-icons/ai";
+import Button from "../Button";
+import Link from "next/link";
 
 export default function CampaignItem({
   data: {
@@ -65,10 +66,10 @@ export default function CampaignItem({
           </Tag>
           <div className="mt-2">
             <Link
-              href={`/campaigns/${_id}`}
+              href={`/campaigns/${slug}`}
               className="sm:text-sm md:text-md lg:text-lg text-gray-700 font-bold hover:underline"
             >
-              {name}
+              <a>{name}</a>
             </Link>
             <Box
               className="mt-2 text-sm md:text-md line-clamp"
@@ -95,7 +96,7 @@ export default function CampaignItem({
             </Stack>
           </Flex>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 mt-4 my-auto">
+          <div className="flex justify-between mt-4 my-auto">
             <div className="flex justify-end sm:justify-start ">
               <Box className="flex items-center">
                 <BsClock className="mr-1" />
@@ -104,12 +105,15 @@ export default function CampaignItem({
                 </Text>
               </Box>
             </div>
-            <Link
-              className="flex items-center justify-end text-blue-700"
-              href={`/campaigns/${_id}`}
-            >
-              <i> Xem chi tiết </i>
-              <AiOutlineDoubleRight className="ml-1" />
+            <Link passHref href={`/campaigns/${slug}`}>
+              <Button
+                px={6}
+                colorScheme={"purple"}
+                bg={color.PRIMARY}
+                rightIcon={<AiOutlineDoubleRight />}
+              >
+                Chi tiết
+              </Button>
             </Link>
           </div>
         </div>
