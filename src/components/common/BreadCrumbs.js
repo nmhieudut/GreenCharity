@@ -1,36 +1,37 @@
-import React from "react";
+import React from 'react';
 import {
   Box,
   Breadcrumb as CBreadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  Container,
   Text
-} from "@chakra-ui/react";
-import { BiChevronRight } from "react-icons/bi";
-import { useRouter } from "next/router";
-import { convertToBreadcrumbs } from "src/utils/locales";
-import { color } from "src/constants/color";
+} from '@chakra-ui/react';
+import { BiChevronRight } from 'react-icons/bi';
+import { useRouter } from 'next/router';
+import { convertToBreadcrumbs } from 'src/utils/locales';
+import { color } from 'src/constants/color';
 
 export default function BreadCrumbs(props) {
   const router = useRouter();
   const { pathname } = router;
-  const pathNames = pathname.split("/").filter(x => x);
+  const pathNames = pathname.split('/').filter(x => x);
   return (
     <>
       {pathNames.length > 0 && (
         <Box {...props}>
-          <Box w={"full"} className="container">
+          <Container maxW='container.xl' w={'full'}>
             <CBreadcrumb
-              spacing="8px"
-              separator={<BiChevronRight color="gray.500" />}
+              spacing='8px'
+              separator={<BiChevronRight color='gray.500' />}
             >
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">
-                  {convertToBreadcrumbs("Home")}
+                <BreadcrumbLink href='/'>
+                  {convertToBreadcrumbs('Home')}
                 </BreadcrumbLink>
               </BreadcrumbItem>
               {pathNames.map((name, index) => {
-                const routeTo = `/${pathNames.slice(0, index + 1).join("/")}`;
+                const routeTo = `/${pathNames.slice(0, index + 1).join('/')}`;
                 const isLast = index === pathNames.length - 1;
                 return isLast ? (
                   <BreadcrumbItem
@@ -49,7 +50,7 @@ export default function BreadCrumbs(props) {
                 );
               })}
             </CBreadcrumb>
-          </Box>
+          </Container>
         </Box>
       )}
     </>

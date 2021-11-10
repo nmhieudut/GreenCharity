@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  Container,
   Flex,
   HStack,
   Menu,
@@ -14,32 +15,32 @@ import {
   Tooltip,
   useColorMode,
   useColorModeValue
-} from "@chakra-ui/react";
-import Hamburger from "hamburger-react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-import { AiFillCaretDown } from "react-icons/ai";
-import { BsBrightnessHigh } from "react-icons/bs";
-import { FaMoon, FaRegLightbulb } from "react-icons/fa";
-import { RiLogoutBoxRLine } from "react-icons/ri";
-import { useDispatch, useSelector } from "react-redux";
-import BreadCrumbs from "src/components/common/BreadCrumbs";
-import { color } from "src/constants/color";
-import { navs } from "src/constants/navbar";
-import firebase from "src/libs/firebase";
-import { AuthActions } from "src/store/auth/action";
-import removeCookie from "src/utils/cookie";
-import { storage } from "src/utils/storage";
+} from '@chakra-ui/react';
+import Hamburger from 'hamburger-react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
+import { AiFillCaretDown } from 'react-icons/ai';
+import { BsBrightnessHigh } from 'react-icons/bs';
+import { FaMoon, FaRegLightbulb } from 'react-icons/fa';
+import { RiLogoutBoxRLine } from 'react-icons/ri';
+import { useDispatch, useSelector } from 'react-redux';
+import BreadCrumbs from 'src/components/common/BreadCrumbs';
+import { color } from 'src/constants/color';
+import { navs } from 'src/constants/navbar';
+import firebase from 'src/libs/firebase';
+import { AuthActions } from 'src/store/auth/action';
+import removeCookie from 'src/utils/cookie';
+import { storage } from 'src/utils/storage';
 
 export default function Header() {
   const dispatch = useDispatch();
-  const bg = useColorModeValue("white", "gray.800");
+  const bg = useColorModeValue('white', 'gray.800');
   const textColor = useColorModeValue(color.primary, color.primary);
   const { colorMode, toggleColorMode } = useColorMode();
   const borderColor = useColorModeValue(
-    "1px solid rgba(229,231,235,1)",
-    "1px solid rgb(31, 41, 55)"
+    '1px solid rgba(229,231,235,1)',
+    '1px solid rgb(31, 41, 55)'
   );
   const user = useSelector(state => state.auth.currentUser);
   const [showLinks, setShowLinks] = useState(false);
@@ -53,17 +54,17 @@ export default function Header() {
       }
     }
     if (showLinks) {
-      document.addEventListener("click", handleClickOutside);
+      document.addEventListener('click', handleClickOutside);
     }
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, [wrapperRef, showLinks]);
 
   const onLogout = () => {
     storage.removeToken();
     dispatch(AuthActions.setCurrentUserSuccessAction(null));
-    router.push("/");
+    router.push('/');
     firebase
       .auth()
       .signOut()
@@ -77,8 +78,8 @@ export default function Header() {
 
   const Logo = () => {
     return (
-      <a href="/#">
-        <img src="/images/GreenCharity.png" width={120} alt="logo" />
+      <a href='/#'>
+        <img src='/images/GreenCharity.png' width={120} alt='logo' />
       </a>
     );
   };
@@ -87,10 +88,10 @@ export default function Header() {
     return (
       <Box
         ref={wrapperRef}
-        display={{ base: "block", md: "none" }}
+        display={{ base: 'block', md: 'none' }}
         onClick={() => setShowLinks(!showLinks)}
       >
-        <Hamburger toggled={showLinks} direction="left" />
+        <Hamburger toggled={showLinks} direction='left' />
       </Box>
     );
   };
@@ -101,7 +102,7 @@ export default function Header() {
       <Link href={href}>
         <a
           className={
-            "menu-item " + (router.pathname == href && "menu-item__active")
+            'menu-item ' + (router.pathname == href && 'menu-item__active')
           }
         >
           {label}
@@ -113,95 +114,90 @@ export default function Header() {
   const NavMenuItemMobile = ({ href, label }) => {
     return (
       <Link href={href}>
-        <a className="font-bold">{label}</a>
+        <a className='font-bold'>{label}</a>
       </Link>
     );
   };
 
   return (
     <Box
-      className="fixed top-0 left-0 z-50 w-full text-sm h-16"
+      className='fixed top-0 left-0 z-50 w-full text-sm h-16'
       color={textColor}
       bg={bg}
       borderBottom={borderColor}
     >
-      <Flex
-        className="container"
+      <Container
+        maxW='container.xl'
+        display='flex'
         h={16}
-        alignItems={"center"}
-        justifyContent={"space-between"}
+        alignItems={'center'}
+        justifyContent={'space-between'}
       >
         <MenuToggle />
-        <HStack spacing={8} alignItems={"center"}>
+        <HStack spacing={8} alignItems={'center'}>
           <Logo />
-          <HStack spacing={8} as={"nav"} display={{ base: "none", md: "flex" }}>
+          <HStack spacing={8} as={'nav'} display={{ base: 'none', md: 'flex' }}>
             {navs.map((n, i) => (
               <NavMenuItem key={i} href={n.to} label={n.label} />
             ))}
           </HStack>
         </HStack>
-        <Flex alignItems={"center"}>
-          <Stack direction={"row"} spacing={2}>
+        <Flex alignItems={'center'}>
+          <Stack direction={'row'} spacing={2} alignItems={'center'}>
             <Tooltip
               hasArrow
-              placement="bottom-end"
-              label={colorMode === "light" ? "Nền tối" : "Nền sáng"}
+              placement='bottom-end'
+              label={colorMode === 'light' ? 'Nền tối' : 'Nền sáng'}
             >
-              <Button
-                color={color.primary}
-                nolinear="true"
-                onClick={toggleColorMode}
-              >
-                <span>
-                  {colorMode === "light" ? <FaMoon /> : <BsBrightnessHigh />}
-                </span>
-              </Button>
+              <span onClick={toggleColorMode}>
+                {colorMode === 'light' ? <FaMoon /> : <BsBrightnessHigh />}
+              </span>
             </Tooltip>
             {user ? (
               <Menu isLazy>
                 <MenuButton
-                  nolinear="true"
+                  nolinear='true'
                   as={Button}
                   px={4}
                   py={2}
-                  outline="variant"
-                  className="flex justify-between"
+                  outline='variant'
+                  className='flex justify-between'
                   rightIcon={<AiFillCaretDown />}
                 >
-                  <Avatar size="xs" src={user.picture} name={user.name} />
+                  <Avatar size='xs' src={user.picture} name={user.name} />
                 </MenuButton>
                 <MenuList>
-                  <div className="p-4">
-                    Đang đăng nhập với tên: <b className="ml-1">{user.name}</b>
+                  <div className='p-4'>
+                    Đang đăng nhập với tên: <b className='ml-1'>{user.name}</b>
                   </div>
-                  <MenuGroup title="Hồ sơ">
+                  <MenuGroup title='Hồ sơ'>
                     <MenuItem>
-                      <a href="/account">Tài khoản</a>
+                      <a href='/account'>Tài khoản</a>
                     </MenuItem>
                   </MenuGroup>
                   <MenuDivider />
-                  <MenuGroup title="Trợ giúp">
+                  <MenuGroup title='Trợ giúp'>
                     <MenuItem>Tài liệu</MenuItem>
                     <MenuItem>Hỏi đáp</MenuItem>
                   </MenuGroup>
                   <MenuDivider />
                   <MenuItem onClick={onLogout}>
-                    <span className="mr-4">Đăng xuất</span>
+                    <span className='mr-4'>Đăng xuất</span>
                     <RiLogoutBoxRLine />
                   </MenuItem>
                 </MenuList>
               </Menu>
             ) : (
-              <Button colorScheme="purple" onClick={() => router.push("/auth")}>
+              <Button colorScheme='purple' onClick={() => router.push('/auth')}>
                 Đăng nhập / Đăng ký
               </Button>
             )}
           </Stack>
         </Flex>
-      </Flex>
+      </Container>
       {showLinks ? (
-        <Box pb={4} display={{ md: "none" }} bg={bg}>
-          <Stack as={"nav"} spacing={8} pt={4} px={8}>
+        <Box pb={4} display={{ md: 'none' }} bg={bg}>
+          <Stack as={'nav'} spacing={8} pt={4} px={8}>
             {navs.map((n, i) => (
               <NavMenuItemMobile key={i} href={n.to} label={n.label} />
             ))}
@@ -212,7 +208,7 @@ export default function Header() {
         bg={bg}
         py={4}
         borderBottom={borderColor}
-        boxShadow="0 .5rem 1.5rem rgba(0,0,0,.1)"
+        boxShadow='0 .5rem 1.5rem rgba(0,0,0,.1)'
       />
     </Box>
   );
