@@ -1,14 +1,14 @@
-import axios from "axios";
-import { storage } from "src/utils/storage";
+import axios from 'axios';
+import { storage } from 'src/utils/storage';
 
 const _http = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`,
   // timeout: 2000,
   headers: {
-    "Access-Control-Allow-Origin": "*",
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    Authorization: ""
+    'Access-Control-Allow-Origin': '*',
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: ''
   }
 });
 
@@ -38,7 +38,7 @@ _http.interceptors.response.use(
   },
   error => {
     // Do something with request error
-    return error;
+    return error.response.data.message;
   }
 );
 

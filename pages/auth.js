@@ -72,11 +72,17 @@ export default function Auth() {
         AuthService.loginWithGoogle(token).then(res => {
           storage.setToken(res.token);
           dispatch(AuthActions.setCurrentUserSuccessAction(res.user));
-          router.push('/');
         });
       });
     });
   }, [idToken]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(AuthActions.loginFailedAction(null));
+      dispatch(AuthActions.signUpFailedAction(null));
+    };
+  });
 
   const handleChange = e => {
     setForm({
@@ -85,34 +91,44 @@ export default function Auth() {
     });
   };
 
-  const handleLogin = e => {
+  const handleLogin = async e => {
     e.preventDefault();
-    dispatch(AuthActions.loginAction());
-    AuthService.login(email, password)
-      .then(res => {
+    try {
+      dispatch(AuthActions.loginAction());
+      const res = await AuthService.login(email, password);
+      console.log('-----res', res);
+      if (res.user) {
         dispatch(AuthActions.loginSuccessAction(res.user));
         storage.setToken(res.token);
-        router.push('/');
-      })
-      .catch(e => {
-        console.log({ e });
-        dispatch(AuthActions.loginFailedAction(e.response.data.message));
-      });
+        return;
+      }
+      return dispatch(AuthActions.loginFailedAction(res));
+    } catch (e) {
+      console.log('error', e);
+      dispatch(AuthActions.loginFailedAction(e));
+    }
   };
 
-  const handleSignUp = e => {
+  const handleSignUp = async e => {
     e.preventDefault();
-    dispatch(AuthActions.signUpAction());
-    AuthService.register(name, email, password, phoneNumber)
-      .then(res => {
+    try {
+      dispatch(AuthActions.signUpAction());
+      const res = await AuthService.register(
+        name,
+        email,
+        password,
+        phoneNumber
+      );
+      if (res.user) {
         dispatch(AuthActions.signUpSuccessAction(res.user));
         storage.setToken(res.token);
-        router.push('/');
-      })
-      .catch(e => {
-        console.log({ e });
-        dispatch(AuthActions.signUpFailedAction(e.response.data.message));
-      });
+        return;
+      }
+      return dispatch(AuthActions.signUpFailedAction(res));
+    } catch (e) {
+      console.log('error', e);
+      dispatch(AuthActions.signUpFailedAction(e));
+    }
   };
 
   const loginWithGoogle = () => {

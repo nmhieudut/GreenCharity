@@ -64,7 +64,6 @@ export default function Header() {
   const onLogout = () => {
     storage.removeToken();
     dispatch(AuthActions.setCurrentUserSuccessAction(null));
-    router.push('/');
     firebase
       .auth()
       .signOut()
