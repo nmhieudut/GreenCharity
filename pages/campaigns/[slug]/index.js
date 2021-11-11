@@ -79,7 +79,7 @@ export default function Detail({ campaign }) {
     donated_amount,
     _id,
     name,
-    image,
+    images,
     content,
     finishedAt,
     author,
@@ -87,13 +87,6 @@ export default function Detail({ campaign }) {
   } = campaign;
   const isEnded = status === 'ended';
   const isOwner = user?.id === author._id;
-  const images = [
-    'https://lipsum.app/id/46/200x150',
-    'https://lipsum.app/id/46/200x150',
-    image,
-    'https://lipsum.app/id/46/200x150',
-    'https://lipsum.app/id/46/200x150'
-  ];
 
   const settings = {
     dots: true,

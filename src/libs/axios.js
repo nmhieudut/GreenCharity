@@ -38,7 +38,7 @@ _http.interceptors.response.use(
   },
   error => {
     // Do something with request error
-    return error.response.data.message;
+    return error;
   }
 );
 

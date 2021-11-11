@@ -82,7 +82,7 @@ export default function Auth() {
       dispatch(AuthActions.loginFailedAction(null));
       dispatch(AuthActions.signUpFailedAction(null));
     };
-  });
+  }, []);
 
   const handleChange = e => {
     setForm({
@@ -96,16 +96,15 @@ export default function Auth() {
     try {
       dispatch(AuthActions.loginAction());
       const res = await AuthService.login(email, password);
-      console.log('-----res', res);
       if (res.user) {
         dispatch(AuthActions.loginSuccessAction(res.user));
         storage.setToken(res.token);
         return;
       }
-      return dispatch(AuthActions.loginFailedAction(res));
+      return dispatch(AuthActions.loginFailedAction(res.response.data.message));
     } catch (e) {
-      console.log('error', e);
-      dispatch(AuthActions.loginFailedAction(e));
+      console.log('error', e.response.data.message);
+      dispatch(AuthActions.loginFailedAction(e.response.data.message));
     }
   };
 
@@ -124,10 +123,12 @@ export default function Auth() {
         storage.setToken(res.token);
         return;
       }
-      return dispatch(AuthActions.signUpFailedAction(res));
+      return dispatch(
+        AuthActions.signUpFailedAction(res.response.data.message)
+      );
     } catch (e) {
-      console.log('error', e);
-      dispatch(AuthActions.signUpFailedAction(e));
+      console.log('error', e.response.data.message);
+      dispatch(AuthActions.signUpFailedAction(e.response.data.message));
     }
   };
 
