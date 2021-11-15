@@ -1,6 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { css, Global } from '@emotion/react';
 import '@fontsource/inter/400.css';
+import '@fontsource/nunito/400.css';
 import 'flatpickr/dist/themes/material_green.css';
 import 'focus-visible/dist/focus-visible';
 import Router from 'next/router';

@@ -40,15 +40,18 @@ export default function CampaignCard(props) {
       _hover={{ boxShadow: 'xl' }}
       bg={useColorModeValue('white', 'gray.900')}
     >
-      <Box className='w-full mb-4 md:mb-0'>
-        <Box className='rounded-lg overflow-hidden shadow'>
-          <Image
-            className='h-56 w-full object-cover object-center'
-            src={image}
-            layout={'fill'}
-            width={600}
-          />
-          <Box className='p-4 h-auto md:h-40 lg:h-40'>
+      <Box className='w-full md:mb-0'>
+        <Box className='rounded-sm shadow' overflow='hidden'>
+          <Box pos='relative'>
+            <Image
+              className='h-56 w-full object-cover object-center '
+              src={image}
+              layout={'fill'}
+              alt=''
+            />
+          </Box>
+
+          <Box className='px-4 pt-4 h-auto md:h-40 lg:h-40'>
             <Tag
               mb={2}
               variant='solid'
@@ -64,34 +67,39 @@ export default function CampaignCard(props) {
             </Tag>
             <Stack>
               <Heading
-                color={color.PRIMARY}
+                _hover={{
+                  color: color.PRIMARY
+                }}
                 fontSize={'md'}
                 fontFamily={'body'}
               >
                 {name}
               </Heading>
-              <Box className='line-clamp text-gray-600 text-sm leading-relaxed block md:text-md'>
-                <div dangerouslySetInnerHTML={{ __html: content }} />
+              <Box className='text-gray-600 leading-relaxed block'>
+                <div
+                  className='text-sm line-clamp'
+                  dangerouslySetInnerHTML={{
+                    __html: content.replace(/<img .*?>/g, '')
+                  }}
+                />
               </Box>
             </Stack>
           </Box>
           <Box mt={'auto'} px={4} mb={4}>
+            <Flex justifyContent='space-between' alignItems='center'>
+              <Text>
+                <b>{n(donated_amount).format('0,0')}đ</b> quyên góp
+              </Text>
+              <Text as='b' fontSize='sm'>
+                {percent}
+              </Text>
+            </Flex>
+
             <Stack my={2} w={'full'}>
               <ProgressBar color={color.PRIMARY} percent={percent} />
             </Stack>
-            <Flex justify='end'>
-              <Stack
-                spacing={2}
-                direction={['column', 'row']}
-                align={'end'}
-                fontSize='sm'
-              >
-                <Text fontWeight={600}>{n(donated_amount).format('0,0')}</Text>
-                <Text>/{n(amount).format('0,0')} VND</Text>
-              </Stack>
-            </Flex>
             <Flex color={'gray.500'} align='center' justify='end' mt={2}>
-              <BsClock className='mr-2' />
+              <BsClock className='mr-2' size='.75rem' />
               <Text fontSize='sm'>
                 {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
               </Text>

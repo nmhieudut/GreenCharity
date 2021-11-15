@@ -72,7 +72,9 @@ export default function CampaignItem({
             </Link>
             <Box
               className='mt-2 text-sm md:text-md line-clamp'
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{
+                __html: content.replace(/<img .*?>/g, '')
+              }}
             />
           </div>
           <Text my={2} fontSize={'md'} fontWeight='bold'>

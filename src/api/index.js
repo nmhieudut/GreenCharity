@@ -1,23 +1,23 @@
 const Rest = {
   // auth services
-  login: "/auth/login",
-  loginGG: "/auth/google",
-  loginFB: "/auth/facebook",
-  register: "/auth/register",
-  checkCurrentUser: "/auth/verify",
+  login: '/auth/login',
+  loginGG: '/auth/google',
+  loginFB: '/auth/facebook',
+  register: '/auth/register',
+  checkCurrentUser: '/auth/verify',
 
   // campaigns services
-  campaigns: "/campaigns",
-  comments: "/comments",
+  campaigns: '/campaigns',
+  comments: '/comments',
 
   //user services
-  user: "/user",
+  user: '/user',
 
   //wallet services
-  wallet: "wallet",
+  wallet: '/wallet',
 
   //checkout
-  checkout: "/checkout"
+  checkout: '/checkout'
 };
 
 export default Rest;

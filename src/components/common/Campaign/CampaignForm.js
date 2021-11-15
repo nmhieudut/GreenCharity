@@ -25,18 +25,22 @@ import {
 import { format } from 'date-fns';
 import add from 'date-fns/add';
 import { Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Flatpickr from 'react-flatpickr';
 import { BsFillImageFill } from 'react-icons/bs';
+import { CgRemove } from 'react-icons/cg';
+import { FcCheckmark } from 'react-icons/fc';
+import Button from 'src/components/common/Button';
 import SectionContainer from 'src/components/common/SectionContainer';
 import ImgLoading from 'src/components/common/Spinner/ImgLoading';
 import Editor from 'src/components/uncommon/Editor';
 import { color } from 'src/constants/color';
 import { storage } from 'src/libs/firebase';
 import { CampaignService } from 'src/services/campaign';
-import Button from 'src/components/common/Button';
 import * as Yup from 'yup';
+import Checkmark from '../Checkmark';
 // YUP
 const schema = Yup.object().shape({
   name: Yup.string().required('Vui lòng điền tên hoạt động'),
@@ -54,8 +58,13 @@ export function CampaignForm({ isEdited, initialValues }) {
   const [imgUrls, setImgUrls] = useState(isEdited ? initialValues.images : []);
   const [imgLoading, setImgLoading] = useState(false);
   const [editorLoaded, setEditorLoaded] = useState(false);
-
+  const [event, setEvent] = useState('');
+  const [status, setStatus] = useState('');
+  const [slug, setSlug] = useState('');
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const router = useRouter();
 
   const formikRef = useRef();
 
@@ -74,6 +83,8 @@ export function CampaignForm({ isEdited, initialValues }) {
       handleUpload();
     }
   }, [images]);
+
+  //TODO: fix handle set fields
 
   const handleUpload = () => {
     setImgLoading(true);
@@ -103,9 +114,6 @@ export function CampaignForm({ isEdited, initialValues }) {
     Promise.all(promises)
       .then(values => {
         console.log('All uploaded images was done');
-        if (formikRef.current) {
-          formikRef.current.setFieldValue('images', imgUrls);
-        }
       })
       .catch(err => {
         console.log(err);
@@ -114,19 +122,50 @@ export function CampaignForm({ isEdited, initialValues }) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const handleSubmit = values => {
-    try {
-      if (!isEdited) {
-        return CampaignService.create(values).then(res => {
-          console.log('res', res);
-        });
-      }
-      return CampaignService.update(initialValues._id, values).then(res => {
-        console.log('res', res);
-      });
-    } catch (e) {}
+  const onRemove = item => {
+    setImgUrls(prevState => prevState.filter(url => url !== item));
   };
 
+  useEffect(() => {
+    formikRef.current.setFieldValue('images', imgUrls);
+  }, [imgUrls]);
+
+  const handleSubmit = async values => {
+    console.log('submit', values);
+    if (!isEdited) {
+      return CampaignService.create(values)
+        .then(res => {
+          console.log('res', res);
+          setStatus('success');
+          setSlug(res.data.slug);
+        })
+        .catch(err => {
+          console.log(err);
+          setStatus('error');
+        })
+        .finally(() => {
+          console.log('---herer1');
+          setEvent('create');
+          setIsOpenModal(true);
+        });
+    }
+    return CampaignService.update(initialValues._id, values)
+      .then(res => {
+        console.log('res', res);
+        setStatus('success');
+        setSlug(res.data.slug);
+      })
+      .catch(err => {
+        console.log(err);
+        setStatus('error');
+      })
+      .finally(() => {
+        console.log('---herer2');
+        setEvent('update');
+        setIsOpenModal(true);
+      });
+  };
+  console.log('setIsOpen', isOpenModal);
   return (
     <SectionContainer>
       <Heading
@@ -144,7 +183,7 @@ export function CampaignForm({ isEdited, initialValues }) {
         innerRef={formikRef}
         initialValues={{
           name: isEdited ? initialValues.name : '',
-          images: isEdited ? initialValues.images : '',
+          images: isEdited ? initialValues.images : [],
           content: isEdited ? initialValues.content : '',
           finishedAt: isEdited
             ? format(new Date(initialValues.finishedAt), 'yyyy/MM/dd')
@@ -272,12 +311,18 @@ export function CampaignForm({ isEdited, initialValues }) {
                     p={4}
                   >
                     {imgUrls?.map((img, idx) => (
-                      <Flex key={idx} justifyContent='center'>
+                      <Flex key={idx} justifyContent='center' pos='relative'>
                         <Image
                           src={img}
                           alt=''
                           className='h-32 object-cover object-center transition duration-300 px-2 cursor-pointer'
                         />
+                        <button
+                          className='absolute top-0 right-0'
+                          onClick={() => onRemove(img)}
+                        >
+                          <CgRemove />
+                        </button>
                       </Flex>
                     ))}
                   </Grid>
@@ -315,7 +360,7 @@ export function CampaignForm({ isEdited, initialValues }) {
             <Button colorScheme='purple' type='submit'>
               {isEdited ? 'Cập nhật hoạt động' : 'Tạo hoạt động'}
             </Button>
-
+            {/* Preview modal */}
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent>
@@ -334,6 +379,68 @@ export function CampaignForm({ isEdited, initialValues }) {
           </Form>
         )}
       </Formik>
+
+      <ResultModal
+        event={event}
+        status={status}
+        openModal={isOpenModal}
+        onPrimaryClick={() => {
+          router.push(`/campaigns/${slug}`);
+          window.location.reload();
+        }}
+        onSecondaryClick={() => {
+          router.push('/');
+          setIsOpenModal(false);
+        }}
+      />
     </SectionContainer>
+  );
+}
+
+function ResultModal({
+  event,
+  status,
+  openModal,
+  onPrimaryClick,
+  onSecondaryClick
+}) {
+  const action = event === 'create' ? 'Yêu cầu tạo' : 'Cập nhật';
+  const statusMess = status === 'success' ? 'thành công' : 'thất bại';
+  console.log('===isOpen', openModal);
+  return (
+    <Modal blockScrollOnMount={false} isOpen={openModal} size='xl'>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalBody>
+          <Box textAlign='center' py={10} px={6}>
+            <Checkmark status={status === 'success' ? 'success' : 'error'} />
+            <Heading as='h2' size='xl' mt={6} mb={2}>
+              {action} hoạt động {statusMess}
+            </Heading>
+            {status === 'success' &&
+              (event === 'create' ? (
+                <Text color={'gray.500'}>
+                  Hoạt động của bạn đã được gửi tới đội ngũ quản lí xem xét và
+                  sẽ xét duyệt trong vòng trễ nhất 24h tới. Xin chân thành cảm
+                  ơn.
+                </Text>
+              ) : (
+                <Text color={'gray.500'}>
+                  Hoạt động này đã được cập nhật thành công
+                </Text>
+              ))}
+          </Box>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button colorScheme='purple' mr={3} onClick={onPrimaryClick}>
+            Kiểm tra hoạt động này
+          </Button>
+          <Button variant='solid' onClick={onSecondaryClick}>
+            Về trang chính
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }

@@ -154,15 +154,7 @@ export default function Header() {
             </Tooltip>
             {user ? (
               <Menu isLazy>
-                <MenuButton
-                  nolinear='true'
-                  as={Button}
-                  px={4}
-                  py={2}
-                  outline='variant'
-                  className='flex justify-between'
-                  rightIcon={<AiFillCaretDown />}
-                >
+                <MenuButton as={Button} className='flex justify-between'>
                   <Avatar size='xs' src={user.picture} name={user.name} />
                 </MenuButton>
                 <MenuList>

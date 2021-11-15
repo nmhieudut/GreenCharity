@@ -1,22 +1,22 @@
 export const navs = [
   {
-    to: "/",
-    label: "Trang chủ"
+    to: '/',
+    label: 'Trang chủ'
   },
   {
-    to: "/campaigns",
-    label: "Các hoạt động"
+    to: '/campaigns',
+    label: 'Các hoạt động'
   },
   {
-    to: "/news",
-    label: "Tin tức"
+    to: '/news',
+    label: 'Tin tức'
   },
   {
-    to: "/about",
-    label: "Về chúng tôi"
+    to: '/about',
+    label: 'Về chúng tôi'
   },
   {
-    to: "/campaigns/new",
-    label: "Tạo hoạt động"
+    to: '/new-campaign',
+    label: 'Tạo hoạt động'
   }
 ];

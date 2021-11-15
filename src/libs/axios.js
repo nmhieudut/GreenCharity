@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { storage } from 'src/utils/storage';
 
+const url = process.env.NEXT_PUBLIC_SERVER_URL;
+// const url = 'https://green-charity-api-production.up.railway.app';
+
 const _http = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`,
+  baseURL: `${url}/api/v1`,
   // timeout: 2000,
   headers: {
     'Access-Control-Allow-Origin': '*',
