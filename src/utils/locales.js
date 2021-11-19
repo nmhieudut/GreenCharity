@@ -11,7 +11,7 @@ export const convertToBreadcrumbs = string => {
     case 'about':
       return 'Về chúng tôi';
     case 'new-campaign':
-      return 'Tạo hoạt động mới';
+      return 'Vận động ngay';
     case 'auth':
       return 'Đăng nhập / đăng kí';
     case 'account':

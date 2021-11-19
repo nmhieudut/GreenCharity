@@ -327,13 +327,10 @@ function WalletTabs() {
     ['wallets', refetch],
     () => UserService.getWallets()
   );
-
-  console.log('++++', data, error, isError, isLoading);
   const { wallets } = data || [];
   const onCreateWallet = async () => {
     const res = await UserService.createWallet();
     if (res) {
-      console.log('reess', res);
       setRefetch(refetch + 1);
     }
   };
@@ -341,7 +338,6 @@ function WalletTabs() {
   const onDeleteWallet = async id => {
     const res = await UserService.deleteWallet(id);
     if (res) {
-      console.log('reess', res);
       setRefetch(refetch + 1);
     }
   };

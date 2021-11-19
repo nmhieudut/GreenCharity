@@ -23,7 +23,6 @@ import {
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import FsLightbox from 'fslightbox-react';
-import * as _ from 'lodash';
 import Head from 'next/head';
 import * as n from 'numeral';
 import React, { useEffect, useState } from 'react';
@@ -43,17 +42,24 @@ import { CommentService } from 'src/services/comment';
 import { DateUtils } from 'src/utils/date';
 
 export async function getServerSideProps(ctx) {
-  const { campaign } = await CampaignService.getById(ctx.query.slug);
-  if (!_.isEmpty(campaign)) {
+  try {
+    const { campaign } = await CampaignService.getById(ctx.query.slug);
+    if (!campaign) {
+      return {
+        notFound: true
+      };
+    }
     return {
       props: {
         campaign
       }
     };
+  } catch (e) {
+    console.error(e);
+    return {
+      notFound: true
+    };
   }
-  return {
-    notFound: true
-  };
 }
 
 export default function Detail({ campaign }) {

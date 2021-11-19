@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Button,
   Container,
   Flex,
   HStack,
@@ -26,6 +25,7 @@ import { FaMoon, FaRegLightbulb } from 'react-icons/fa';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import BreadCrumbs from 'src/components/common/BreadCrumbs';
+import Button from 'src/components/common/Button';
 import { color } from 'src/constants/color';
 import { navs } from 'src/constants/navbar';
 import firebase from 'src/libs/firebase';
@@ -154,7 +154,10 @@ export default function Header() {
             </Tooltip>
             {user ? (
               <Menu isLazy>
-                <MenuButton as={Button} className='flex justify-between'>
+                <MenuButton
+                  as={'span'}
+                  className='flex justify-between cursor-pointer'
+                >
                   <Avatar size='xs' src={user.picture} name={user.name} />
                 </MenuButton>
                 <MenuList>
@@ -179,7 +182,12 @@ export default function Header() {
                 </MenuList>
               </Menu>
             ) : (
-              <Button colorScheme='purple' onClick={() => router.push('/auth')}>
+              <Button
+                size='sm'
+                colorScheme='purple'
+                fontSize={'sm'}
+                onClick={() => router.push('/auth')}
+              >
                 Đăng nhập / Đăng ký
               </Button>
             )}

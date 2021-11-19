@@ -1,9 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import './color';
+@import './header';
+@import './pages/home.scss';
 
-@import "./color";
-@import "./header";
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter/Inter-Regular.ttf");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("/fonts/lato/Lato-Regular.ttf");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Quicksand";
+  src: url("/fonts/quicksand/Quicksand-Regular.ttf");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 
 html,
 body {
@@ -13,7 +37,6 @@ body {
 
 a {
   color: inherit;
-  text-decoration: none;
 }
 label {
   margin: 0 !important;
@@ -25,8 +48,8 @@ label {
 
 .container {
   max-width: 1440px;
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   margin: 0 auto;
 }
 
@@ -56,8 +79,7 @@ section {
 }
 button {
   outline: none !important;
-  font-family: "Quicksand", sans-serif !important;
-  font-weight: 400 !important;
+  font-family: 'Quicksand', sans-serif !important;
 }
 
 .tsparticles-canvas-el {
@@ -72,6 +94,7 @@ button {
   right: 1% !important;
   z-index: 1;
 }
-.slick-prev:before, .slick-next:before {
+.slick-prev:before,
+.slick-next:before {
   font-size: 30px;
 }

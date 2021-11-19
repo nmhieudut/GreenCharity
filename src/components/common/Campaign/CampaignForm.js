@@ -144,7 +144,6 @@ export function CampaignForm({ isEdited, initialValues }) {
           setStatus('error');
         })
         .finally(() => {
-          console.log('---herer1');
           setEvent('create');
           setIsOpenModal(true);
         });
@@ -160,12 +159,10 @@ export function CampaignForm({ isEdited, initialValues }) {
         setStatus('error');
       })
       .finally(() => {
-        console.log('---herer2');
         setEvent('update');
         setIsOpenModal(true);
       });
   };
-  console.log('setIsOpen', isOpenModal);
   return (
     <SectionContainer>
       <Heading
@@ -358,7 +355,7 @@ export function CampaignForm({ isEdited, initialValues }) {
             </Stack>
             <Divider my={4} />
             <Button colorScheme='purple' type='submit'>
-              {isEdited ? 'Cập nhật hoạt động' : 'Tạo hoạt động'}
+              {isEdited ? 'Cập nhật hoạt động' : 'Vận động'}
             </Button>
             {/* Preview modal */}
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -406,7 +403,6 @@ function ResultModal({
 }) {
   const action = event === 'create' ? 'Yêu cầu tạo' : 'Cập nhật';
   const statusMess = status === 'success' ? 'thành công' : 'thất bại';
-  console.log('===isOpen', openModal);
   return (
     <Modal blockScrollOnMount={false} isOpen={openModal} size='xl'>
       <ModalOverlay />

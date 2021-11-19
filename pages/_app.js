@@ -1,7 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { css, Global } from '@emotion/react';
-import '@fontsource/inter/400.css';
-import '@fontsource/nunito/400.css';
 import 'flatpickr/dist/themes/material_green.css';
 import 'focus-visible/dist/focus-visible';
 import Router from 'next/router';
@@ -10,17 +8,17 @@ import 'nprogress/nprogress.css';
 import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 import GlobalSpinner from 'src/components/common/Spinner/GlobalSpinner';
 import Layout from 'src/layout';
 import 'src/libs/firebase';
-import { UserService } from 'src/services/user';
+import { AuthService } from 'src/services/auth';
 import { wrapper } from 'src/store';
 import { AuthActions } from 'src/store/auth/action';
 import { ModalActions } from 'src/store/modal/action';
 import { storage } from 'src/utils/storage';
 import theme from 'src/utils/theme';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import '../styles/globals.scss';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -45,7 +43,7 @@ function MyApp({ Component, pageProps }) {
       if (storage.getToken()) {
         dispatch(AuthActions.setCurrentUserAction());
         dispatch(ModalActions.setModalOn());
-        await UserService.getInfo()
+        await AuthService.getInfo()
           .then(res => {
             dispatch(AuthActions.setCurrentUserSuccessAction(res.data));
           })

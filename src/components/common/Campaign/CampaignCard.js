@@ -37,14 +37,14 @@ export default function CampaignCard(props) {
       cursor={'pointer'}
       flexDir={'column'}
       className='transition duration-300 md:mx-2 mb-8'
-      _hover={{ boxShadow: 'xl' }}
+      _hover={{ boxShadow: 'lg' }}
       bg={useColorModeValue('white', 'gray.900')}
     >
       <Box className='w-full md:mb-0'>
         <Box className='rounded-sm shadow' overflow='hidden'>
           <Box pos='relative'>
             <Image
-              className='h-56 w-full object-cover object-center '
+              className='h-56 w-full object-cover object-center'
               src={image}
               layout={'fill'}
               alt=''
