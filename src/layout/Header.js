@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BsBrightnessHigh } from 'react-icons/bs';
-import { FaMoon, FaRegLightbulb } from 'react-icons/fa';
+import { FaMoon, FaRegLightbulb, FaRegUserCircle } from 'react-icons/fa';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import BreadCrumbs from 'src/components/common/BreadCrumbs';
@@ -46,13 +46,12 @@ export default function Header() {
   const [showLinks, setShowLinks] = useState(false);
   const wrapperRef = useRef(null);
   const router = useRouter();
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (!wrapperRef.current.contains(event.target)) {
-        setShowLinks(false);
-      }
+  function handleClickOutside(event) {
+    if (!wrapperRef.current.contains(event.target)) {
+      setShowLinks(false);
     }
+  }
+  useEffect(() => {
     if (showLinks) {
       document.addEventListener('click', handleClickOutside);
     }
@@ -62,6 +61,7 @@ export default function Header() {
   }, [wrapperRef, showLinks]);
 
   const onLogout = () => {
+    router.push('/');
     storage.removeToken();
     dispatch(AuthActions.setCurrentUserSuccessAction(null));
     firebase
@@ -166,7 +166,7 @@ export default function Header() {
                   </div>
                   <MenuGroup title='Hồ sơ'>
                     <MenuItem>
-                      <a href='/account'>Tài khoản</a>
+                      <a href='/me'>Tài khoản</a>
                     </MenuItem>
                   </MenuGroup>
                   <MenuDivider />
@@ -187,6 +187,7 @@ export default function Header() {
                 colorScheme='purple'
                 fontSize={'sm'}
                 onClick={() => router.push('/auth')}
+                leftIcon={<FaRegUserCircle />}
               >
                 Đăng nhập / Đăng ký
               </Button>

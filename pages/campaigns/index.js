@@ -64,7 +64,7 @@ const CampaignsList = ({ query, status }) => {
       {campaigns && (
         <Box>
           <Text as={'h6'}>Hiển thị {total} kết quả</Text>
-          <Box py={12}>
+          <Box py={6}>
             {campaigns.map(campaign => (
               <CampaignItem key={campaign._id} data={campaign} />
             ))}

@@ -404,7 +404,7 @@ function ResultModal({
   const action = event === 'create' ? 'Yêu cầu tạo' : 'Cập nhật';
   const statusMess = status === 'success' ? 'thành công' : 'thất bại';
   return (
-    <Modal blockScrollOnMount={false} isOpen={openModal} size='xl'>
+    <Modal blockScrollOnMount={true} isOpen={openModal} size='xl'>
       <ModalOverlay />
       <ModalContent>
         <ModalBody>

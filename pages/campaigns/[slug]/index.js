@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Box,
   Divider,
   Flex,
@@ -89,7 +90,6 @@ export default function Detail({ campaign }) {
     author,
     createdAt
   } = campaign;
-  const isEnded = status === 'ended';
   const isOwner = user?.id === author._id;
   const percent = `${((donated_amount / amount) * 100).toFixed(2)}%`;
   const settings = {
@@ -151,11 +151,18 @@ export default function Detail({ campaign }) {
             {format(new Date(createdAt), 'dd/MM/yyyy')}
           </Text>
           <Box mt={4}>
-            {isEnded ? (
-              <Tag colorScheme='red'>Hoạt động đã kết thúc</Tag>
-            ) : (
-              <Tag colorScheme='purple'>Hoạt động đang diễn ra</Tag>
-            )}
+            <Badge
+              variant='outline'
+              colorScheme={
+                status === 'pending'
+                  ? 'purple'
+                  : status === 'active'
+                  ? 'green'
+                  : 'red'
+              }
+            >
+              {convertStatusToString(status)}
+            </Badge>
           </Box>
 
           <Slider className='my-4 w-full' {...settings}>
@@ -200,37 +207,37 @@ export default function Detail({ campaign }) {
               </Tabs>
             </Box>
             <Box
-              className='border-2'
               order={['1', '1', '2']}
               my={8}
               h='max-content'
               ml={['0', '0', '8']}
               flex={2}
               bg={bg}
-              boxShadow={'2xl'}
               rounded={'md'}
               overflow={'hidden'}
             >
-              <Stack textAlign={'center'} p={6} align={'center'}>
+              <Stack textAlign={'center'} py={1} align={'center'}>
                 <Text fontSize={'xl'} color={color.PRIMARY} fontWeight={600}>
                   THÔNG TIN QUYÊN GÓP
                 </Text>
               </Stack>
 
-              <Box bg={bg} px={6} py={2}>
+              <Box bg={bg} px={6} py={2} fontSize='sm'>
                 <Stack my={4} w={'full'}>
-                  <Flex justify={'space-between'} fontSize='sm'>
-                    <Flex align={'end'}>
-                      <Text fontSize={'lg'} fontWeight={600}>
-                        {n(donated_amount).format('0,0')}đ quyên góp
-                      </Text>
-                      &nbsp;/&nbsp;<Text>{n(amount).format('0,0')}đ</Text>
-                    </Flex>
+                  <Flex justify={'space-between'}>
+                    <Text fontWeight={600}>Đạt được:</Text>
+                    <Text>{percent}</Text>
                   </Flex>
                   <ProgressBar
                     color={color.PRIMARY}
                     percent={`${((donated_amount / amount) * 100).toFixed(2)}%`}
                   />
+                  <Flex>
+                    <b>Mục tiêu: </b>
+                    <Text color={color.PRIMARY} ml={2} fontWeight={600}>
+                      {n(amount).format('0,0')}đ
+                    </Text>
+                  </Flex>
                 </Stack>
                 <Flex
                   my={2}
@@ -238,19 +245,19 @@ export default function Detail({ campaign }) {
                   justifyContent='space-between'
                   flexWrap='wrap'
                 >
-                  <Flex flexDir='column' alignItems='center'>
+                  <Flex flexDir='column' alignItems='center' bg={bg}>
                     <Text fontSize={'md'}>Lượt ủng hộ</Text>
                     <Text color={'gray.500'} as={'b'}>
-                      4.500 lượt
+                      4.500
                     </Text>
                   </Flex>
-                  <Flex flexDir='column' alignItems='center'>
-                    <Text fontSize={'md'}>Đạt được</Text>
+                  <Flex flexDir='column' alignItems='center' bg={bg}>
+                    <Text fontSize={'md'}>Đã quyên góp</Text>
                     <Text color={'gray.500'} as={'b'}>
-                      {percent}
+                      {n(donated_amount).format('0,0')}đ
                     </Text>
                   </Flex>
-                  <Flex flexDir='column' alignItems='center'>
+                  <Flex flexDir='column' alignItems='center' bg={bg}>
                     <Text fontSize={'md'}>Thời hạn còn</Text>
                     <Text color={'gray.500'} as={'b'}>
                       {DateUtils.calculateDaysFromNow(finishedAt)} ngày

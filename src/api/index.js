@@ -11,10 +11,10 @@ const Rest = {
   comments: '/comments',
 
   //user services
-  user: '/user',
+  user: '/users',
 
-  //wallet services
-  wallet: '/wallet',
+  //charge
+  charge: '/charge',
 
   //checkout
   checkout: '/checkout'

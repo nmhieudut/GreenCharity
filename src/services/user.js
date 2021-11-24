@@ -2,13 +2,11 @@ import _http from 'src/libs/axios';
 import Rest from 'src/api';
 
 export const UserService = {
-  getMany: () => {},
+  getMany: () => _http.get(Rest.user),
 
-  update: payload => _http.put(Rest.user, payload),
+  update: (userId, payload) => _http.put(`${Rest.user}/${userId}`, payload),
 
-  getWallets: () => _http.get(`${Rest.wallet}/list`),
+  charge: (userId, payload) => _http.post(`${Rest.charge}/${userId}`, payload),
 
-  createWallet: () => _http.post(Rest.wallet),
-
-  deleteWallet: id => _http.delete(`${Rest.wallet}/${id}`)
+  checkout: (type, payload) => _http.post(`${Rest.checkout}/${type}`, payload)
 };

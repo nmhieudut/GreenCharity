@@ -3,31 +3,8 @@
 @tailwind utilities;
 @import './color';
 @import './header';
+@import './fonts';
 @import './pages/home.scss';
-
-@font-face {
-  font-family: "Inter";
-  src: url("/fonts/inter/Inter-Regular.ttf");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Lato";
-  src: url("/fonts/lato/Lato-Regular.ttf");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Quicksand";
-  src: url("/fonts/quicksand/Quicksand-Regular.ttf");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
 
 html,
 body {
@@ -79,7 +56,6 @@ section {
 }
 button {
   outline: none !important;
-  font-family: 'Quicksand', sans-serif !important;
 }
 
 .tsparticles-canvas-el {

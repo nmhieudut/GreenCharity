@@ -159,13 +159,14 @@ export default function Home({ campaigns }) {
             'repeat(1, 1fr)',
             'repeat(2, 1fr)'
           ]}
+          h={80}
         >
           <Flex
             flexDir='column'
             bg={color.PRIMARY}
             p={8}
             color={'#fff'}
-            h={'96'}
+            h={'full'}
           >
             <Heading fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}>
               Người người làm từ thiện, nhà nhà làm từ thiện
@@ -176,7 +177,7 @@ export default function Home({ campaigns }) {
             </Text>
           </Flex>
           <div
-            className='animate__item w-full h-96'
+            className='animate__item w-full h-full'
             data-displacement='img/displacement/8.jpg'
           >
             <div className='animate__item-content'>

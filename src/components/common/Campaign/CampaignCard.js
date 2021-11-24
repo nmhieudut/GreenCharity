@@ -1,11 +1,11 @@
 import {
+  Badge,
   Box,
   Flex,
   Heading,
   Image,
   Link,
   Stack,
-  Tag,
   Text,
   useColorModeValue
 } from '@chakra-ui/react';
@@ -52,26 +52,34 @@ export default function CampaignCard(props) {
           </Box>
 
           <Box className='px-4 pt-4 h-auto md:h-40 lg:h-40'>
-            <Tag
-              mb={2}
-              variant='solid'
-              colorScheme={
-                status === 'pending'
-                  ? 'blue'
-                  : status === 'active'
-                  ? 'purple'
-                  : 'red'
-              }
-            >
-              {convertStatusToString(status)}
-            </Tag>
+            <Flex mb={2} alignItems='center' justify='space-between'>
+              <Badge
+                variant='outline'
+                colorScheme={
+                  status === 'pending'
+                    ? 'purple'
+                    : status === 'active'
+                    ? 'green'
+                    : 'red'
+                }
+              >
+                {convertStatusToString(status)}
+              </Badge>
+              <Flex color={'gray.500'} align='center' justify='end'>
+                <BsClock className='mr-2' size='.75rem' />
+                <Text fontSize='sm'>
+                  {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
+                </Text>
+              </Flex>
+            </Flex>
+
             <Stack>
               <Heading
                 _hover={{
                   color: color.PRIMARY
                 }}
-                fontSize={'md'}
-                fontFamily={'body'}
+                fontSize={'lg'}
+                fontFamily={'bold'}
               >
                 {name}
               </Heading>
@@ -86,24 +94,20 @@ export default function CampaignCard(props) {
             </Stack>
           </Box>
           <Box mt={'auto'} px={4} mb={4}>
-            <Flex justifyContent='space-between' alignItems='center'>
+            <Flex
+              justifyContent='space-between'
+              alignItems='center'
+              fontSize='sm'
+            >
               <Text>
                 <b>{n(donated_amount).format('0,0')}đ</b> quyên góp
               </Text>
-              <Text as='b' fontSize='sm'>
-                {percent}
-              </Text>
+              <Text as='b'>{percent}</Text>
             </Flex>
 
             <Stack my={2} w={'full'}>
               <ProgressBar color={color.PRIMARY} percent={percent} />
             </Stack>
-            <Flex color={'gray.500'} align='center' justify='end' mt={2}>
-              <BsClock className='mr-2' size='.75rem' />
-              <Text fontSize='sm'>
-                {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
-              </Text>
-            </Flex>
           </Box>
         </Box>
       </Box>

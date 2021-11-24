@@ -2,16 +2,20 @@ import { extendTheme } from '@chakra-ui/react';
 
 const theme = extendTheme({
   fonts: {
-    heading: 'Lato',
+    heading: 'Nunito',
     body: 'Inter'
   },
   styles: {
     global: {
-      // styles for the `a`
       a: {
+        fontFamily: 'Quicksand',
         _hover: {
           color: 'purple.500'
         }
+      },
+      button: {
+        fontFamily: 'Open Sans',
+        fontWeight: 400
       }
     }
   }

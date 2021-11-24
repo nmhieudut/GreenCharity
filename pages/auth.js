@@ -42,9 +42,10 @@ import { AuthActions } from 'src/store/auth/action';
 import { storage } from 'src/utils/storage';
 import Button from 'src/components/common/Button';
 import SectionContainer from 'src/components/common/SectionContainer';
+import DividerWithText from 'src/components/common/DividerWithText';
 
 export default function Auth() {
-  const bg = useColorModeValue('purple.200', 'gray.800');
+  const bg = useColorModeValue('purple.200', 'gray.900');
   const formBg = useColorModeValue('white', 'gray.800');
 
   const router = useRouter();
@@ -158,216 +159,216 @@ export default function Auth() {
         <title>Đăng nhập</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }} bg={bg}>
-        <SectionContainer>
-          <div className='flex h-full flex-col lg:flex-row lg:items-center'>
-            <Flex flex={1}>
-              <Image
-                alt={'Login Image'}
-                objectFit={'cover'}
-                src={'/images/banner.png'}
-              />
-            </Flex>
-            <Box
-              className='flex-1 flex flex-col border-2 rounded-lg pb-12'
-              bg={formBg}
+      <Box
+        background="url('/images/tuthienlogin.jpeg') no-repeat"
+        backgroundSize='cover'
+      >
+        <Center
+          mx='auto'
+          py={48}
+          style={{ background: 'rgba(128,90,213,0.5)' }}
+        >
+          <Text
+            textAlign='center'
+            fontSize={{ base: '2xl', md: '4xl', lg: '5xl' }}
+            color='white'
+            fontWeight='bold'
+          >
+            Tham gia cộng đồng Green Charity ngay hôm nay!
+          </Text>
+        </Center>
+      </Box>
+      <SectionContainer semi bg={bg}>
+        <Box className='flex-1 flex flex-col border-2 pb-12' bg={formBg}>
+          <Tabs isLazy isFitted variant='enclosed'>
+            <TabList>
+              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>
+                Đăng nhập
+              </Tab>
+              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>
+                Đăng ký
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <div className='px-4 pt-4 flex flex-col'>
+                  <Heading fontSize={'2xl'}>Đăng nhập</Heading>
+                  <form className='mt-4' onSubmit={handleLogin}>
+                    <FormControl id='email' isRequired>
+                      <FormLabel>Email</FormLabel>
+                      <Input
+                        onChange={handleChange}
+                        isRequired
+                        className='my-2'
+                        focusBorderColor={color.PRIMARY}
+                        type='email'
+                      />
+                    </FormControl>
+
+                    <div className='my-4' />
+                    <FormControl id='password' isRequired>
+                      <FormLabel>Password</FormLabel>
+                      <InputGroup size='md'>
+                        <Input
+                          onChange={handleChange}
+                          isRequired
+                          className='my-2'
+                          focusBorderColor={color.PRIMARY}
+                          pr='4.5rem'
+                          type={show ? 'text' : 'password'}
+                          placeholder='Enter password'
+                        />
+                        <InputRightElement className='my-2'>
+                          <span
+                            className='cursor-pointer'
+                            onClick={() => setShow(!show)}
+                          >
+                            {show ? (
+                              <RiEyeCloseLine color={color.PRIMARY} />
+                            ) : (
+                              <ImEye color={color.PRIMARY} />
+                            )}
+                          </span>
+                        </InputRightElement>
+                      </InputGroup>
+                      {logInError && (
+                        <Box py={2}>
+                          <CustomAlert label={logInError} status='error' />
+                        </Box>
+                      )}
+                    </FormControl>
+                    <Button
+                      w='full'
+                      mt={4}
+                      colorScheme='purple'
+                      type='submit'
+                      isLoading={loading}
+                    >
+                      Đăng nhập
+                    </Button>
+                  </form>
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className='px-4 pt-4 flex flex-col'>
+                  <Heading fontSize={'2xl'}>Đăng ký</Heading>
+                  <form className='mt-4' onSubmit={handleSignUp}>
+                    <div className='flex flex-col md:flex-row'>
+                      <FormControl className='flex-1' id='name' isRequired>
+                        <FormLabel>Họ và tên</FormLabel>
+                        <Input
+                          onChange={handleChange}
+                          className='my-2'
+                          focusBorderColor={color.PRIMARY}
+                          type='text'
+                        />
+                      </FormControl>
+                      <div className='m-2'></div>
+                      <FormControl
+                        className='flex-1'
+                        id='phoneNumber'
+                        isRequired
+                      >
+                        <FormLabel>Số điện thoại</FormLabel>
+                        <Input
+                          onChange={handleChange}
+                          isRequired
+                          className='my-2'
+                          focusBorderColor={color.PRIMARY}
+                          type='number'
+                        />
+                      </FormControl>
+                    </div>
+
+                    <div className='my-4' />
+                    <FormControl id='email' isRequired>
+                      <FormLabel>Email</FormLabel>
+                      <Input
+                        onChange={handleChange}
+                        isRequired
+                        className='my-2'
+                        focusBorderColor={color.PRIMARY}
+                        type='email'
+                      />
+                      <FormHelperText>
+                        Chúng tôi sẽ không chia sẻ email của bạn.
+                      </FormHelperText>
+                    </FormControl>
+
+                    <div className='my-4' />
+                    <FormControl id='password' isRequired>
+                      <FormLabel>Password</FormLabel>
+                      <InputGroup size='md'>
+                        <Input
+                          onChange={handleChange}
+                          isRequired
+                          className='my-2'
+                          focusBorderColor={color.PRIMARY}
+                          pr='4.5rem'
+                          type={show ? 'text' : 'password'}
+                          placeholder='Enter password'
+                        />
+                        <InputRightElement className='my-2'>
+                          <span
+                            className='h-full cursor-pointer'
+                            onClick={() => setShow(!show)}
+                          >
+                            {show ? (
+                              <RiEyeCloseLine color={color.PRIMARY} />
+                            ) : (
+                              <ImEye color={color.PRIMARY} />
+                            )}
+                          </span>
+                        </InputRightElement>
+                      </InputGroup>
+                      {signUpError && (
+                        <Box py={2}>
+                          <CustomAlert label={signUpError} status='error' />
+                        </Box>
+                      )}
+                    </FormControl>
+                    <Button
+                      w='full'
+                      mt={4}
+                      colorScheme='purple'
+                      type='submit'
+                      isLoading={loading}
+                    >
+                      Đăng ký
+                    </Button>
+                  </form>
+                </div>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+          <DividerWithText mb={4}>Hoặc</DividerWithText>
+          <div className='px-8 flex flex-col md:flex-row'>
+            <Button
+              nolinear='true'
+              w={'full'}
+              variant={'outline'}
+              leftIcon={<FcGoogle />}
+              onClick={loginWithGoogle}
             >
-              <Tabs isLazy isFitted variant='enclosed'>
-                <TabList>
-                  <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>
-                    Đăng nhập
-                  </Tab>
-                  <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>
-                    Đăng ký
-                  </Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel>
-                    <div className='px-4 pt-4 flex flex-col'>
-                      <Heading fontSize={'2xl'}>Đăng nhập</Heading>
-                      <form className='my-4' onSubmit={handleLogin}>
-                        <FormControl id='email' isRequired>
-                          <FormLabel>Email</FormLabel>
-                          <Input
-                            onChange={handleChange}
-                            isRequired
-                            className='my-2'
-                            focusBorderColor={color.PRIMARY}
-                            type='email'
-                          />
-                        </FormControl>
-
-                        <div className='my-4' />
-                        <FormControl id='password' isRequired>
-                          <FormLabel>Password</FormLabel>
-                          <InputGroup size='md'>
-                            <Input
-                              onChange={handleChange}
-                              isRequired
-                              className='my-2'
-                              focusBorderColor={color.PRIMARY}
-                              pr='4.5rem'
-                              type={show ? 'text' : 'password'}
-                              placeholder='Enter password'
-                            />
-                            <InputRightElement className='my-2'>
-                              <span
-                                className='cursor-pointer'
-                                onClick={() => setShow(!show)}
-                              >
-                                {show ? (
-                                  <RiEyeCloseLine color={color.PRIMARY} />
-                                ) : (
-                                  <ImEye color={color.PRIMARY} />
-                                )}
-                              </span>
-                            </InputRightElement>
-                          </InputGroup>
-                          {logInError && (
-                            <Box py={2}>
-                              <CustomAlert label={logInError} status='error' />
-                            </Box>
-                          )}
-                        </FormControl>
-
-                        <Divider className='my-4' />
-                        <div className='w-full'>
-                          <Button
-                            w='full'
-                            colorScheme='purple'
-                            type='submit'
-                            isLoading={loading}
-                          >
-                            Đăng nhập
-                          </Button>
-                        </div>
-                      </form>
-                    </div>
-                  </TabPanel>
-                  <TabPanel>
-                    <div className='px-4 pt-4 flex flex-col'>
-                      <Heading fontSize={'2xl'}>Đăng ký</Heading>
-                      <form className='my-4' onSubmit={handleSignUp}>
-                        <div className='flex flex-col md:flex-row'>
-                          <FormControl className='flex-1' id='name' isRequired>
-                            <FormLabel>Họ và tên</FormLabel>
-                            <Input
-                              onChange={handleChange}
-                              className='my-2'
-                              focusBorderColor={color.PRIMARY}
-                              type='text'
-                            />
-                          </FormControl>
-                          <div className='m-2'></div>
-                          <FormControl
-                            className='flex-1'
-                            id='phoneNumber'
-                            isRequired
-                          >
-                            <FormLabel>Số điện thoại</FormLabel>
-                            <Input
-                              onChange={handleChange}
-                              isRequired
-                              className='my-2'
-                              focusBorderColor={color.PRIMARY}
-                              type='number'
-                            />
-                          </FormControl>
-                        </div>
-
-                        <div className='my-4' />
-                        <FormControl id='email' isRequired>
-                          <FormLabel>Email</FormLabel>
-                          <Input
-                            onChange={handleChange}
-                            isRequired
-                            className='my-2'
-                            focusBorderColor={color.PRIMARY}
-                            type='email'
-                          />
-                          <FormHelperText>
-                            Chúng tôi sẽ không chia sẻ email của bạn.
-                          </FormHelperText>
-                        </FormControl>
-
-                        <div className='my-4' />
-                        <FormControl id='password' isRequired>
-                          <FormLabel>Password</FormLabel>
-                          <InputGroup size='md'>
-                            <Input
-                              onChange={handleChange}
-                              isRequired
-                              className='my-2'
-                              focusBorderColor={color.PRIMARY}
-                              pr='4.5rem'
-                              type={show ? 'text' : 'password'}
-                              placeholder='Enter password'
-                            />
-                            <InputRightElement className='my-2'>
-                              <span
-                                className='h-full cursor-pointer'
-                                onClick={() => setShow(!show)}
-                              >
-                                {show ? (
-                                  <RiEyeCloseLine color={color.PRIMARY} />
-                                ) : (
-                                  <ImEye color={color.PRIMARY} />
-                                )}
-                              </span>
-                            </InputRightElement>
-                          </InputGroup>
-                          {signUpError && (
-                            <Box py={2}>
-                              <CustomAlert label={signUpError} status='error' />
-                            </Box>
-                          )}
-                        </FormControl>
-                        <Divider className='my-4' />
-                        <div className='w-full'>
-                          <Button
-                            w='full'
-                            colorScheme='purple'
-                            type='submit'
-                            isLoading={loading}
-                          >
-                            Đăng ký
-                          </Button>
-                        </div>
-                      </form>
-                    </div>
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-              <span className='text-center mb-4'>Hoặc</span>
-              <div className='px-8 flex flex-col md:flex-row'>
-                <Button
-                  nolinear='true'
-                  w={'full'}
-                  variant={'outline'}
-                  leftIcon={<FcGoogle />}
-                  onClick={loginWithGoogle}
-                >
-                  <Center>
-                    <Text>Google</Text>
-                  </Center>
-                </Button>
-                <div className='m-2'></div>
-                <Button
-                  w={'full'}
-                  nolinear='true'
-                  colorScheme={'facebook'}
-                  leftIcon={<FaFacebook />}
-                  onClick={loginWithFacebook}
-                >
-                  <Center>
-                    <Text>Facebook</Text>
-                  </Center>
-                </Button>
-              </div>
-            </Box>
+              <Center>
+                <Text>Google</Text>
+              </Center>
+            </Button>
+            <div className='m-2'></div>
+            <Button
+              w={'full'}
+              nolinear='true'
+              colorScheme={'facebook'}
+              leftIcon={<FaFacebook />}
+              onClick={loginWithFacebook}
+            >
+              <Center>
+                <Text>Facebook</Text>
+              </Center>
+            </Button>
           </div>
-        </SectionContainer>
-      </Stack>
+        </Box>
+      </SectionContainer>
     </>
   );
 }

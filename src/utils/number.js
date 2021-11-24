@@ -1,6 +1,6 @@
 function ignoreZeroBefore(number) {
   if (/^0/.test(number)) {
-    return number.replace(/^0/, "");
+    return number.replace(/^0/, '');
   }
 }
 

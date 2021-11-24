@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { storage } from 'src/utils/storage';
 
-// const url = process.env.NEXT_PUBLIC_SERVER_URL;
-const url = 'https://green-charity-api-production.up.railway.app';
+const url = 'http://localhost:8080';
+// const url = 'https://green-charity-api-production.up.railway.app';
 
 const _http = axios.create({
   baseURL: `${url}/api/v1`,
