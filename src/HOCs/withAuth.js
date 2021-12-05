@@ -17,7 +17,7 @@ const withAuth = WrappedComponent => {
         );
       }
 
-      return <WrappedComponent {...props} />;
+      return <WrappedComponent {...props} user={user} />;
     }
     return null;
   };

@@ -9,10 +9,10 @@ import {
   Text,
   useColorModeValue
 } from '@chakra-ui/react';
-import * as n from 'numeral';
 import { BsClock } from 'react-icons/bs';
 import { color } from 'src/constants/color';
 import { DateUtils } from 'src/utils/date';
+import { VNDFormatter } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
 import ProgressBar from '../Progress/ProgressBar';
 
@@ -21,16 +21,16 @@ export default function CampaignCard(props) {
     campaign: {
       slug,
       _id,
-      image,
+      images,
       status,
       name,
       content,
       donated_amount,
-      amount,
+      goal,
       finishedAt
     }
   } = props;
-  const percent = `${((donated_amount / amount) * 100).toFixed(2)}%`;
+  const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
   return (
     <Link
       href={`/campaigns/${slug}`}
@@ -45,7 +45,7 @@ export default function CampaignCard(props) {
           <Box pos='relative'>
             <Image
               className='h-56 w-full object-cover object-center'
-              src={image}
+              src={images[0]}
               layout={'fill'}
               alt=''
             />
@@ -100,7 +100,7 @@ export default function CampaignCard(props) {
               fontSize='sm'
             >
               <Text>
-                <b>{n(donated_amount).format('0,0')}đ</b> quyên góp
+                <b>{VNDFormatter(donated_amount)}đ</b> quyên góp
               </Text>
               <Text as='b'>{percent}</Text>
             </Flex>

@@ -24,8 +24,8 @@ export default function Sidebar() {
   return (
     <Flex
       pos='sticky'
-      h='95vh'
-      boxShadow='0 4px 12px 0 rgba(0, 0, 0, 0.05)'
+      h='full'
+      boxShadow='0 0 12px 0 rgba(0, 0, 0, 0.05)'
       w={navSize == 'small' ? '75px' : '200px'}
       flexDir='column'
       justifyContent='space-between'

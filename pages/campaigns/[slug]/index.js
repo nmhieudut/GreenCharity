@@ -6,10 +6,16 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  Image,
+  IconButton,
   Input,
   InputGroup,
   InputRightAddon,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   SkeletonCircle,
   SkeletonText,
   Stack,
@@ -18,33 +24,39 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Tag,
   Text,
-  useColorModeValue
+  useBreakpointValue,
+  useColorModeValue,
+  useDisclosure
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import FsLightbox from 'fslightbox-react';
 import Head from 'next/head';
-import * as n from 'numeral';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineComment, AiOutlineLeft } from 'react-icons/ai';
+import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import { RiEditLine } from 'react-icons/ri';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Slider from 'react-slick';
 import Button from 'src/components/common/Button';
 import { CampaignForm } from 'src/components/common/Campaign/CampaignForm';
 import CommentItem from 'src/components/common/Campaign/CommentItem';
+import DividerWithText from 'src/components/common/DividerWithText';
 import NeedLogin from 'src/components/common/NeedLogin';
 import ProgressBar from 'src/components/common/Progress/ProgressBar';
 import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
 import { CampaignService } from 'src/services/campaign';
 import { CommentService } from 'src/services/comment';
+import { ModalActions } from 'src/store/modal/action';
 import { DateUtils } from 'src/utils/date';
+import { VNDFormatter } from 'src/utils/number';
+import { convertStatusToString } from 'src/utils/status';
 
 export async function getServerSideProps(ctx) {
   try {
-    const { campaign } = await CampaignService.getById(ctx.query.slug);
+    const { campaign } = await CampaignService.getBySlug(ctx.query.slug);
     if (!campaign) {
       return {
         notFound: true
@@ -63,14 +75,39 @@ export async function getServerSideProps(ctx) {
   }
 }
 
+const settings = {
+  dots: true,
+  arrows: false,
+  fade: true,
+  infinite: true,
+  autoplay: true,
+  speed: 500,
+  autoplaySpeed: 5000,
+  slidesToShow: 1,
+  slidesToScroll: 1
+};
+
 export default function Detail({ campaign }) {
   const user = useSelector(state => state.auth.currentUser);
+  const router = useRouter();
+  const dispatch = useDispatch();
   const bg = useColorModeValue('white', 'gray.800');
+  const [slider, setSlider] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
+  const [res, setRes] = useState(null);
+  const [resMessage, setResMessage] = useState('');
+  const [donatedInfo, setDonatedInfo] = useState({
+    wished_amount: 0,
+    message: ''
+  });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [lightboxController, setLightboxController] = useState({
     toggler: false,
     sourceIndex: 0
   });
+  const top = useBreakpointValue({ base: '90%', md: '50%' });
+  const side = useBreakpointValue({ base: '30%', md: '10px' });
+
   function openLightboxOnSource(sourceIndex) {
     setLightboxController({
       toggler: !lightboxController.toggler,
@@ -80,7 +117,7 @@ export default function Detail({ campaign }) {
 
   const {
     status,
-    amount,
+    goal,
     donated_amount,
     _id,
     name,
@@ -90,37 +127,35 @@ export default function Detail({ campaign }) {
     author,
     createdAt
   } = campaign;
+  const { wished_amount, message } = donatedInfo;
   const isOwner = user?.id === author._id;
-  const percent = `${((donated_amount / amount) * 100).toFixed(2)}%`;
-  const settings = {
-    dots: true,
-    arrows: true,
-    infinite: images.length > 4,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          dots: true
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
+  const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
+
+  const handleChange = e => {
+    setDonatedInfo({
+      ...donatedInfo,
+      [e.target.id]: e.target.value
+    });
+  };
+
+  const handleDonate = async () => {
+    if (!user) {
+      return;
+    }
+    dispatch(ModalActions.setModalOn());
+    const res = await CampaignService.donate(campaign._id, {
+      amount: parseInt(wished_amount),
+      message
+    });
+    onOpen();
+    if (res.status === 'ok') {
+      setRes('success');
+      setResMessage(res.message);
+    } else {
+      setRes('error');
+      setResMessage(res.response.data.message);
+    }
+    dispatch(ModalActions.setModalOff());
   };
 
   return (
@@ -164,23 +199,64 @@ export default function Detail({ campaign }) {
               {convertStatusToString(status)}
             </Badge>
           </Box>
-
-          <Slider className='my-4 w-full' {...settings}>
-            {images.map((image, idx) => (
-              <Image
-                key={idx}
-                onClick={() => openLightboxOnSource(idx)}
-                className='h-56 w-full object-cover object-center transition duration-300 px-2 cursor-pointer'
-                _hover={{ boxShadow: '2xl', transform: 'scale(1.1)' }}
-                src={image}
-                alt={`campaign-${_id}-${idx}`}
-              />
-            ))}
-          </Slider>
-
           <FsLightbox toggler={lightboxController.toggler} sources={images} />
           <Flex flexDirection={['column', 'column', 'row']} spacing={8}>
-            <Box flex={3} my={8} order={['2', '2', '1']} mr={['0', '0', '8']}>
+            <Box
+              w={['100%', '100%', '60%']}
+              my={8}
+              order={['2', '2', '1']}
+              mr={['0', '0', '2']}
+            >
+              <Box position={'relative'} overflow='hidden' mb={8}>
+                {images.length > 1 && (
+                  <>
+                    <IconButton
+                      aria-label='left-arrow'
+                      colorScheme='purple'
+                      position='absolute'
+                      left={side}
+                      top={top}
+                      transform={'translate(0%, -50%)'}
+                      zIndex={2}
+                      onClick={() => slider?.slickPrev()}
+                    >
+                      <BiLeftArrowAlt size='40px' />
+                    </IconButton>
+                    {/* Right Icon */}
+                    <IconButton
+                      aria-label='right-arrow'
+                      position='absolute'
+                      colorScheme='purple'
+                      right={side}
+                      top={top}
+                      transform={'translate(0%, -50%)'}
+                      zIndex={2}
+                      onClick={() => slider?.slickNext()}
+                    >
+                      <BiRightArrowAlt size='40px' />
+                    </IconButton>
+                  </>
+                )}
+
+                <Slider {...settings} ref={slider => setSlider(slider)}>
+                  {images.map((image, idx) => (
+                    <Box
+                      key={idx}
+                      height={'sm'}
+                      onClick={() => openLightboxOnSource(idx)}
+                      className='w-full transition duration-300 px-2 cursor-pointer'
+                      _hover={{ boxShadow: '2xl', transform: 'scale(1.1)' }}
+                      position='relative'
+                      backgroundPosition='center'
+                      backgroundRepeat='no-repeat'
+                      backgroundSize='cover'
+                      backgroundImage={`url(${image})`}
+                      alt={`campaign-${_id}-${idx}`}
+                    />
+                  ))}
+                </Slider>
+              </Box>
+
               <Tabs isLazy>
                 <TabList mb='1em'>
                   <Tab _selected={{ borderColor: color.PRIMARY }}>
@@ -210,8 +286,8 @@ export default function Detail({ campaign }) {
               order={['1', '1', '2']}
               my={8}
               h='max-content'
-              ml={['0', '0', '8']}
-              flex={2}
+              ml={['0', '0', '2']}
+              w={['100%', '100%', '40%']}
               bg={bg}
               rounded={'md'}
               overflow={'hidden'}
@@ -228,14 +304,11 @@ export default function Detail({ campaign }) {
                     <Text fontWeight={600}>Đạt được:</Text>
                     <Text>{percent}</Text>
                   </Flex>
-                  <ProgressBar
-                    color={color.PRIMARY}
-                    percent={`${((donated_amount / amount) * 100).toFixed(2)}%`}
-                  />
+                  <ProgressBar color={color.PRIMARY} percent={percent} />
                   <Flex>
                     <b>Mục tiêu: </b>
                     <Text color={color.PRIMARY} ml={2} fontWeight={600}>
-                      {n(amount).format('0,0')}đ
+                      {VNDFormatter(goal)}đ
                     </Text>
                   </Flex>
                 </Stack>
@@ -254,7 +327,7 @@ export default function Detail({ campaign }) {
                   <Flex flexDir='column' alignItems='center' bg={bg}>
                     <Text fontSize={'md'}>Đã quyên góp</Text>
                     <Text color={'gray.500'} as={'b'}>
-                      {n(donated_amount).format('0,0')}đ
+                      {VNDFormatter(donated_amount)}đ
                     </Text>
                   </Flex>
                   <Flex flexDir='column' alignItems='center' bg={bg}>
@@ -280,24 +353,104 @@ export default function Detail({ campaign }) {
                     </Text>
                   </Flex>
                 </Box>
-                <Text textAlign={'center'} my={2} fontSize={'lg'}>
-                  Hoặc quyên góp ngay
-                </Text>
-                <form onSubmit={() => {}}>
-                  <FormControl id='amount' isRequired>
-                    <InputGroup>
+                <DividerWithText> Hoặc quyên góp ngay</DividerWithText>
+                {user ? (
+                  <form
+                    onSubmit={e => {
+                      e.preventDefault();
+                      setRes(null);
+                      setResMessage('');
+                      onOpen();
+                    }}
+                  >
+                    <FormControl my={2} id='wished_amount' isRequired>
+                      <InputGroup>
+                        <Input
+                          onChange={handleChange}
+                          type='number'
+                          placeholder='Nhập số tiền muốn quyên góp tại đây'
+                          focusBorderColor={color.PRIMARY}
+                        />
+                        <InputRightAddon>VND</InputRightAddon>
+                      </InputGroup>
+                    </FormControl>
+                    <FormControl my={2} id='message' isRequired>
                       <Input
-                        type='number'
-                        placeholder='Nhập số tiền muốn quyên góp tại đây'
+                        onChange={handleChange}
+                        type='text'
+                        placeholder='Và để lại lời nhắn ở đây'
                         focusBorderColor={color.PRIMARY}
                       />
-                      <InputRightAddon>VND</InputRightAddon>
-                    </InputGroup>
-                  </FormControl>
-                  <Button w='full' mt={4} colorScheme={'pink'} type='submit'>
-                    Quyên góp
-                  </Button>
-                </form>
+                    </FormControl>
+                    <Button w='full' mt={4} colorScheme={'pink'} type='submit'>
+                      Quyên góp
+                    </Button>
+                  </form>
+                ) : (
+                  <Box>
+                    <NeedLogin />
+                  </Box>
+                )}
+
+                <Modal
+                  isOpen={isOpen}
+                  onClose={() => {
+                    onClose();
+                    res === 'success' && window.location.reload();
+                  }}
+                >
+                  <ModalOverlay />
+                  <ModalContent py={4}>
+                    {res ? (
+                      <>
+                        <ModalHeader>Thông báo</ModalHeader>
+                        <ModalBody>{resMessage}</ModalBody>
+                        <ModalFooter>
+                          {res === 'error' && (
+                            <Button
+                              colorScheme='purple'
+                              nolinear
+                              mr={3}
+                              onClick={() => router.push('/checkout')}
+                            >
+                              Nạp tiền
+                            </Button>
+                          )}
+                          <Button
+                            colorScheme='gray'
+                            nolinear
+                            onClick={() => {
+                              onClose();
+                              res === 'success' && window.location.reload();
+                            }}
+                          >
+                            {res === 'success' ? 'Hihi, không có chi' : 'Đóng'}
+                          </Button>
+                        </ModalFooter>
+                      </>
+                    ) : (
+                      <>
+                        <ModalHeader>Xác nhận quyên góp</ModalHeader>
+                        <ModalBody>
+                          Bạn muốn quyên góp số tiền <b>{wished_amount}</b> đồng
+                          cho hoạt động này ?
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button
+                            colorScheme={'purple'}
+                            mr={3}
+                            onClick={handleDonate}
+                          >
+                            Đúng dậy tui chắc chắn
+                          </Button>
+                          <Button colorScheme='gray' nolinear onClick={onClose}>
+                            Tui muốn suy nghĩ lại
+                          </Button>
+                        </ModalFooter>
+                      </>
+                    )}
+                  </ModalContent>
+                </Modal>
                 <Divider my={2} />
                 <Stack py={1}>
                   <Text
@@ -310,7 +463,7 @@ export default function Detail({ campaign }) {
                   </Text>
                   <Stack my={2} direction={'row'} spacing={4} align={'center'}>
                     <Avatar src={author.picture} alt={'Author'} />
-                    <Stack direction={'column'} spacing={2} fontSize={'md'}>
+                    <Stack direction={'column'} spacing={1} fontSize={'md'}>
                       <b>{author.name}</b>
                       <Text>
                         Số điện thoại:&nbsp; <b>{author.phoneNumber}</b>

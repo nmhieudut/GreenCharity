@@ -42,7 +42,7 @@ export default function Home({ campaigns }) {
       image1: '/images/damvinhhung.jpg',
       image2: '/images/thuytien.png',
       displacementImage: 'https://picsum.photos/id/237/200/300',
-      imagesRatio: 0.75
+      imagesRatio: 0.5
     });
   }, []);
 
@@ -149,49 +149,6 @@ export default function Home({ campaigns }) {
             <Image src='/images/hero.png' alt='hero' w='full' />
           </Flex>
         </Stack>
-      </SectionContainer>
-      <SectionContainer>
-        <Grid
-          overflow={'hidden'}
-          w={'full'}
-          templateColumns={[
-            'repeat(1, 1fr)',
-            'repeat(1, 1fr)',
-            'repeat(2, 1fr)'
-          ]}
-          h={80}
-        >
-          <Flex
-            flexDir='column'
-            bg={color.PRIMARY}
-            p={8}
-            color={'#fff'}
-            h={'full'}
-          >
-            <Heading fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}>
-              Người người làm từ thiện, nhà nhà làm từ thiện
-            </Heading>
-            <Text>
-              Nhiều gương mặt đại diện đã đứng ra kêu gọi từ thiện, tiêu biểu là
-              những ca sĩ, nghệ sĩ trong những năm gần đây.
-            </Text>
-          </Flex>
-          <div
-            className='animate__item w-full h-full'
-            data-displacement='img/displacement/8.jpg'
-          >
-            <div className='animate__item-content'>
-              <h3 className='animate__item-subtitle'>
-                <Heading fontSize='md'>Ông Đàm Vĩnh Biệt</Heading>
-                <span>Anh sẽ vì em làm cha thèn bé</span>
-              </h3>
-              <h3 className='animate__item-subtitle'>
-                <Heading fontSize='md'>Bà Lê Thị Thủy Tề</Heading>
-                <span>Em làm từ thiện từ năm 10 tuổi</span>
-              </h3>
-            </div>
-          </div>
-        </Grid>
       </SectionContainer>
       <SectionContainer id='get-started' hasBg>
         <Heading
@@ -310,6 +267,56 @@ export default function Home({ campaigns }) {
           >
             Xem thêm
           </Button>
+        </Flex>
+      </SectionContainer>
+      <SectionContainer hasBg>
+        <Heading
+          textAlign='center'
+          fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
+          lineHeight={'110%'}
+          color={color.PRIMARY}
+        >
+          Người người làm từ thiện, nhà nhà làm từ thiện
+        </Heading>
+        <Flex
+          mt={14}
+          overflow={'hidden'}
+          w={'full'}
+          flexWrap='wrap'
+          flexDir={{ base: 'column', md: 'row' }}
+        >
+          <Flex
+            w={{ base: 'full', md: '50%' }}
+            flexDir='column'
+            bg={color.PRIMARY}
+            p={8}
+            color={'#fff'}
+            h={96}
+          >
+            <Heading fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}>
+              Cùng với những người nổi tiếng
+            </Heading>
+            <Text>
+              Nhiều gương mặt đại diện đã đứng ra kêu gọi từ thiện, tiêu biểu là
+              những ca sĩ, nghệ sĩ trong những năm gần đây.
+            </Text>
+          </Flex>
+          <Box
+            w={{ base: 'full', md: '50%' }}
+            className='animate__item h-96'
+            data-displacement='img/displacement/8.jpg'
+          >
+            <div className='animate__item-content'>
+              <h3 className='animate__item-subtitle'>
+                <Heading fontSize='md'>Ông Đàm Vĩnh Biệt</Heading>
+                <span>Anh sẽ vì em làm cha thèn bé</span>
+              </h3>
+              <h3 className='animate__item-subtitle'>
+                <Heading fontSize='md'>Bà Lê Thị Thủy Tề</Heading>
+                <span>Em làm từ thiện từ năm 10 tuổi</span>
+              </h3>
+            </div>
+          </Box>
         </Flex>
       </SectionContainer>
     </>

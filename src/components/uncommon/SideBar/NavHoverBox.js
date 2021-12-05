@@ -30,7 +30,7 @@ export default function NavHoverBox({ title, icon, description }) {
         <Heading size='sm' fontWeight='normal'>
           {title}
         </Heading>
-        <Text>{description}</Text>
+        <Text fontSize='xs'>{description}</Text>
       </Flex>
     </>
   );

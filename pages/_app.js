@@ -20,6 +20,7 @@ import { ModalActions } from 'src/store/modal/action';
 import { storage } from 'src/utils/storage';
 import theme from 'src/utils/theme';
 import '../styles/globals.scss';
+import App from 'next/app';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -33,6 +34,13 @@ const GlobalStyles = css`
 `;
 
 const queryClient = new QueryClient();
+
+// MyApp.getInitialProps = async (appContext) => {
+//   // calls page's `getInitialProps` and fills `appProps.pageProps`
+//   const appProps = await App.getInitialProps(appContext);
+//
+//   return { ...appProps }
+// }
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();

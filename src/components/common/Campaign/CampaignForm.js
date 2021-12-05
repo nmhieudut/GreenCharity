@@ -60,7 +60,6 @@ export function CampaignForm({ isEdited, initialValues }) {
   const [editorLoaded, setEditorLoaded] = useState(false);
   const [event, setEvent] = useState('');
   const [status, setStatus] = useState('');
-  const [slug, setSlug] = useState('');
   const [isOpenModal, setIsOpenModal] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -137,7 +136,6 @@ export function CampaignForm({ isEdited, initialValues }) {
         .then(res => {
           console.log('res', res);
           setStatus('success');
-          setSlug(res.data.slug);
         })
         .catch(err => {
           console.log(err);
@@ -152,7 +150,6 @@ export function CampaignForm({ isEdited, initialValues }) {
       .then(res => {
         console.log('res', res);
         setStatus('success');
-        setSlug(res.data.slug);
       })
       .catch(err => {
         console.log(err);
@@ -382,8 +379,7 @@ export function CampaignForm({ isEdited, initialValues }) {
         status={status}
         openModal={isOpenModal}
         onPrimaryClick={() => {
-          router.push(`/campaigns/${slug}`);
-          window.location.reload();
+          router.push(`/me/my-campaigns`);
         }}
         onSecondaryClick={() => {
           router.push('/');
@@ -432,7 +428,7 @@ function ResultModal({
           <Button colorScheme='purple' mr={3} onClick={onPrimaryClick}>
             Kiểm tra hoạt động này
           </Button>
-          <Button variant='solid' onClick={onSecondaryClick}>
+          <Button colorScheme='gray' nolinear onClick={onSecondaryClick}>
             Về trang chính
           </Button>
         </ModalFooter>

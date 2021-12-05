@@ -14,7 +14,7 @@ const Rest = {
   user: '/users',
 
   //charge
-  charge: '/charge',
+  balance: '/balance',
 
   //checkout
   checkout: '/checkout'

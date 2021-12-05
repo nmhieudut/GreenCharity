@@ -1,8 +1,6 @@
 import {
-  Alert,
-  AlertIcon,
   Box,
-  Center,
+  Divider,
   Flex,
   FormControl,
   FormLabel,
@@ -13,33 +11,32 @@ import {
   InputGroup,
   InputLeftElement,
   Spinner,
-  Text,
-  useDisclosure
+  Text
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import Flatpickr from 'react-flatpickr';
-import { AiOutlineDelete } from 'react-icons/ai';
-import { BiWalletAlt } from 'react-icons/bi';
-import { FaCcStripe } from 'react-icons/fa';
 import { FcCalendar, FcPhone } from 'react-icons/fc';
 import { FiEdit3 } from 'react-icons/fi';
-import { GiMoneyStack } from 'react-icons/gi';
-import { useQuery } from 'react-query';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import CustomAlert from 'src/components/common/Alert';
 import Button from 'src/components/common/Button';
 import { color } from 'src/constants/color';
 import withAuth from 'src/HOCs/withAuth';
 import MeLayout from 'src/layout/MeLayout';
 import { storage } from 'src/libs/firebase';
+import { AuthService } from 'src/services/auth';
 import { UserService } from 'src/services/user';
+import { AuthActions } from 'src/store/auth/action';
+import { ModalActions } from 'src/store/modal/action';
+import { VNDFormatter } from 'src/utils/number';
 
-function AccountPage() {
-  const user = useSelector(state => state.auth.currentUser);
+function AccountPage(props) {
+  const { user } = props;
   const router = useRouter();
   const imageRef = useRef();
+  const dispatch = useDispatch();
   const [info, setInfo] = useState({
     name: user.name,
     phoneNumber: user.phoneNumber,
@@ -115,11 +112,19 @@ function AccountPage() {
       user.id,
       Object.assign(info, { picture: imageUrl })
     );
+    setLoading(false);
     if (res) {
       setSuccess(true);
-      setTimeout(() => {
-        // window.location.reload();
-      }, 1000);
+      dispatch(AuthActions.setCurrentUserAction());
+      dispatch(ModalActions.setModalOn());
+      await AuthService.getInfo()
+        .then(res => {
+          dispatch(AuthActions.setCurrentUserSuccessAction(res.data));
+        })
+        .catch(e => dispatch(AuthActions.setCurrentUserFailedAction()))
+        .finally(() => {
+          dispatch(ModalActions.setModalOff());
+        });
     }
   };
 
@@ -136,7 +141,7 @@ function AccountPage() {
         </Heading>
         <Flex flexDirection='column' justifyContent='center' mt={6} maxW='3xl'>
           <Flex flexDir={{ base: 'column', md: 'row' }} justify='space-between'>
-            <Box className='flex justify-end relative w-48 h-48'>
+            <Box className='flex justify-end relative w-24 h-24'>
               {imageUrl ? (
                 <Image
                   className='absolute h-full w-full rounded-full object-cover object-center'
@@ -150,7 +155,8 @@ function AccountPage() {
                 colorScheme='purple'
                 rounded='full'
                 pos='absolute'
-                bottom='20px'
+                size='sm'
+                bottom={0}
                 right={0}
                 onClick={() => imageRef.current.click()}
                 icon={<FiEdit3 />}
@@ -164,7 +170,7 @@ function AccountPage() {
             </Box>
             <Flex flexDir={'column'}>
               <Text fontSize='lg'>
-                Số dư hiện có: <b>{user.balance} VND</b>{' '}
+                Số dư hiện có: <b> {VNDFormatter(user.balance)} VND</b>
               </Text>
               <Button
                 mt={2}
@@ -176,7 +182,7 @@ function AccountPage() {
               </Button>
             </Flex>
           </Flex>
-
+          <Divider mt={8} />
           <form onSubmit={onUpdateInfo}>
             <div className='my-8'></div>
             <FormControl className='flex flex-col md:flex-row md:items-center md:justify-between'>
@@ -272,76 +278,6 @@ function AccountPage() {
         </Flex>
       </Box>
     </MeLayout>
-  );
-}
-
-function WalletTabs() {
-  const [refetch, setRefetch] = useState(0);
-  const { data, error, isError, isLoading } = useQuery(
-    ['wallets', refetch],
-    () => UserService.getWallets()
-  );
-  const { wallets } = data || [];
-
-  return (
-    <Box>
-      <Alert status='warning'>
-        <AlertIcon />
-        Chúng tôi sẽ không lưu thẻ hoặc tài khoản thẻ trên hệ thống để tránh các
-        trường hợp đánh cắp thông tin của bạn. Vui lòng chọn phương thức thanh
-        toán cho mỗi lần nạp tiền.
-      </Alert>
-      <Flex justifyContent='flex-end'>
-        <Button
-          leftIcon={<BiWalletAlt />}
-          colorScheme='purple'
-          variant='solid'
-          onClick={onCreateWallet}
-        >
-          Tạo ví mới
-        </Button>
-      </Flex>
-      {wallets?.map(wallet => (
-        <Box key={wallet._id}>
-          <WalletItem wallet={wallet} onDelete={onDeleteWallet} />
-        </Box>
-      ))}
-    </Box>
-  );
-}
-
-function WalletItem({ wallet, onDelete }) {
-  const { isOpen, onToggle } = useDisclosure();
-  return (
-    <Box boxShadow={'xl'} my={8} p={4}>
-      <Text>Mã ví: {wallet._id}</Text>
-      <Text>
-        Số dư hiện có:{' '}
-        <Text as='b'>{wallet.amount_money ? wallet.amount_money : 0} VND</Text>
-      </Text>
-      <Flex justify='flex-end'>
-        <Button
-          size='sm'
-          leftIcon={<GiMoneyStack />}
-          colorScheme='purple'
-          variant='solid'
-          nolinear='true'
-          onClick={onToggle}
-        >
-          Nạp tiền
-        </Button>
-        <Button
-          size='sm'
-          leftIcon={<AiOutlineDelete />}
-          ml={4}
-          nolinear='true'
-          onClick={() => onDelete(wallet._id)}
-          colorScheme='red'
-        >
-          Xóa ví
-        </Button>
-      </Flex>
-    </Box>
   );
 }
 

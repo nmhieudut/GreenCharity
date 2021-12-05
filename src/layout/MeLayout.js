@@ -2,7 +2,7 @@ import { Flex, IconButton } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { FiMenu, FiSettings } from 'react-icons/fi';
+import { FiMenu } from 'react-icons/fi';
 import SectionContainer from 'src/components/common/SectionContainer';
 import NavItem from 'src/components/uncommon/SideBar/NavItem';
 import { meSideBar } from 'src/constants/sidebar';
@@ -11,14 +11,13 @@ export default function MeLayout({ children }) {
   const [navSize, changeNavSize] = useState('large');
   const router = useRouter();
   const { pathname } = router;
-  console.log('---', pathname);
   return (
     <div>
       <Head>
         <title>Tài khoản</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      <SectionContainer>
+      <SectionContainer py={0}>
         <Flex>
           <Flex
             transition='all 0.3s ease-in-out'
@@ -55,6 +54,7 @@ export default function MeLayout({ children }) {
                   routeTo={item.path}
                   active={item.path === pathname}
                   title={item.title}
+                  description={item.description}
                 />
               ))}
             </Flex>

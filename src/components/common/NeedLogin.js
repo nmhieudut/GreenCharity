@@ -20,7 +20,7 @@ export default function NeedLogin({ hasHeader }) {
         justify='center'
         align='center'
       >
-        <Text fontSize='2xl' mb={4}>
+        <Text fontSize='xl' mb={4}>
           Bạn cần đăng nhập để thực hiện hành động này
         </Text>
         <Button colorScheme='purple' onClick={() => router.push('/auth')}>

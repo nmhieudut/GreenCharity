@@ -13,7 +13,11 @@ export default function SectionContainer({
   return (
     <Box as={'section'} bg={hasBg && bg} {...rest} w='full'>
       {hasParticle && <Particle />}
-      <Container mx='auto' maxW={semi ? 'container.md' : 'container.xl'}>
+      <Container
+        mx='auto'
+        maxW={semi ? 'container.sm' : 'container.xl'}
+        h='full'
+      >
         {children}
       </Container>
     </Box>

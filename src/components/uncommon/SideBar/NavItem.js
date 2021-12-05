@@ -23,7 +23,7 @@ export default function NavItem({
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Flex
-      mt={30}
+      mt={4}
       flexDir='column'
       w='100%'
       alignItems={navSize == 'small' ? 'center' : 'flex-start'}
@@ -35,7 +35,7 @@ export default function NavItem({
           onMouseLeave={onClose}
           backgroundColor={active && color.PRIMARY}
           color={active && '#fff'}
-          p={3}
+          p={2}
           borderRadius={8}
           _hover={{
             color: '#fff',
@@ -45,9 +45,13 @@ export default function NavItem({
           w={navSize == 'large' && '100%'}
         >
           <MenuButton w='100%'>
-            <Flex>
+            <Flex align='center'>
               <Icon as={icon} fontSize='xl' color={active && '#fff'} />
-              <Text ml={5} display={navSize == 'small' ? 'none' : 'flex'}>
+              <Text
+                ml={5}
+                display={navSize === 'small' ? 'none' : 'flex'}
+                fontSize={navSize === 'small' ? 'xs' : 'sm'}
+              >
                 {title}
               </Text>
             </Flex>

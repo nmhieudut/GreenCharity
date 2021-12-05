@@ -30,8 +30,33 @@ export default function Campaigns({ total, campaigns }) {
         <title>Các hoạt động</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      <Box bg={color.PRIMARY}>
-        <SectionContainer>
+      {/* <Box
+        background="url('/images/tuthienlogin.jpeg') no-repeat"
+        backgroundSize='cover'
+      >
+        <Center
+          mx='auto'
+          py={48}
+          style={{ background: 'rgba(128,90,213,0.5)' }}
+        >
+          <Text
+            textAlign='center'
+            fontSize={{ base: '2xl', md: '4xl', lg: '5xl' }}
+            color='white'
+            fontWeight='bold'
+          >
+            Tham gia cộng đồng Green Charity ngay hôm nay!
+          </Text>
+        </Center>
+      </Box> */}
+      <Box
+        background="url('/images/tuthienlogin.jpeg') no-repeat"
+        backgroundSize='cover'
+      >
+        <SectionContainer
+          mt={12}
+          style={{ background: 'rgba(128,90,213,0.5)' }}
+        >
           <Heading className='text-center font-bold text-white text-4xl'>
             Tìm kiếm các hoạt động thiện nguyện ngay
             <p className='mx-auto font-normal text-sm my-6 max-w-lg'>

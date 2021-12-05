@@ -22,19 +22,21 @@ import { useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
 import DividerWithText from 'src/components/common/DividerWithText';
 import SectionContainer from 'src/components/common/SectionContainer';
-import { UserService } from 'src/services/user';
+import withAuth from 'src/HOCs/withAuth';
+import { CheckoutService } from 'src/services/checkout';
 import ignoreZeroBefore from 'src/utils/number';
 
-export default function CheckoutDetail() {
+function CheckoutDetail(props) {
   const bg = useColorModeValue('gray.50', 'gray.700');
-  const user = useSelector(state => state.auth.currentUser);
+  const { user } = props;
   const router = useRouter();
   const [method, setMethod] = React.useState('');
   const [amount, setAmount] = React.useState(0);
-  console.log('+++', method, amount);
   const onCheckout = async e => {
     e.preventDefault();
-    const res = await UserService.checkout(method, { amount_money: amount });
+    const res = await CheckoutService.checkout(method, {
+      amount_money: amount
+    });
     console.log('ressss', res);
     router.push(res.payUrl);
   };
@@ -111,7 +113,7 @@ export default function CheckoutDetail() {
                             Momo
                           </Button>
                         </Radio>
-                        <Radio value='vnpay'>
+                        <Radio value='vn-pay'>
                           <Button
                             nolinear='true'
                             my={2}
@@ -119,7 +121,7 @@ export default function CheckoutDetail() {
                             leftIcon={
                               <Image
                                 src='/images/vnpay.png'
-                                alt='vnpay'
+                                alt='vn-pay'
                                 w={30}
                               />
                             }
@@ -172,3 +174,4 @@ export default function CheckoutDetail() {
     </>
   );
 }
+export default withAuth(CheckoutDetail);

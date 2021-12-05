@@ -11,6 +11,7 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  Text,
   Tooltip,
   useColorMode,
   useColorModeValue
@@ -19,9 +20,8 @@ import Hamburger from 'hamburger-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { AiFillCaretDown } from 'react-icons/ai';
 import { BsBrightnessHigh } from 'react-icons/bs';
-import { FaMoon, FaRegLightbulb, FaRegUserCircle } from 'react-icons/fa';
+import { FaMoon, FaRegUserCircle } from 'react-icons/fa';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import BreadCrumbs from 'src/components/common/BreadCrumbs';
@@ -31,6 +31,7 @@ import { navs } from 'src/constants/navbar';
 import firebase from 'src/libs/firebase';
 import { AuthActions } from 'src/store/auth/action';
 import removeCookie from 'src/utils/cookie';
+import { VNDFormatter } from 'src/utils/number';
 import { storage } from 'src/utils/storage';
 
 export default function Header() {
@@ -101,7 +102,8 @@ export default function Header() {
       <Link href={href}>
         <a
           className={
-            'menu-item ' + (router.pathname == href && 'menu-item__active')
+            'menu-item font-bold ' +
+            (router.pathname == href && 'menu-item__active')
           }
         >
           {label}
@@ -158,17 +160,33 @@ export default function Header() {
                   as={'span'}
                   className='flex justify-between cursor-pointer'
                 >
-                  <Avatar size='xs' src={user.picture} name={user.name} />
+                  <Flex
+                    align='center'
+                    bg={'gray.100'}
+                    px={2}
+                    py={1}
+                    fontSize='xs'
+                  >
+                    <Avatar size='xs' src={user.picture} name={user.name} />
+                    <Text mx={2} color={color.PRIMARY}>
+                      {user.name}
+                    </Text>
+                    <Text color={'gray.500'}>
+                      {VNDFormatter(user.balance)}
+                      <sup>đ</sup>
+                    </Text>
+                  </Flex>
                 </MenuButton>
                 <MenuList>
                   <div className='p-4'>
                     Đang đăng nhập với tên: <b className='ml-1'>{user.name}</b>
                   </div>
-                  <MenuGroup title='Hồ sơ'>
-                    <MenuItem>
-                      <a href='/me'>Tài khoản</a>
-                    </MenuItem>
-                  </MenuGroup>
+                  <MenuItem>
+                    <a href='/me'>Tài khoản</a>
+                  </MenuItem>
+                  <MenuItem>
+                    <a href='/checkout'>Nạp tiền</a>
+                  </MenuItem>
                   <MenuDivider />
                   <MenuGroup title='Trợ giúp'>
                     <MenuItem>Tài liệu</MenuItem>
