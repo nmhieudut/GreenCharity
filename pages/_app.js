@@ -20,7 +20,10 @@ import { ModalActions } from 'src/store/modal/action';
 import { storage } from 'src/utils/storage';
 import theme from 'src/utils/theme';
 import '../styles/globals.scss';
-import App from 'next/app';
+// import hoverEffect from 'hover-effect';
+
+const hoverEffect =
+  typeof window !== `undefined` ? require('hover-effect').default : null;
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -62,6 +65,18 @@ function MyApp({ Component, pageProps }) {
       }
     };
     verifyUser();
+  }, []);
+
+  useEffect(() => {
+    const el = document.querySelector('.animate__item');
+    new hoverEffect({
+      parent: el,
+      intensity: 0.3,
+      image1: '/images/damvinhhung.jpg',
+      image2: '/images/thuytien.png',
+      displacementImage: 'https://picsum.photos/id/237/200/300',
+      imagesRatio: 0.5
+    });
   }, []);
 
   return (

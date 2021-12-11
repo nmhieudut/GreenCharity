@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { storage } from 'src/utils/storage';
 
-const url = 'http://localhost:8080';
+const url = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080';
 // const url = 'https://green-charity-api-production.up.railway.app';
 
 const _http = axios.create({
@@ -27,7 +27,7 @@ _http.interceptors.request.use(
   },
   error => {
     // Do something with request error
-    return error;
+    return Promise.reject(error);
   }
 );
 
@@ -41,7 +41,7 @@ _http.interceptors.response.use(
   },
   error => {
     // Do something with request error
-    return error;
+    return Promise.reject(error);
   }
 );
 

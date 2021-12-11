@@ -13,6 +13,9 @@ const Rest = {
   //user services
   user: '/users',
 
+  //news services
+  news: '/news',
+
   //charge
   balance: '/balance',
 

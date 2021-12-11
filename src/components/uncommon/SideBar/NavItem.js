@@ -43,12 +43,14 @@ export default function NavItem({
             backgroundColor: color.PRIMARY
           }}
           w={navSize == 'large' && '100%'}
+          display='flex'
+          alignItems='center'
         >
           <MenuButton w='100%'>
             <Flex align='center'>
               <Icon as={icon} fontSize='xl' color={active && '#fff'} />
               <Text
-                ml={5}
+                ml={2}
                 display={navSize === 'small' ? 'none' : 'flex'}
                 fontSize={navSize === 'small' ? 'xs' : 'sm'}
               >

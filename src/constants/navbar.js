@@ -14,9 +14,5 @@ export const navs = [
   {
     to: '/about',
     label: 'Về chúng tôi'
-  },
-  {
-    to: '/new-campaign',
-    label: 'Tạo hoạt động'
   }
 ];

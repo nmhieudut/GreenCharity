@@ -6,12 +6,15 @@ export const UserService = {
 
   update: (userId, payload) => _http.put(`${Rest.user}/${userId}`, payload),
 
+  resetPassword: (userId, payload) =>
+    _http.put(`${Rest.user}/${userId}/reset-password`, payload),
+
   charge: (userId, payload) =>
     _http.put(`${Rest.balance}/charge/${userId}`, payload),
 
   checkout: (type, payload) => _http.post(`${Rest.checkout}/${type}`, payload),
 
-  getChargeHistory: userId => _http.get(`${Rest.user}/${userId}/charges`),
+  getTransactions: userId => _http.get(`${Rest.user}/${userId}/transactions`),
 
   getDonationsHistory: userId => _http.get(`${Rest.user}/${userId}/donations`)
 };

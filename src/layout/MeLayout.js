@@ -12,56 +12,48 @@ export default function MeLayout({ children }) {
   const router = useRouter();
   const { pathname } = router;
   return (
-    <div>
-      <Head>
-        <title>Tài khoản</title>
-        <link rel='icon' href='/images/thumbnail.png' />
-      </Head>
-      <SectionContainer py={0}>
-        <Flex>
-          <Flex
-            transition='all 0.3s ease-in-out'
-            pos='sticky'
-            h='calc(100vh - 8.125rem)'
-            zIndex={49}
-            w={navSize == 'small' ? '75px' : '300px'}
-            boxShadow='0 4px 12px 0 rgba(0, 0, 0, 0.05)'
-            flexDir='column'
-            justifyContent='space-between'
-          >
-            <Flex
-              p='5%'
-              flexDir='column'
-              w='100%'
-              alignItems={navSize == 'small' ? 'center' : 'flex-start'}
-              as='nav'
-            >
-              <IconButton
-                background='none'
-                mt={5}
-                _hover={{ background: 'none' }}
-                icon={<FiMenu />}
-                onClick={() => {
-                  if (navSize == 'small') changeNavSize('large');
-                  else changeNavSize('small');
-                }}
-              />
-              {meSideBar.map((item, index) => (
-                <NavItem
-                  key={index}
-                  navSize={navSize}
-                  icon={item.icon}
-                  routeTo={item.path}
-                  active={item.path === pathname}
-                  title={item.title}
-                  description={item.description}
-                />
-              ))}
-            </Flex>
-          </Flex>
-          {children}
+    <Flex h='100%'>
+      <Flex
+        transition='all 0.3s ease-in-out'
+        pos='sticky'
+        h='100%'
+        zIndex={49}
+        w={navSize == 'small' ? '75px' : '300px'}
+        boxShadow='0 2px 6px 0 rgba(0, 0, 0, 0.05)'
+        flexDir='column'
+        justifyContent='space-between'
+      >
+        <Flex
+          p='5%'
+          flexDir='column'
+          w='100%'
+          alignItems={navSize == 'small' ? 'center' : 'flex-start'}
+          as='nav'
+        >
+          <IconButton
+            background='none'
+            mt={5}
+            _hover={{ background: 'none' }}
+            icon={<FiMenu />}
+            onClick={() => {
+              if (navSize == 'small') changeNavSize('large');
+              else changeNavSize('small');
+            }}
+          />
+          {meSideBar.map((item, index) => (
+            <NavItem
+              key={index}
+              navSize={navSize}
+              icon={item.icon}
+              routeTo={item.path}
+              active={item.path === pathname}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
         </Flex>
-      </SectionContainer>
-    </div>
+      </Flex>
+      {children}
+    </Flex>
   );
 }

@@ -6,6 +6,11 @@ export const CampaignService = {
 
   getByAuthor: id => _http.get(`${Rest.campaigns}/owner/${id}`),
 
+  fetchSummary: () => _http.get(`${Rest.campaigns}/info/summary`),
+
+  fetchCampaignsByStatus: status =>
+    _http.get(`${Rest.campaigns}/status/${status}`),
+
   fetchCampaigns: (query, status, skip) => {
     const queryString = query ? `q=${query}` : '';
     const statusString = status ? `&status=${status}` : '';

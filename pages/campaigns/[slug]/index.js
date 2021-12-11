@@ -143,17 +143,17 @@ export default function Detail({ campaign }) {
       return;
     }
     dispatch(ModalActions.setModalOn());
-    const res = await CampaignService.donate(campaign._id, {
-      amount: parseInt(wished_amount),
-      message
-    });
-    onOpen();
-    if (res.status === 'ok') {
+    try {
+      const res = await CampaignService.donate(campaign._id, {
+        amount: parseInt(wished_amount),
+        message
+      });
+      onOpen();
       setRes('success');
       setResMessage(res.message);
-    } else {
+    } catch (e) {
       setRes('error');
-      setResMessage(res.response.data.message);
+      setResMessage(e.response.data.message);
     }
     dispatch(ModalActions.setModalOff());
   };

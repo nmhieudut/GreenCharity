@@ -86,7 +86,7 @@ export default function CampaignItem({
             {percent}
           </Text>
           <Stack my={2} w={'full'}>
-            <ProgressBar color={color.PRIMARY} percent='23%' />
+            <ProgressBar color={color.PRIMARY} percent={percent} />
           </Stack>
           <Flex justify='end'>
             <Stack

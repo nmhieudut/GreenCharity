@@ -1,6 +1,13 @@
-import React from "react";
-import withAuth from "src/HOCs/withAuth";
+import Head from 'next/head';
+import React from 'react';
 const About = () => {
-  return <div>About</div>;
+  return (
+    <div>
+      <Head>
+        <title>Đội ngũ phát triển</title>
+        <link rel='icon' href='/images/thumbnail.png' />
+      </Head>
+    </div>
+  );
 };
 export default About;

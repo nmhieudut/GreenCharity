@@ -70,10 +70,14 @@ export default function Auth() {
     firebase.auth().onAuthStateChanged(userCred => {
       userCred?.getIdToken().then(token => {
         setIdToken(token);
-        AuthService.loginWithGoogle(token).then(res => {
-          storage.setToken(res.token);
-          dispatch(AuthActions.setCurrentUserSuccessAction(res.user));
-        });
+        AuthService.loginWithGoogle(token)
+          .then(res => {
+            storage.setToken(res.token);
+            dispatch(AuthActions.setCurrentUserSuccessAction(res.user));
+          })
+          .catch(e => {
+            console.log(e);
+          });
       });
     });
   }, [idToken]);
@@ -122,7 +126,6 @@ export default function Auth() {
       if (res.user) {
         dispatch(AuthActions.signUpSuccessAction(res.user));
         storage.setToken(res.token);
-        return;
       }
       return dispatch(
         AuthActions.signUpFailedAction(res.response.data.message)

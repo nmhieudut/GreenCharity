@@ -31,7 +31,6 @@ import { useDropzone } from 'react-dropzone';
 import Flatpickr from 'react-flatpickr';
 import { BsFillImageFill } from 'react-icons/bs';
 import { CgRemove } from 'react-icons/cg';
-import { FcCheckmark } from 'react-icons/fc';
 import Button from 'src/components/common/Button';
 import SectionContainer from 'src/components/common/SectionContainer';
 import ImgLoading from 'src/components/common/Spinner/ImgLoading';
@@ -48,7 +47,7 @@ const schema = Yup.object().shape({
   content: Yup.string().required('Vui lòng nhập nội dung'),
   finishedAt: Yup.date().required('Thêm ngày kết thúc vào nữa'),
   bank_account_number: Yup.string(),
-  amount: Yup.number()
+  goal: Yup.number()
     .required('Nhập số tiền mong muốn')
     .min(100000, 'Số tiền không được dưới 100.000 VND')
 });
@@ -130,7 +129,6 @@ export function CampaignForm({ isEdited, initialValues }) {
   }, [imgUrls]);
 
   const handleSubmit = async values => {
-    console.log('submit', values);
     if (!isEdited) {
       return CampaignService.create(values)
         .then(res => {
@@ -148,7 +146,6 @@ export function CampaignForm({ isEdited, initialValues }) {
     }
     return CampaignService.update(initialValues._id, values)
       .then(res => {
-        console.log('res', res);
         setStatus('success');
       })
       .catch(err => {
@@ -185,7 +182,7 @@ export function CampaignForm({ isEdited, initialValues }) {
           bank_account_number: isEdited
             ? initialValues.bank_account_number
             : '',
-          amount: isEdited ? initialValues.amount : 100000
+          goal: isEdited ? initialValues.goal : 100000
         }}
         validationSchema={schema}
         onSubmit={values => handleSubmit(values)}
@@ -219,21 +216,21 @@ export function CampaignForm({ isEdited, initialValues }) {
                   <FormErrorMessage>{errors.name}</FormErrorMessage>
                 </FormControl>
                 <div className='my-4' />
-                <FormControl isInvalid={errors.amount} isRequired>
+                <FormControl isInvalid={errors.goal} isRequired>
                   <FormLabel>
                     Số tiền muốn quyên góp (ít nhất là 100.000 VND)
                   </FormLabel>
                   <InputGroup>
                     <Input
                       name='2'
-                      onChange={handleChange('amount')}
-                      value={values.amount}
+                      onChange={handleChange('goal')}
+                      value={values.goal}
                       focusBorderColor={color.PRIMARY}
                       type='number'
                     />
                     <InputRightAddon>VND</InputRightAddon>
                   </InputGroup>
-                  <FormErrorMessage>{errors.amount}</FormErrorMessage>
+                  <FormErrorMessage>{errors.goal}</FormErrorMessage>
                 </FormControl>
                 <div className='my-4' />
                 <FormControl isInvalid={errors.finishedAt} isRequired>

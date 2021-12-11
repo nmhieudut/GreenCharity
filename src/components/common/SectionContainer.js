@@ -10,8 +10,9 @@ export default function SectionContainer({
   ...rest
 }) {
   const bg = useColorModeValue('gray.100', 'gray.700');
+  const bg2 = useColorModeValue('gray.200', 'gray.800');
   return (
-    <Box as={'section'} bg={hasBg && bg} {...rest} w='full'>
+    <Box as={'section'} bg={hasBg ? bg : bg2} {...rest} w='full'>
       {hasParticle && <Particle />}
       <Container
         mx='auto'

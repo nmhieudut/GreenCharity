@@ -5,12 +5,12 @@ import { CheckoutService } from 'src/services/checkout';
 import { UserService } from 'src/services/user';
 import Checkmark from 'src/components/common/Checkmark';
 import Head from 'next/head';
+import Loading from 'src/components/common/Spinner/Loading';
 
 export default function VNPayReturn() {
   const router = useRouter();
   const [status, setStatus] = React.useState();
   const [checking, setChecking] = React.useState(false);
-  console.log('router', router);
 
   useEffect(() => {
     async function check() {
@@ -35,11 +35,10 @@ export default function VNPayReturn() {
     }
     check();
   }, [router]);
-  console.log('checking', checking);
   return (
     <Flex w='full' h={'100vh'} justify='center' align='center'>
       {checking && !status ? (
-        <div>Loading</div>
+        <Loading />
       ) : (
         <Box textAlign='center' py={10} px={6}>
           <Head>
@@ -53,7 +52,7 @@ export default function VNPayReturn() {
             {status === 'success' ? (
               <div>
                 Tiền đã được nạp thành công vào tài khoản của bạn. Bấm vào{' '}
-                <Link href='/me' textDecor='underline'>
+                <Link href='/account' textDecor='underline'>
                   đây
                 </Link>{' '}
                 để kiểm tra số dư

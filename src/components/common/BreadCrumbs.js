@@ -21,39 +21,31 @@ export default function BreadCrumbs(props) {
       {pathNames.length > 0 &&
         !pathNames.includes('me') &&
         !pathNames.includes('checkout') && (
-          <Box {...props}>
-            <Container maxW='container.xl' w={'full'}>
-              <CBreadcrumb
-                spacing='8px'
-                separator={<BiChevronRight color='gray.500' />}
-              >
-                <BreadcrumbItem>
-                  <BreadcrumbLink href='/'>
-                    {convertToBreadcrumbs('Home')}
+          <CBreadcrumb
+            spacing='8px'
+            separator={<BiChevronRight color='gray.500' />}
+          >
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/'>
+                {convertToBreadcrumbs('Home')}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            {pathNames.map((name, index) => {
+              const routeTo = `/${pathNames.slice(0, index + 1).join('/')}`;
+              const isLast = index === pathNames.length - 1;
+              return isLast ? (
+                <BreadcrumbItem key={index} isCurrentPage color={color.PRIMARY}>
+                  <Text>{convertToBreadcrumbs(name)}</Text>
+                </BreadcrumbItem>
+              ) : (
+                <BreadcrumbItem key={index}>
+                  <BreadcrumbLink href={routeTo}>
+                    {convertToBreadcrumbs(name)}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                {pathNames.map((name, index) => {
-                  const routeTo = `/${pathNames.slice(0, index + 1).join('/')}`;
-                  const isLast = index === pathNames.length - 1;
-                  return isLast ? (
-                    <BreadcrumbItem
-                      key={index}
-                      isCurrentPage
-                      color={color.PRIMARY}
-                    >
-                      <Text>{convertToBreadcrumbs(name)}</Text>
-                    </BreadcrumbItem>
-                  ) : (
-                    <BreadcrumbItem key={index}>
-                      <BreadcrumbLink href={routeTo}>
-                        {convertToBreadcrumbs(name)}
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                  );
-                })}
-              </CBreadcrumb>
-            </Container>
-          </Box>
+              );
+            })}
+          </CBreadcrumb>
         )}
     </>
   );

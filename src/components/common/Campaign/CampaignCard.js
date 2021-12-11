@@ -39,17 +39,18 @@ export default function CampaignCard(props) {
       className='transition duration-300 md:mx-2 mb-8'
       _hover={{ boxShadow: 'lg' }}
       bg={useColorModeValue('white', 'gray.900')}
+      w={['100%', '45%', '31%']}
+      mx={2}
     >
       <Box className='w-full md:mb-0'>
         <Box className='rounded-sm shadow' overflow='hidden'>
-          <Box pos='relative'>
-            <Image
-              className='h-56 w-full object-cover object-center'
-              src={images[0]}
-              layout={'fill'}
-              alt=''
-            />
-          </Box>
+          <Box
+            backgroundImage={images[0]}
+            backgroundSize='cover'
+            backgroundRepeat='no-repeat'
+            backgroundPosition='center'
+            h={'12rem'}
+          />
 
           <Box className='px-4 pt-4 h-auto md:h-40 lg:h-40'>
             <Flex mb={2} alignItems='center' justify='space-between'>

@@ -19,6 +19,8 @@ import { color } from 'src/constants/color';
 import { CampaignService } from 'src/services/campaign';
 import Button from 'src/components/common/Button';
 import { useEffect } from 'react';
+import { useQuery } from 'react-query';
+import Loading from 'src/components/common/Spinner/Loading';
 
 const SectionContainer = dynamic(() =>
   import('src/components/common/SectionContainer')
@@ -27,24 +29,17 @@ const CampaignCard = dynamic(() =>
   import('src/components/common/Campaign/CampaignCard')
 );
 
-const hoverEffect =
-  typeof window !== `undefined` ? require('hover-effect').default : null;
-
-export default function Home({ campaigns }) {
+export default function Home({
+  total_campaigns,
+  total_amount_donations,
+  total_donors
+}) {
   const router = useRouter();
   const bg = useColorModeValue('white', 'gray.800');
-
-  useEffect(() => {
-    const el = document.querySelector('.animate__item');
-    new hoverEffect({
-      parent: el,
-      intensity: 0.3,
-      image1: '/images/damvinhhung.jpg',
-      image2: '/images/thuytien.png',
-      displacementImage: 'https://picsum.photos/id/237/200/300',
-      imagesRatio: 0.5
-    });
-  }, []);
+  const { data, isLoading, isError, error } = useQuery('campaigns', () =>
+    CampaignService.fetchCampaignsByStatus('active')
+  );
+  const { campaigns } = data || {};
 
   return (
     <>
@@ -62,6 +57,7 @@ export default function Home({ campaigns }) {
         pos='relative'
         hasParticle
         overflow={'hidden'}
+        background='none'
       >
         <Stack
           align={'center'}
@@ -95,19 +91,23 @@ export default function Home({ campaigns }) {
             <Flex justify='space-between' alignItems='center'>
               <Box>
                 <Box color={color.PRIMARY} fontWeight={600}>
-                  <CountUp end={30} duration={3} />
+                  <CountUp end={total_campaigns} duration={3} />
                 </Box>
                 <Text>Hoạt động</Text>
               </Box>
               <Box>
                 <Box color={color.PRIMARY} fontWeight={600}>
-                  <CountUp separator=',' end={40000} duration={3} />
+                  <CountUp separator=',' end={total_donors} duration={3} />
                 </Box>
                 <Text>Lượt quyên góp</Text>
               </Box>
               <Box>
                 <Box color={color.PRIMARY} fontWeight={600}>
-                  <CountUp separator=',' end={1435600000} duration={3} />
+                  <CountUp
+                    separator=','
+                    end={total_amount_donations}
+                    duration={3}
+                  />
                 </Box>
                 <Text>Đồng được quyên góp</Text>
               </Box>
@@ -251,7 +251,8 @@ export default function Home({ campaigns }) {
         >
           Các hoạt động đang diễn ra 🔥
         </Heading>
-        <Box className='grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 mt-14 mb-10'>
+        <Box className='flex flex-wrap mt-14 mb-10'>
+          {isLoading && <Loading />}
           {campaigns?.map((campaign, index) => (
             <CampaignCard key={index} campaign={campaign} />
           ))}
@@ -325,15 +326,22 @@ export default function Home({ campaigns }) {
 
 export const getStaticProps = async () => {
   try {
-    const { campaigns } = await CampaignService.fetchCampaigns();
+    const { total_campaigns, total_amount_donations, total_donors } =
+      await CampaignService.fetchSummary();
     return {
       props: {
-        campaigns
+        total_campaigns,
+        total_amount_donations,
+        total_donors
       }
     };
   } catch (e) {
     return {
-      notFound: true
+      props: {
+        total_campaigns: 0,
+        total_amount_donations: 0,
+        total_donors: 0
+      }
     };
   }
 };
