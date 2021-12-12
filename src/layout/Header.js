@@ -15,10 +15,12 @@ import {
   Tooltip,
   useColorMode,
   useColorModeValue,
-  Link,
-  Switch
+  Link as ChakraLink,
+  Switch,
+  AvatarBadge
 } from '@chakra-ui/react';
 import Hamburger from 'hamburger-react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { BsBrightnessHigh } from 'react-icons/bs';
@@ -32,6 +34,7 @@ import {
 import { MdCampaign } from 'react-icons/md';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
+import AnimatedButton from 'src/components/common/AnimatedButton';
 import BreadCrumbs from 'src/components/common/BreadCrumbs';
 import Button from 'src/components/common/Button';
 import SocialButton from 'src/components/common/SocialButton';
@@ -40,12 +43,13 @@ import { navs } from 'src/constants/navbar';
 import firebase from 'src/libs/firebase';
 import { AuthActions } from 'src/store/auth/action';
 import removeCookie from 'src/utils/cookie';
+import { VNDFormatter } from 'src/utils/number';
 import { storage } from 'src/utils/storage';
 
 export default function Header() {
   const dispatch = useDispatch();
   const bg = useColorModeValue('white', 'gray.800');
-  const bg2 = useColorModeValue('gray.50', 'gray.700');
+  const bg2 = useColorModeValue('gray.200', 'gray.700');
   const textColor = useColorModeValue(color.primary, color.primary);
   const { colorMode, toggleColorMode } = useColorMode();
   const borderColor = useColorModeValue(
@@ -143,7 +147,7 @@ export default function Header() {
       color={textColor}
       bg={bg}
       borderBottom={borderColor}
-      boxShadow='0 .5rem 1.5rem rgba(0,0,0,.1)'
+      boxShadow='0 .5rem 4.5rem rgba(0,0,0,.1)'
     >
       <Box w='full' bg={bg2}>
         <Container
@@ -184,7 +188,9 @@ export default function Header() {
                 className='flex justify-between cursor-pointer'
               >
                 <Flex align='center' bg={bg} px={2} py={1} fontSize='xs'>
-                  <Avatar size='xs' src={user.picture} name={user.name} />
+                  <Avatar size='xs' src={user.picture} name={user.name}>
+                    <AvatarBadge boxSize='1.25em' bg='green.500' />
+                  </Avatar>
                   <Text mx={2} color={color.PRIMARY} overflow='hidden'>
                     {user.name}
                   </Text>
@@ -194,12 +200,19 @@ export default function Header() {
                 <div className='p-4'>
                   Đang đăng nhập với tên: <b className='ml-1'>{user.name}</b>
                 </div>
-                <MenuItem>
-                  <a href='/account'>Tài khoản</a>
-                </MenuItem>
-                <MenuItem>
-                  <a href='/checkout'>Nạp tiền</a>
-                </MenuItem>
+                <div className='px-4'>
+                  Số dư:{' '}
+                  <b className='ml-1'>{VNDFormatter(user.balance)} VND</b>
+                </div>
+                <MenuDivider />
+                <MenuGroup title='Cá nhân'>
+                  <MenuItem>
+                    <a href='/account'>Tài khoản</a>
+                  </MenuItem>
+                  <MenuItem>
+                    <a href='/checkout'>Nạp tiền</a>
+                  </MenuItem>
+                </MenuGroup>
                 <MenuDivider />
                 <MenuGroup title='Trợ giúp'>
                   <MenuItem>Tài liệu</MenuItem>
@@ -213,11 +226,11 @@ export default function Header() {
               </MenuList>
             </Menu>
           ) : (
-            <Link href='/auth'>
+            <ChakraLink href='/auth'>
               <Flex align='center'>
                 <FaRegUserCircle className='mr-2' /> Đăng nhập | Đăng ký
               </Flex>
-            </Link>
+            </ChakraLink>
           )}
         </Container>
       </Box>
@@ -239,17 +252,17 @@ export default function Header() {
         </HStack>
         <Flex alignItems={'center'}>
           <Stack direction={'row'} spacing={2} alignItems={'center'}>
-            <Button
+            <AnimatedButton
               ml='auto'
               variant={'solid'}
               size={'sm'}
-              mr={2}
               colorScheme='purple'
-              leftIcon={<MdCampaign />}
+              mr={2}
+              leftIcon={<MdCampaign size='1rem' />}
               onClick={onCreate}
             >
               Vận động
-            </Button>
+            </AnimatedButton>
           </Stack>
         </Flex>
       </Container>

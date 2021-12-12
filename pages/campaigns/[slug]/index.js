@@ -523,10 +523,7 @@ function Comment({ campaignId }) {
   return (
     <Box>
       {user ? (
-        <form
-          onSubmit={handleComment}
-          className='p-4 rounded-xl bg-gray-50 my-4'
-        >
+        <form onSubmit={handleComment} className='p-4 rounded-xl mb-4'>
           <FormControl isRequired>
             <FormLabel htmlFor='name'>Viết bình luận</FormLabel>
             <Input

@@ -32,7 +32,7 @@ label {
 
 section {
   padding: 4rem 0;
-  background: #FAFAFA
+  background: #fafafa;
 }
 
 ::-webkit-scrollbar {
@@ -74,6 +74,14 @@ button {
 .slick-next:before {
   font-size: 30px;
 }
-table, th, td {
+table,
+th,
+td {
   border: 1px solid black;
+}
+
+.spread {
+  -webkit-transition: max-width .5s ease-in-out !important;
+  -moz-transition: max-width .5s ease-in-out !important;
+  transition: max-width .5s ease-in-out !important;
 }
