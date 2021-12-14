@@ -1,9 +1,10 @@
-import { createWrapper, HYDRATE } from "next-redux-wrapper";
-import { createStore } from "redux";
-import rootReducer from "./reducers";
+import { createWrapper, HYDRATE } from 'next-redux-wrapper';
+import { createStore } from 'redux';
+import rootReducer from './reducers';
 
 const reducer = (state, action) => {
   if (action.type === HYDRATE) {
+    console.log('HYDRATE');
     const nextState = {
       ...state, // use previous state
       ...action.payload // apply delta from hydration

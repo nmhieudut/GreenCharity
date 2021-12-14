@@ -1,9 +1,12 @@
 import {
   Avatar,
+  AvatarBadge,
   Box,
+  chakra,
   Container,
   Flex,
   HStack,
+  Link as ChakraLink,
   Menu,
   MenuButton,
   MenuDivider,
@@ -11,18 +14,17 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  Switch,
   Text,
-  Tooltip,
   useColorMode,
   useColorModeValue,
-  Link as ChakraLink,
-  Switch,
-  AvatarBadge
+  VisuallyHidden
 } from '@chakra-ui/react';
 import Hamburger from 'hamburger-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import { AiFillBell } from 'react-icons/ai';
 import { BsBrightnessHigh } from 'react-icons/bs';
 import {
   FaFacebook,
@@ -35,8 +37,6 @@ import { MdCampaign } from 'react-icons/md';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import AnimatedButton from 'src/components/common/AnimatedButton';
-import BreadCrumbs from 'src/components/common/BreadCrumbs';
-import Button from 'src/components/common/Button';
 import SocialButton from 'src/components/common/SocialButton';
 import { color } from 'src/constants/color';
 import { navs } from 'src/constants/navbar';
@@ -49,7 +49,7 @@ import { storage } from 'src/utils/storage';
 export default function Header() {
   const dispatch = useDispatch();
   const bg = useColorModeValue('white', 'gray.800');
-  const bg2 = useColorModeValue('gray.200', 'gray.700');
+  const bg2 = useColorModeValue('gray.50', 'gray.700');
   const textColor = useColorModeValue(color.primary, color.primary);
   const { colorMode, toggleColorMode } = useColorMode();
   const borderColor = useColorModeValue(
@@ -155,7 +155,11 @@ export default function Header() {
           display='flex'
           alignItems={'center'}
           justifyContent={'flex-end'}
+          py={2}
         >
+          <Text as={'i'} fontSize='xs' fontWeight={600}>
+            Đường giây siêu nóng: (+84) 905245054
+          </Text>
           <Stack direction={'row'} spacing={1} ml='auto' mr={2} align='center'>
             <SocialButton rounded='none' bg='none' label={'Twitter'} href={'#'}>
               <FaFacebook />
@@ -172,7 +176,7 @@ export default function Header() {
               <FaInstagram />
             </SocialButton>
           </Stack>
-          <Flex align='center' mr={2}>
+          <Flex align='center' mr={6}>
             <BsBrightnessHigh className='mr-2' />
             <Switch
               defaultChecked={colorMode === 'dark'}
@@ -182,49 +186,52 @@ export default function Header() {
             <FaMoon className='ml-2' />
           </Flex>
           {user ? (
-            <Menu isLazy>
-              <MenuButton
-                as={'span'}
-                className='flex justify-between cursor-pointer'
-              >
-                <Flex align='center' bg={bg} px={2} py={1} fontSize='xs'>
-                  <Avatar size='xs' src={user.picture} name={user.name}>
-                    <AvatarBadge boxSize='1.25em' bg='green.500' />
-                  </Avatar>
-                  <Text mx={2} color={color.PRIMARY} overflow='hidden'>
-                    {user.name}
-                  </Text>
-                </Flex>
-              </MenuButton>
-              <MenuList>
-                <div className='p-4'>
-                  Đang đăng nhập với tên: <b className='ml-1'>{user.name}</b>
-                </div>
-                <div className='px-4'>
-                  Số dư:{' '}
-                  <b className='ml-1'>{VNDFormatter(user.balance)} VND</b>
-                </div>
-                <MenuDivider />
-                <MenuGroup title='Cá nhân'>
-                  <MenuItem>
-                    <a href='/account'>Tài khoản</a>
+            <Flex>
+              <chakra.a p={3} rounded='sm'>
+                <AiFillBell />
+                <VisuallyHidden>Notifications</VisuallyHidden>
+              </chakra.a>
+              <Menu isLazy>
+                <MenuButton
+                  as={'span'}
+                  className='flex justify-between cursor-pointer'
+                >
+                  <Flex align='center' px={2} py={1} fontSize='xs'>
+                    <Avatar size='xs' src={user.picture} name={user.name}>
+                      <AvatarBadge boxSize='1.25em' bg='green.500' />
+                    </Avatar>
+                  </Flex>
+                </MenuButton>
+                <MenuList>
+                  <div className='p-4'>
+                    Đang đăng nhập với tên: <b className='ml-1'>{user.name}</b>
+                  </div>
+                  <div className='px-4'>
+                    Số dư:{' '}
+                    <b className='ml-1'>{VNDFormatter(user.balance)} VND</b>
+                  </div>
+                  <MenuDivider />
+                  <MenuGroup title='Cá nhân'>
+                    <MenuItem>
+                      <a href='/account'>Tài khoản</a>
+                    </MenuItem>
+                    <MenuItem>
+                      <a href='/checkout'>Nạp tiền</a>
+                    </MenuItem>
+                  </MenuGroup>
+                  <MenuDivider />
+                  <MenuGroup title='Trợ giúp'>
+                    <MenuItem>Tài liệu</MenuItem>
+                    <MenuItem>Hỏi đáp</MenuItem>
+                  </MenuGroup>
+                  <MenuDivider />
+                  <MenuItem onClick={onLogout}>
+                    <span className='mr-4'>Đăng xuất</span>
+                    <RiLogoutBoxRLine />
                   </MenuItem>
-                  <MenuItem>
-                    <a href='/checkout'>Nạp tiền</a>
-                  </MenuItem>
-                </MenuGroup>
-                <MenuDivider />
-                <MenuGroup title='Trợ giúp'>
-                  <MenuItem>Tài liệu</MenuItem>
-                  <MenuItem>Hỏi đáp</MenuItem>
-                </MenuGroup>
-                <MenuDivider />
-                <MenuItem onClick={onLogout}>
-                  <span className='mr-4'>Đăng xuất</span>
-                  <RiLogoutBoxRLine />
-                </MenuItem>
-              </MenuList>
-            </Menu>
+                </MenuList>
+              </Menu>
+            </Flex>
           ) : (
             <ChakraLink href='/auth'>
               <Flex align='center'>

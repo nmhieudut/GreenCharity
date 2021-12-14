@@ -406,16 +406,6 @@ export default function Detail({ campaign }) {
                         <ModalHeader>Thông báo</ModalHeader>
                         <ModalBody>{resMessage}</ModalBody>
                         <ModalFooter>
-                          {res === 'error' && (
-                            <Button
-                              colorScheme='purple'
-                              nolinear
-                              mr={3}
-                              onClick={() => router.push('/checkout')}
-                            >
-                              Nạp tiền
-                            </Button>
-                          )}
                           <Button
                             colorScheme='gray'
                             nolinear

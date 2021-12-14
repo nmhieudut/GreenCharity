@@ -71,7 +71,7 @@ export default function CampaignItem({
             </Flex>
           </Flex>
           <div className='mt-2'>
-            <Text className='text-md sm:text-sm lg:text-lg text-gray-700 font-bold'>
+            <Text className='text-md sm:text-sm lg:text-lg font-bold'>
               {name}
             </Text>
 

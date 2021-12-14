@@ -7,6 +7,7 @@ import {
   FormLabel,
   Grid,
   Heading,
+  IconButton,
   Image,
   Input,
   InputGroup,
@@ -29,6 +30,7 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Flatpickr from 'react-flatpickr';
+import { AiOutlineMinus } from 'react-icons/ai';
 import { BsFillImageFill } from 'react-icons/bs';
 import { CgRemove } from 'react-icons/cg';
 import Button from 'src/components/common/Button';
@@ -40,6 +42,7 @@ import { storage } from 'src/libs/firebase';
 import { CampaignService } from 'src/services/campaign';
 import * as Yup from 'yup';
 import Checkmark from '../Checkmark';
+import Loading from '../Spinner/Loading';
 // YUP
 const schema = Yup.object().shape({
   name: Yup.string().required('Vui lòng điền tên hoạt động'),
@@ -268,9 +271,11 @@ export function CampaignForm({ isEdited, initialValues }) {
                     align='center'
                     justify='center'
                   >
-                    <Input {...getInputProps()} name='4' />
+                    <Input {...getInputProps()} name='4' accept='image/*' />
                     {imgLoading ? (
-                      <ImgLoading color={color.PRIMARY} />
+                      <Box p={12}>
+                        <Loading />
+                      </Box>
                     ) : (
                       <Flex
                         direction='column'
@@ -292,28 +297,41 @@ export function CampaignForm({ isEdited, initialValues }) {
                       </Flex>
                     )}
                   </Flex>
+                  <div className='my-4' />
+                  <Text>Xem trước hình ảnh</Text>
                   <Grid
                     templateColumns={[
                       'repeat(1, 1fr)',
                       'repeat(2, 1fr)',
-                      'repeat(3, 1fr)'
+                      'repeat(3, 1fr)',
+                      'repeat(4, 1fr)'
                     ]}
-                    gap={4}
-                    p={4}
+                    gap={2}
+                    py={4}
                   >
                     {imgUrls?.map((img, idx) => (
-                      <Flex key={idx} justifyContent='center' pos='relative'>
+                      <Flex
+                        key={idx}
+                        justifyContent='center'
+                        pos='relative'
+                        border='1px dashed black'
+                      >
                         <Image
                           src={img}
                           alt=''
-                          className='h-32 object-cover object-center transition duration-300 px-2 cursor-pointer'
+                          className='h-24 object-cover object-center transition duration-300 px-2'
                         />
-                        <button
-                          className='absolute top-0 right-0'
+                        <IconButton
+                          position='absolute'
+                          cursor='pointer'
+                          colorScheme='purple'
+                          size='xs'
+                          top={0}
+                          right={0}
                           onClick={() => onRemove(img)}
-                        >
-                          <CgRemove />
-                        </button>
+                          rounded='none'
+                          icon={<AiOutlineMinus className='text-white' />}
+                        />
                       </Flex>
                     ))}
                   </Grid>

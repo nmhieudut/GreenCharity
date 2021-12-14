@@ -166,12 +166,14 @@ function AccountPage(props) {
           border='1px solid #d9d9d9'
           bg={'white'}
         >
-          <TabList h={'50vh'}>
+          <TabList h={'50vh'} w='240px'>
             {meSideBar.map((item, index) => (
-              <Tab key={index} width='max-content'>
+              <Tab key={index} width='full'>
                 <Flex w='full' alignItems='center'>
                   <Icon key={index} as={item.icon} fontSize='1rem' />
-                  <Text ml={2}>{item.title}</Text>
+                  <Text ml={2} fontSize='sm'>
+                    {item.title}
+                  </Text>
                 </Flex>
               </Tab>
             ))}

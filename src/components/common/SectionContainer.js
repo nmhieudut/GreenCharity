@@ -18,6 +18,7 @@ export default function SectionContainer({
         mx='auto'
         maxW={semi ? 'container.sm' : 'container.xl'}
         h='full'
+        mt={4}
       >
         {children}
       </Container>

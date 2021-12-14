@@ -1,10 +1,12 @@
 import {
   Box,
+  chakra,
   Flex,
   Grid,
   Heading,
   Icon,
   Image,
+  SimpleGrid,
   Stack,
   Text,
   useColorModeValue
@@ -14,13 +16,17 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import CountUp from 'react-countup';
-import { FcConferenceCall, FcDonate } from 'react-icons/fc';
+import { AiOutlineTransaction } from 'react-icons/ai';
+import { FaDonate } from 'react-icons/fa';
+import { FcConferenceCall, FcDonate, FcOnlineSupport } from 'react-icons/fc';
+import { FiExternalLink } from 'react-icons/fi';
+import { GiClick } from 'react-icons/gi';
+import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
+import Button from 'src/components/common/Button';
+import Loading from 'src/components/common/Spinner/Loading';
 import { color } from 'src/constants/color';
 import { CampaignService } from 'src/services/campaign';
-import Button from 'src/components/common/Button';
-import { useEffect } from 'react';
-import { useQuery } from 'react-query';
-import Loading from 'src/components/common/Spinner/Loading';
 
 const SectionContainer = dynamic(() =>
   import('src/components/common/SectionContainer')
@@ -39,7 +45,41 @@ export default function Home({
   const { data, isLoading, isError, error } = useQuery('campaigns', () =>
     CampaignService.fetchCampaignsByStatus('active')
   );
+  const user = useSelector(state => state.auth.currentUser);
   const { campaigns } = data || {};
+
+  const Feature = props => {
+    return (
+      <Box>
+        <Flex
+          alignItems='center'
+          justifyContent='center'
+          w={8}
+          h={8}
+          mb={4}
+          rounded='full'
+          color={useColorModeValue(`${props.color}.600`, `${props.color}.100`)}
+          bg={useColorModeValue(`${props.color}.100`, `${props.color}.600`)}
+        >
+          {props.icon}
+        </Flex>
+        <chakra.h3
+          mb={2}
+          fontWeight='semibold'
+          lineHeight='shorter'
+          color={useColorModeValue('gray.900')}
+        >
+          {props.title}
+        </chakra.h3>
+        <chakra.p
+          fontSize='sm'
+          color={useColorModeValue('gray.500', 'gray.400')}
+        >
+          {props.children}
+        </chakra.p>
+      </Box>
+    );
+  };
 
   return (
     <>
@@ -149,6 +189,125 @@ export default function Home({
             <Image src='/images/hero.png' alt='hero' w='full' />
           </Flex>
         </Stack>
+      </SectionContainer>
+      <SectionContainer>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={0}>
+          <Flex>
+            <Image
+              src='http://imgs.vietnamnet.vn/Images/2016/06/08/11/20160608105845-tuthien1.jpg'
+              alt=''
+              fit='cover'
+              w='full'
+              h={{ base: 64, md: 'full' }}
+              loading='lazy'
+            />
+          </Flex>
+          <Flex
+            direction='column'
+            alignItems='start'
+            justifyContent='center'
+            px={{ base: 4, md: 8, lg: 20 }}
+            py={24}
+            zIndex={3}
+          >
+            <chakra.h1
+              mb={4}
+              fontSize={{ base: '4xl', md: '4xl', lg: '5xl' }}
+              fontWeight='bold'
+              color={useColorModeValue('brand.600', 'gray.300')}
+              lineHeight='shorter'
+              textShadow='2px 0 currentcolor'
+            >
+              Chúng tôi ở đây để giúp đỡ
+            </chakra.h1>
+            <chakra.p
+              pr={{ base: 0, lg: 16 }}
+              mb={4}
+              fontSize='lg'
+              color={useColorModeValue('brand.600', 'gray.400')}
+              letterSpacing='wider'
+            >
+              Là nền tảng #1 giúp bạn dễ dàng chung tay quyên góp tiền cùng hàng
+              triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả nước.
+            </chakra.p>
+            {!user && (
+              <Button
+                mt={10}
+                w={'full'}
+                colorScheme={'purple'}
+                rightIcon={<FiExternalLink />}
+                onClick={() => router.push('/auth')}
+              >
+                Tham gia ngay
+              </Button>
+            )}
+          </Flex>
+        </SimpleGrid>
+      </SectionContainer>
+      <SectionContainer>
+        <Flex
+          bg={useColorModeValue('#F9FAFB', 'gray.600')}
+          w='auto'
+          justifyContent='center'
+          alignItems='center'
+        >
+          <Box px={8} py={20} mx='auto'>
+            <Heading
+              textAlign='center'
+              fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
+              lineHeight={'110%'}
+              color={color.PRIMARY}
+              mb={14}
+            >
+              Vì sao lại chọn Green Charity?
+            </Heading>
+            <SimpleGrid
+              columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+              spacingX={{ base: 16, lg: 24 }}
+              spacingY={20}
+              mt={6}
+            >
+              <Feature
+                color='yellow'
+                title='Thao tác nhanh, dễ sử dụng'
+                icon={<GiClick />}
+              >
+                Dễ dàng kêu gọi, quyên góp chỉ với vài thao tác cơ bản.
+              </Feature>
+
+              <Feature
+                color='pink'
+                title='Bạn có thể quyên góp cho nhiều người'
+                icon={<FaDonate />}
+              >
+                Bạn có thể quyên góp cho nhiều người, nhưng chỉ cần chọn một
+                người để quyên góp. Và nếu bạn không thể chọn được người để
+                quyên góp, bạn có thể quyên góp cho chính mình.
+              </Feature>
+
+              <Feature
+                color='green'
+                title='Quyên góp trực tuyến'
+                icon={<AiOutlineTransaction />}
+              >
+                Bạn không thể quyên góp trực tiếp cho người kêu gọi ? Đừng lo
+                bạn có thể quyên góp thông qua nạp tiền vào số dư của bạn và
+                quyên góp.
+              </Feature>
+              <Feature
+                color='blue'
+                title='Đội ngũ hỗ trợ nhiệt tình'
+                icon={<FcOnlineSupport />}
+              >
+                Đội ngũ hỗ trợ nhiệt tình và chuyên nghiệp sẽ giúp bạn đạt được
+                mục tiêu của bạn. Bạn có thể liên hệ với chúng tôi qua số điện
+                thoại, email hoặc thông qua Facebook messenger trên màn hình.
+                Chúng tôi sẽ phản hồi bạn trong vòng nhiều nhất 24h kể từ khi
+                nhận được yêu cầu.
+              </Feature>
+            </SimpleGrid>
+          </Box>
+        </Flex>
       </SectionContainer>
       <SectionContainer id='get-started' hasBg>
         <Heading
