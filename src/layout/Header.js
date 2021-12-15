@@ -1,6 +1,7 @@
 import {
   Avatar,
   AvatarBadge,
+  Badge,
   Box,
   chakra,
   Container,
@@ -27,12 +28,14 @@ import { useEffect, useRef, useState } from 'react';
 import { AiFillBell } from 'react-icons/ai';
 import { BsBrightnessHigh } from 'react-icons/bs';
 import {
+  FaCrown,
   FaFacebook,
   FaGithub,
   FaInstagram,
   FaMoon,
   FaRegUserCircle
 } from 'react-icons/fa';
+import { FcManager } from 'react-icons/fc';
 import { MdCampaign } from 'react-icons/md';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
@@ -203,6 +206,24 @@ export default function Header() {
                   </Flex>
                 </MenuButton>
                 <MenuList>
+                  {/* role bagde */}
+                  <div className='px-4'>
+                    <Badge
+                      colorScheme={user.role === 'admin' ? 'blue' : 'green'}
+                    >
+                      {user.role === 'admin' ? (
+                        <Flex align='center' p={1}>
+                          <FaCrown className='mr-2' size='1.2rem' />
+                          <Text>Quản trị viên</Text>
+                        </Flex>
+                      ) : (
+                        <Flex align='center' p={1}>
+                          <FcManager className='mr-2' size='1.2rem' />{' '}
+                          <Text>Thành viên</Text>
+                        </Flex>
+                      )}
+                    </Badge>
+                  </div>
                   <div className='p-4'>
                     Đang đăng nhập với tên: <b className='ml-1'>{user.name}</b>
                   </div>

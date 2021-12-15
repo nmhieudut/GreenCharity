@@ -49,6 +49,7 @@
     "sass": "^1.42.1",
     "slick-carousel": "^1.8.1",
     "tsparticles": "^1.37.2",
+    "video.js": "^7.17.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

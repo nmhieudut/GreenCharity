@@ -244,13 +244,8 @@ export default function Home({
           </Flex>
         </SimpleGrid>
       </SectionContainer>
-      <SectionContainer>
-        <Flex
-          bg={useColorModeValue('#F9FAFB', 'gray.600')}
-          w='auto'
-          justifyContent='center'
-          alignItems='center'
-        >
+      <SectionContainer hasBg>
+        <Flex w='auto' justifyContent='center' alignItems='center'>
           <Box px={8} py={20} mx='auto'>
             <Heading
               textAlign='center'
@@ -309,7 +304,7 @@ export default function Home({
           </Box>
         </Flex>
       </SectionContainer>
-      <SectionContainer id='get-started' hasBg>
+      <SectionContainer id='get-started'>
         <Heading
           textAlign='center'
           fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
@@ -401,7 +396,7 @@ export default function Home({
           </Flex>
         </Grid>
       </SectionContainer>
-      <SectionContainer id='current-campaigns'>
+      <SectionContainer id='current-campaigns' hasBg>
         <Heading
           textAlign='center'
           fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
@@ -429,7 +424,7 @@ export default function Home({
           </Button>
         </Flex>
       </SectionContainer>
-      <SectionContainer hasBg>
+      <SectionContainer>
         <Heading
           textAlign='center'
           fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}

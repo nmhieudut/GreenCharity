@@ -68,9 +68,11 @@ export default function CampaignCard(props) {
               </Badge>
               <Flex color={'gray.500'} align='center' justify='end'>
                 <BsClock className='mr-2' size='.75rem' />
-                <Text fontSize='sm'>
-                  {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
-                </Text>
+                {status === 'active' && (
+                  <Text fontSize='sm'>
+                    {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
+                  </Text>
+                )}
               </Flex>
             </Flex>
 

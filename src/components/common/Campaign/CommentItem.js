@@ -12,7 +12,7 @@ import { color } from 'src/constants/color';
 
 export default function CommentItem({ comment }) {
   const { author, text, createdAt } = comment;
-  const bg = useColorModeValue('gray.100', 'gray.800');
+  const bg = useColorModeValue('gray.100', 'gray.900');
   return (
     <Box padding='4' rounded={'xl'} bg={bg} my={4}>
       <Stack mb={2} direction={'row'} spacing={4} align={'center'}>

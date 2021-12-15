@@ -63,12 +63,14 @@ export default function CampaignItem({
             >
               {convertStatusToString(status)}
             </Badge>
-            <Flex color={'gray.500'} align='center' justify='end'>
-              <BsClock className='mr-2' size='.75rem' />
-              <Text fontSize='sm'>
-                {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
-              </Text>
-            </Flex>
+            {status === 'active' && (
+              <Flex color={'gray.500'} align='center' justify='end'>
+                <BsClock className='mr-2' size='.75rem' />
+                <Text fontSize='sm'>
+                  {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
+                </Text>
+              </Flex>
+            )}
           </Flex>
           <div className='mt-2'>
             <Text className='text-md sm:text-sm lg:text-lg font-bold'>

@@ -37,11 +37,13 @@ import React, { useEffect, useState } from 'react';
 import { AiOutlineComment, AiOutlineLeft } from 'react-icons/ai';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import { RiEditLine } from 'react-icons/ri';
+import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import Slider from 'react-slick';
 import Button from 'src/components/common/Button';
 import { CampaignForm } from 'src/components/common/Campaign/CampaignForm';
 import CommentItem from 'src/components/common/Campaign/CommentItem';
+import DonatorItem from 'src/components/common/Card/DonatorItem';
 import DividerWithText from 'src/components/common/DividerWithText';
 import NeedLogin from 'src/components/common/NeedLogin';
 import ProgressBar from 'src/components/common/Progress/ProgressBar';
@@ -57,11 +59,6 @@ import { convertStatusToString } from 'src/utils/status';
 export async function getServerSideProps(ctx) {
   try {
     const { campaign } = await CampaignService.getBySlug(ctx.query.slug);
-    if (!campaign) {
-      return {
-        notFound: true
-      };
-    }
     return {
       props: {
         campaign
@@ -91,7 +88,7 @@ export default function Detail({ campaign }) {
   const user = useSelector(state => state.auth.currentUser);
   const router = useRouter();
   const dispatch = useDispatch();
-  const bg = useColorModeValue('white', 'gray.800');
+  const bg = useColorModeValue('white', 'gray.900');
   const [slider, setSlider] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
   const [res, setRes] = useState(null);
@@ -274,7 +271,7 @@ export default function Detail({ campaign }) {
                     <div dangerouslySetInnerHTML={{ __html: content }} />
                   </TabPanel>
                   <TabPanel px={0}>
-                    <div>nha hao tam</div>
+                    <Donator campaignId={_id} />
                   </TabPanel>
                   <TabPanel px={0}>
                     <Comment campaignId={_id} />
@@ -285,6 +282,7 @@ export default function Detail({ campaign }) {
             <Box
               order={['1', '1', '2']}
               my={8}
+              py={4}
               h='max-content'
               ml={['0', '0', '2']}
               w={['100%', '100%', '40%']}
@@ -332,9 +330,16 @@ export default function Detail({ campaign }) {
                   </Flex>
                   <Flex flexDir='column' alignItems='center' bg={bg}>
                     <Text fontSize={'md'}>Thời hạn còn</Text>
-                    <Text color={'gray.500'} as={'b'}>
-                      {DateUtils.calculateDaysFromNow(finishedAt)} ngày
-                    </Text>
+                    {status === 'active' ? (
+                      <Text color={'gray.500'} as={'b'}>
+                        {DateUtils.calculateDaysFromNow(finishedAt)} ngày
+                      </Text>
+                    ) : (
+                      <Text color={'red.500'} as={'b'}>
+                        Hết hạn
+                      </Text>
+                    )}
+                    <Text color={'gray.500'} as={'b'}></Text>
                   </Flex>
                 </Flex>
                 <Box py={2}>
@@ -483,61 +488,52 @@ export default function Detail({ campaign }) {
 
 function Comment({ campaignId }) {
   const [value, setValue] = useState('');
-  const [comments, setComments] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [refetch, setRefetch] = useState(0);
+  const { data, isLoading, isError, error } = useQuery(
+    ['comments', refetch],
+    () => CampaignService.fetchComments(campaignId)
+  );
+  const { comments } = data || [];
+  const bg = useColorModeValue('gray.100', 'gray.900');
   const user = useSelector(state => state.auth.currentUser);
   async function handleComment(e) {
     e.preventDefault();
     await CommentService.create(campaignId, value).then(res => {
-      getComments();
+      setRefetch(r => r + 1);
       setValue('');
     });
   }
-  async function getComments() {
-    setLoading(true);
-    await CampaignService.fetchComments(campaignId)
-      .then(res => {
-        console.log('res', res);
-        setComments(res);
-      })
-      .catch(e => {
-        console.log('e', e);
-      });
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    getComments();
-  }, []);
 
   return (
     <Box>
       {user ? (
-        <form onSubmit={handleComment} className='p-4 rounded-xl mb-4'>
-          <FormControl isRequired>
-            <FormLabel htmlFor='name'>Viết bình luận</FormLabel>
-            <Input
-              onChange={e => setValue(e.target.value)}
-              value={value}
-              id='name'
-              placeholder='Cảm nghĩ của bạn'
-              focusBorderColor={color.PRIMARY}
-            />
-          </FormControl>
-          <Button
-            mt={4}
-            colorScheme='purple'
-            isLoading={loading}
-            type='submit'
-            rightIcon={<AiOutlineComment />}
-          >
-            Bình luận
-          </Button>
+        <form onSubmit={handleComment}>
+          <Box bg={bg} p={4} rounded='xl' mb={4}>
+            <FormControl isRequired>
+              <FormLabel htmlFor='name'>Viết bình luận</FormLabel>
+              <Input
+                onChange={e => setValue(e.target.value)}
+                value={value}
+                id='name'
+                placeholder='Cảm nghĩ của bạn'
+                focusBorderColor={color.PRIMARY}
+              />
+            </FormControl>
+            <Button
+              mt={4}
+              colorScheme='purple'
+              isLoading={isLoading}
+              type='submit'
+              rightIcon={<AiOutlineComment />}
+            >
+              Bình luận
+            </Button>
+          </Box>
         </form>
       ) : (
         <NeedLogin />
       )}
-      {loading ? (
+      {isLoading ? (
         <Box padding='4' rounded={'xl'} bg='gray.50' my={4}>
           <SkeletonCircle size='10' />
           <SkeletonText mt='4' noOfLines={4} spacing='4' />
@@ -548,6 +544,31 @@ function Comment({ campaignId }) {
         ))
       )}
       {comments?.length === 0 && <div>Chưa có bình luận nào</div>}
+    </Box>
+  );
+}
+
+function Donator({ campaignId }) {
+  const { data, isLoading, error, isError } = useQuery('donators', () =>
+    CampaignService.fetchDonations(campaignId)
+  );
+  const { donations } = data || [];
+  console.log(donations, isLoading, error);
+
+  return (
+    <Box>
+      {/* skeleton card loading */}
+      {isLoading ? (
+        <Box padding='4' rounded={'xl'} bg='gray.50' my={4}>
+          <SkeletonCircle size='10' />
+          <SkeletonText mt='4' noOfLines={4} spacing='4' />
+        </Box>
+      ) : (
+        donations?.map(donation => (
+          <DonatorItem key={donation._id} donation={donation} />
+        ))
+      )}
+      {donations?.length === 0 && <div>Chưa có người quyên góp nào</div>}
     </Box>
   );
 }

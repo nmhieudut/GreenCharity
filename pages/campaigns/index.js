@@ -77,7 +77,7 @@ export default function Campaigns({ total, campaigns }) {
 const CampaignsList = ({ query, status }) => {
   const { data, isLoading, isError, error } = useQuery(
     ['campaigns', query, status],
-    () => CampaignService.fetchCampaigns(query, status)
+    () => CampaignService.fetchCampaigns(query, status, 5, 2)
   );
   const { total, campaigns } = data || {};
 

@@ -45,7 +45,6 @@ import SectionContainer from 'src/components/common/SectionContainer';
 import DividerWithText from 'src/components/common/DividerWithText';
 
 export default function Auth() {
-  const bg = useColorModeValue('purple.200', 'gray.900');
   const formBg = useColorModeValue('white', 'gray.800');
 
   const router = useRouter();
@@ -181,8 +180,8 @@ export default function Auth() {
           </Text>
         </Center>
       </Box>
-      <SectionContainer semi bg={bg}>
-        <Box className='flex-1 flex flex-col border-2 pb-12' bg={formBg}>
+      <SectionContainer semi bg={formBg}>
+        <Box className='flex-1 flex flex-col pb-12' bg={formBg}>
           <Tabs isLazy isFitted variant='enclosed'>
             <TabList>
               <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>

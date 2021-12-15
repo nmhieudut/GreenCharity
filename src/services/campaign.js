@@ -11,16 +11,19 @@ export const CampaignService = {
   fetchCampaignsByStatus: status =>
     _http.get(`${Rest.campaigns}/status/${status}`),
 
-  fetchCampaigns: (query, status, skip) => {
+  fetchCampaigns: (query, status, limit, page) => {
     const queryString = query ? `q=${query}` : '';
     const statusString = status ? `&status=${status}` : '';
-    const skipString = skip ? `&skip=${skip}` : '';
+    const limitString = limit ? `&skip=${limit}` : '';
+    const pageString = page ? `&page=${page}` : '';
     return _http.get(
-      `${Rest.campaigns}/search?${queryString}${statusString}${skipString}`
+      `${Rest.campaigns}/search?${queryString}${statusString}${limitString}${pageString}`
     );
   },
 
   fetchComments: id => _http.get(`${Rest.campaigns}/${id}/comments`),
+
+  fetchDonations: id => _http.get(`${Rest.campaigns}/${id}/donations`),
 
   donate: (id, payload) =>
     _http.post(`${Rest.campaigns}/${id}/donate`, payload),

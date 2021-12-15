@@ -20,7 +20,7 @@ import { ModalActions } from 'src/store/modal/action';
 import { storage } from 'src/utils/storage';
 import theme from 'src/utils/theme';
 import '../styles/globals.scss';
-// import hoverEffect from 'hover-effect';
+import 'video.js/dist/video-js.css';
 
 const hoverEffect =
   typeof window !== `undefined` ? require('hover-effect').default : null;

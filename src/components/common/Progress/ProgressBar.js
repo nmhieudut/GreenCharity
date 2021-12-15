@@ -12,6 +12,7 @@ export default function ProgressBar({ color, percent, ...rest }) {
           width: 100%;
           height: 0.5rem;
           background-color: #e8e8e8;
+          overflow: hidden;
         }
         .bar-percent {
           height: 100%;

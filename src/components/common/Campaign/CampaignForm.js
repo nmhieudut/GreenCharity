@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Divider,
   Flex,
@@ -52,7 +54,7 @@ const schema = Yup.object().shape({
   bank_account_number: Yup.string(),
   goal: Yup.number()
     .required('Nhập số tiền mong muốn')
-    .min(100000, 'Số tiền không được dưới 100.000 VND')
+    .min(10000000, 'Số tiền không được dưới 10.000.000 VND')
 });
 
 export function CampaignForm({ isEdited, initialValues }) {
@@ -205,8 +207,8 @@ export function CampaignForm({ isEdited, initialValues }) {
               handleSubmit(e);
             }}
           >
-            <Stack spacing={6} direction={['column', 'row']}>
-              <Box w={['100%', '50%']}>
+            <Flex justify='center'>
+              <Box maxW='3xl'>
                 <FormControl isInvalid={errors.name} isRequired>
                   <FormLabel>Tên hoạt động</FormLabel>
                   <Input
@@ -221,7 +223,7 @@ export function CampaignForm({ isEdited, initialValues }) {
                 <div className='my-4' />
                 <FormControl isInvalid={errors.goal} isRequired>
                   <FormLabel>
-                    Số tiền muốn quyên góp (ít nhất là 100.000 VND)
+                    Số tiền muốn quyên góp (ít nhất là 10.000.000 VND)
                   </FormLabel>
                   <InputGroup>
                     <Input
@@ -337,18 +339,14 @@ export function CampaignForm({ isEdited, initialValues }) {
                   </Grid>
                   <FormErrorMessage>{errors.image}</FormErrorMessage>
                 </FormControl>
-              </Box>
-              <Box w={['100%', '50%']}>
+                <div className='my-4' />
                 <FormControl
                   isInvalid={errors.content}
                   isRequired
-                  className='w-full mb-12'
+                  className='w-full'
                 >
-                  <FormLabel>Nội dung câu chuyện</FormLabel>
-                  <InputGroup
-                    className='pb-4 h-auto w-full'
-                    focusBorderColor={color.PRIMARY}
-                  >
+                  <FormLabel>Nội dung câu chuyện </FormLabel>
+                  <InputGroup focusBorderColor={color.PRIMARY}>
                     <Editor
                       name='5'
                       value={values.content}
@@ -360,15 +358,24 @@ export function CampaignForm({ isEdited, initialValues }) {
                   </InputGroup>
                   <FormErrorMessage>{errors.content}</FormErrorMessage>
                 </FormControl>
-                <Button colorScheme='purple' onClick={onOpen}>
+                <Button my={4} colorScheme='purple' onClick={onOpen}>
                   Xem trước bài đăng
                 </Button>
+                <Alert status='info'>
+                  <AlertIcon />
+                  Khi gửi yêu cầu này, bạn đã đồng ý với điều khoản sử dụng của
+                  GreenCharity. Yêu cầu của bạn sẽ được duyệt trong vòng 24
+                  tiếng. Các yêu cầu điền đúng đầy đủ thông tin sẽ được duyệt
+                  nhanh hơn.
+                </Alert>
+
+                <Divider my={4} />
+                <Button colorScheme='purple' type='submit'>
+                  {isEdited ? 'Cập nhật hoạt động' : 'Yêu cầu vận động'}
+                </Button>
               </Box>
-            </Stack>
-            <Divider my={4} />
-            <Button colorScheme='purple' type='submit'>
-              {isEdited ? 'Cập nhật hoạt động' : 'Vận động'}
-            </Button>
+            </Flex>
+
             {/* Preview modal */}
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
