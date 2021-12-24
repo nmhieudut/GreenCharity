@@ -121,8 +121,7 @@ export default function AuctionDetails({ data }) {
       }
     });
   }, []);
-
-  console.log('----', auction);
+  const bg = useColorModeValue('white', 'gray.700');
   const top = useBreakpointValue({ base: '90%', md: '50%' });
   const side = useBreakpointValue({ base: '30%', md: '10px' });
   function openLightboxOnSource(sourceIndex) {
@@ -395,44 +394,47 @@ export default function AuctionDetails({ data }) {
                 <Box mt={4}>
                   {auction.bids?.length > 0 ? (
                     <List>
-                      {auction.bids.reverse().map((bid, idx) => (
-                        <ListItem
-                          key={idx}
-                          rounded='lg'
-                          shadow='md'
-                          p={2}
-                          my={2}
-                          bg={useColorModeValue('white', 'gray.700')}
-                        >
-                          <Flex align='center'>
-                            <Avatar
-                              name={bid.author.name}
-                              src={bid.author.picture}
-                              size='sm'
-                              mr={4}
-                            />
-                            <Text fontWeight={600}>{bid.author.name}</Text>
-                            <Text fontSize={'md'} ml={4} color='green'>
-                              +{' '}
-                              {VNDFormatter(
-                                auction.bids.length > 0 &&
-                                  bid.amount - auction.bids[0].amount
-                              )}
-                            </Text>
-                            <Text
-                              as='i'
-                              color='gray.500'
-                              ml={'auto'}
-                              fontSize='xs'
-                            >
-                              {formatDistanceToNow(new Date(bid.createdAt), {
-                                locale: vi
-                              })}{' '}
-                              trước
-                            </Text>
-                          </Flex>
-                        </ListItem>
-                      ))}
+                      {auction.bids
+                        .slice(0)
+                        .reverse()
+                        .map((bid, idx) => (
+                          <ListItem
+                            key={idx}
+                            rounded='lg'
+                            shadow='md'
+                            p={2}
+                            my={2}
+                            bg={bg}
+                          >
+                            <Flex align='center'>
+                              <Avatar
+                                name={bid.author.name}
+                                src={bid.author.picture}
+                                size='sm'
+                                mr={4}
+                              />
+                              <Text fontWeight={600}>{bid.author.name}</Text>
+                              <Text fontSize={'md'} ml={4} color='green'>
+                                +{' '}
+                                {VNDFormatter(
+                                  auction.bids.length > 0 &&
+                                    bid.amount - auction.bids[0].amount
+                                )}
+                              </Text>
+                              <Text
+                                as='i'
+                                color='gray.500'
+                                ml={'auto'}
+                                fontSize='xs'
+                              >
+                                {formatDistanceToNow(new Date(bid.createdAt), {
+                                  locale: vi
+                                })}{' '}
+                                trước
+                              </Text>
+                            </Flex>
+                          </ListItem>
+                        ))}
                     </List>
                   ) : (
                     <Flex justify='center' align='center' h='100%'>
