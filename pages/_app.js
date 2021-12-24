@@ -20,7 +20,6 @@ import { ModalActions } from 'src/store/modal/action';
 import { storage } from 'src/utils/storage';
 import theme from 'src/utils/theme';
 import '../styles/globals.scss';
-import 'video.js/dist/video-js.css';
 
 const hoverEffect =
   typeof window !== `undefined` ? require('hover-effect').default : null;
@@ -77,7 +76,7 @@ function MyApp({ Component, pageProps }) {
       displacementImage: 'https://picsum.photos/id/237/200/300',
       imagesRatio: 0.5
     });
-  }, []);
+  });
 
   return (
     <ChakraProvider theme={theme}>

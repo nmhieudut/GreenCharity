@@ -2,7 +2,6 @@ import {
   Alert,
   AlertIcon,
   Box,
-  CloseButton,
   Flex,
   FormControl,
   FormLabel,
@@ -32,7 +31,7 @@ import {
 import { format } from 'date-fns';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Flatpickr from 'react-flatpickr';
 import { AiOutlineEye } from 'react-icons/ai';
 import { FcCalendar, FcPhone } from 'react-icons/fc';
@@ -46,7 +45,7 @@ import Loading from 'src/components/common/Spinner/Loading';
 import { color } from 'src/constants/color';
 import { meSideBar } from 'src/constants/sidebar';
 import withAuth from 'src/HOCs/withAuth';
-import { storage } from 'src/libs/firebase';
+import { useStorage } from 'src/hooks/useStorage';
 import { AuthService } from 'src/services/auth';
 import { CampaignService } from 'src/services/campaign';
 import { UserService } from 'src/services/user';
@@ -66,26 +65,12 @@ function AccountPage(props) {
     phoneNumber: user.phoneNumber,
     dateOfBirth: user.dateOfBirth
   });
+  const { name, phoneNumber, dateOfBirth } = info;
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [imgLoading, setImgLoading] = useState(false);
   const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState(user.picture);
 
-  const { name, phoneNumber, dateOfBirth } = info;
-  const uploadButton = (
-    <div>
-      {imgLoading && (
-        <Spinner
-          color={color.PRIMARY}
-          thickness='4px'
-          speed='0.65s'
-          emptyColor='gray.200'
-          size='xl'
-        />
-      )}
-    </div>
-  );
+  const { url, uploadLoading } = useStorage(user.picture, image, 'avatars');
 
   const handleChange = (field, value) => {
     setInfo({
@@ -94,37 +79,10 @@ function AccountPage(props) {
     });
   };
 
-  useEffect(() => {
-    if (image) handleUpload();
-  }, [image]);
-
   const handleImageChange = e => {
-    setImageUrl('');
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
     }
-  };
-
-  const handleUpload = () => {
-    setImgLoading(true);
-    const uploadTask = storage.ref(`avatars/${image.name}`).put(image);
-    uploadTask.on(
-      'state_changed',
-      snapshot => {},
-      error => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref('avatars')
-          .child(image.name)
-          .getDownloadURL()
-          .then(url => {
-            setImageUrl(url);
-            setImgLoading(false);
-          });
-      }
-    );
   };
 
   const onUpdateInfo = async e => {
@@ -186,14 +144,22 @@ function AccountPage(props) {
                 justify='space-between'
               >
                 <Box className='flex justify-end relative w-24 h-24'>
-                  {imageUrl ? (
+                  {url ? (
                     <Image
                       className='absolute h-full w-full rounded-full object-cover object-center'
-                      src={imageUrl}
+                      src={url}
                       alt={user.name}
                     />
                   ) : (
-                    uploadButton
+                    uploadLoading && (
+                      <Spinner
+                        color={color.PRIMARY}
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        size='xl'
+                      />
+                    )
                   )}
                   <IconButton
                     colorScheme='purple'

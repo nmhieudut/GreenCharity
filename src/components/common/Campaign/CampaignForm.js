@@ -21,7 +21,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Stack,
   Text,
   useDisclosure
 } from '@chakra-ui/react';
@@ -34,10 +33,8 @@ import { useDropzone } from 'react-dropzone';
 import Flatpickr from 'react-flatpickr';
 import { AiOutlineMinus } from 'react-icons/ai';
 import { BsFillImageFill } from 'react-icons/bs';
-import { CgRemove } from 'react-icons/cg';
 import Button from 'src/components/common/Button';
 import SectionContainer from 'src/components/common/SectionContainer';
-import ImgLoading from 'src/components/common/Spinner/ImgLoading';
 import Editor from 'src/components/uncommon/Editor';
 import { color } from 'src/constants/color';
 import { storage } from 'src/libs/firebase';
@@ -273,7 +270,7 @@ export function CampaignForm({ isEdited, initialValues }) {
                     align='center'
                     justify='center'
                   >
-                    <Input {...getInputProps()} name='4' accept='image/*' />
+                    <Input {...getInputProps()} name='4' />
                     {imgLoading ? (
                       <Box p={12}>
                         <Loading />
@@ -450,7 +447,7 @@ function ResultModal({
           <Button colorScheme='purple' mr={3} onClick={onPrimaryClick}>
             Kiểm tra hoạt động này
           </Button>
-          <Button colorScheme='gray' nolinear onClick={onSecondaryClick}>
+          <Button colorScheme='gray' noLinear onClick={onSecondaryClick}>
             Về trang chính
           </Button>
         </ModalFooter>

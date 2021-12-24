@@ -91,7 +91,7 @@ function CheckoutDetail(props) {
                       <Stack direction='column'>
                         <Radio value='momo'>
                           <Button
-                            nolinear='true'
+                            noLinear='true'
                             colorScheme='pink'
                             size='sm'
                             my={2}
@@ -115,7 +115,7 @@ function CheckoutDetail(props) {
                         </Radio>
                         <Radio value='vn-pay'>
                           <Button
-                            nolinear='true'
+                            noLinear='true'
                             my={2}
                             size='sm'
                             leftIcon={

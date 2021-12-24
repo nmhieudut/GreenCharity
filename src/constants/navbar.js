@@ -8,6 +8,11 @@ export const navs = [
     label: 'Các hoạt động'
   },
   {
+    to: '/auctions',
+    label: 'Đấu giá',
+    new: true
+  },
+  {
     to: '/news',
     label: 'Tin tức'
   },

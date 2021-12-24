@@ -120,17 +120,29 @@ export default function Header() {
     );
   };
 
-  const NavMenuItem = ({ href, label }) => {
+  const NavMenuItem = ({ href, label, isNew }) => {
     const router = useRouter();
     return (
       <Link href={href}>
         <a
           className={
-            'menu-item font-bold ' +
+            'menu-item font-bold flex py-4 ' +
             (router.pathname == href && 'menu-item__active')
           }
         >
           {label}
+          {isNew && (
+            <Box
+              // colorScheme='red'
+              fontSize='xs'
+              ml={2}
+              px={1}
+              rounded='full'
+              className='blinking_item text-white'
+            >
+              Mới
+            </Box>
+          )}
         </a>
       </Link>
     );
@@ -265,16 +277,15 @@ export default function Header() {
       <Container
         maxW='container.xl'
         display='flex'
-        py={4}
         alignItems={'center'}
         justifyContent={'space-between'}
       >
         <MenuToggle />
         <HStack spacing={8} alignItems={'center'}>
           <Logo />
-          <HStack spacing={8} as={'nav'} display={{ base: 'none', md: 'flex' }}>
+          <HStack spacing={6} as={'nav'} display={{ base: 'none', md: 'flex' }}>
             {navs.map((n, i) => (
-              <NavMenuItem key={i} href={n.to} label={n.label} />
+              <NavMenuItem key={i} href={n.to} label={n.label} isNew={n.new} />
             ))}
           </HStack>
         </HStack>

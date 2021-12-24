@@ -1,8 +1,10 @@
 import { AiOutlineTransaction } from 'react-icons/ai';
 import { BiDonateHeart } from 'react-icons/bi';
+import { BsNewspaper } from 'react-icons/bs';
 import { FiSettings, FiUser } from 'react-icons/fi';
 import { IoMdKey } from 'react-icons/io';
 import { MdCampaign } from 'react-icons/md';
+import { RiAuctionFill } from 'react-icons/ri';
 
 export const meSideBar = [
   {
@@ -33,9 +35,32 @@ export const meSideBar = [
 
 export const adminSideBar = [
   {
-    title: 'Lịch sử quyên góp',
-    icon: BiDonateHeart,
-    path: '/me/donate-history',
-    description: 'Xem các hoạt động bạn đã quyên góp'
+    title: 'Người dùng',
+    icon: FiUser,
+    path: 'users'
+  },
+  {
+    title: 'Các hoạt động',
+    icon: MdCampaign
+  },
+  {
+    title: 'Giao dịch hệ thống',
+    icon: AiOutlineTransaction
+  },
+  {
+    title: 'Các quyên góp',
+    icon: BiDonateHeart
+  },
+  {
+    title: 'Các phiên đấu giá',
+    icon: RiAuctionFill
+  },
+  {
+    title: 'Tin tức',
+    icon: BsNewspaper
+  },
+  {
+    title: 'Cài đặt',
+    icon: FiSettings
   }
 ];

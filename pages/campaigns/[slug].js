@@ -33,7 +33,7 @@ import { format } from 'date-fns';
 import FsLightbox from 'fslightbox-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AiOutlineComment, AiOutlineLeft } from 'react-icons/ai';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import { RiEditLine } from 'react-icons/ri';
@@ -52,9 +52,9 @@ import { color } from 'src/constants/color';
 import { CampaignService } from 'src/services/campaign';
 import { CommentService } from 'src/services/comment';
 import { ModalActions } from 'src/store/modal/action';
-import { DateUtils } from 'src/utils/date';
 import { VNDFormatter } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
+import useCountdown from 'src/hooks/useCountdown';
 
 export async function getServerSideProps(ctx) {
   try {
@@ -127,6 +127,11 @@ export default function Detail({ campaign }) {
   const { wished_amount, message } = donatedInfo;
   const isOwner = user?.id === author._id;
   const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
+  const { days, hours, minutes, seconds } = useCountdown(finishedAt);
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
 
   const handleChange = e => {
     setDonatedInfo({
@@ -313,15 +318,9 @@ export default function Detail({ campaign }) {
                 <Flex
                   my={2}
                   fontSize='sm'
-                  justifyContent='space-between'
                   flexWrap='wrap'
+                  justifyContent='space-between'
                 >
-                  <Flex flexDir='column' alignItems='center' bg={bg}>
-                    <Text fontSize={'md'}>Lượt ủng hộ</Text>
-                    <Text color={'gray.500'} as={'b'}>
-                      4.500
-                    </Text>
-                  </Flex>
                   <Flex flexDir='column' alignItems='center' bg={bg}>
                     <Text fontSize={'md'}>Đã quyên góp</Text>
                     <Text color={'gray.500'} as={'b'}>
@@ -331,9 +330,26 @@ export default function Detail({ campaign }) {
                   <Flex flexDir='column' alignItems='center' bg={bg}>
                     <Text fontSize={'md'}>Thời hạn còn</Text>
                     {status === 'active' ? (
-                      <Text color={'gray.500'} as={'b'}>
-                        {DateUtils.calculateDaysFromNow(finishedAt)} ngày
-                      </Text>
+                      <Stack spacing={4} direction='row'>
+                        {days > 0 && (
+                          <Text color={'gray.500'} as={'b'}>
+                            {days} ngày
+                          </Text>
+                        )}
+                        {hours > 0 && (
+                          <Text color={'gray.500'} as={'b'}>
+                            {hours} giờ
+                          </Text>
+                        )}
+                        {minutes > 0 && (
+                          <Text color={'gray.500'} as={'b'}>
+                            {minutes} phút
+                          </Text>
+                        )}
+                        <Text color={'gray.500'} as={'b'}>
+                          {seconds} giây
+                        </Text>
+                      </Stack>
                     ) : (
                       <Text color={'red.500'} as={'b'}>
                         Hết hạn
@@ -401,7 +417,7 @@ export default function Detail({ campaign }) {
                   isOpen={isOpen}
                   onClose={() => {
                     onClose();
-                    res === 'success' && window.location.reload();
+                    res === 'success' && refreshData();
                   }}
                 >
                   <ModalOverlay />
@@ -413,10 +429,10 @@ export default function Detail({ campaign }) {
                         <ModalFooter>
                           <Button
                             colorScheme='gray'
-                            nolinear
+                            noLinear
                             onClick={() => {
                               onClose();
-                              res === 'success' && window.location.reload();
+                              res === 'success' && refreshData();
                             }}
                           >
                             {res === 'success' ? 'Hihi, không có chi' : 'Đóng'}
@@ -438,7 +454,7 @@ export default function Detail({ campaign }) {
                           >
                             Đúng dậy tui chắc chắn
                           </Button>
-                          <Button colorScheme='gray' nolinear onClick={onClose}>
+                          <Button colorScheme='gray' noLinear onClick={onClose}>
                             Tui muốn suy nghĩ lại
                           </Button>
                         </ModalFooter>

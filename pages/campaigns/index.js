@@ -7,12 +7,14 @@ import {
   Text
 } from '@chakra-ui/react';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useQuery } from 'react-query';
 import CampaignItem from 'src/components/common/Campaign/CampaignItem';
 import CampaignItemSkeleton from 'src/components/common/Campaign/CampaignItemSkeleton';
 import Search from 'src/components/common/Search';
 import SectionContainer from 'src/components/common/SectionContainer';
+import Loading from 'src/components/common/Spinner/Loading';
 import { color } from 'src/constants/color';
 import { options } from 'src/constants/filter';
 import { CampaignService } from 'src/services/campaign';
@@ -75,25 +77,55 @@ export default function Campaigns({ total, campaigns }) {
 }
 
 const CampaignsList = ({ query, status }) => {
-  const { data, isLoading, isError, error } = useQuery(
-    ['campaigns', query, status],
-    () => CampaignService.fetchCampaigns(query, status, 5, 2)
-  );
-  const { total, campaigns } = data || {};
+  const [loading, setLoading] = useState(false);
+  const [campaigns, setCampaigns] = useState([]);
+  const [page, setPage] = useState(0);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    async function fetchCampaigns() {
+      setLoading(true);
+      try {
+        const data = await CampaignService.fetchCampaigns(
+          query,
+          status,
+          5,
+          page
+        );
+        setCampaigns([...campaigns].concat(data.campaigns));
+      } catch (e) {
+        console.log(e);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchCampaigns();
+  }, [query, status, page]);
+  console.log('res', campaigns);
   return (
     <div>
-      {isError && <div>Có gì đó không ổn, thử lại sau</div>}
-      {isLoading &&
-        Array.from({ length: 3 }, (_, i) => <CampaignItemSkeleton />)}
+      {error && <div>Có gì đó không ổn, thử lại sau</div>}
+      {loading && Array.from({ length: 3 }, (_, i) => <CampaignItemSkeleton />)}
       {campaigns && (
         <Box>
-          <Text as={'h6'}>Hiển thị {total} kết quả</Text>
-          <Box py={6}>
-            {campaigns.map(campaign => (
-              <CampaignItem key={campaign._id} data={campaign} />
-            ))}
-          </Box>
+          <Text as={'h6'}>Hiển thị {campaigns.length} kết quả</Text>
+          <InfiniteScroll
+            dataLength={campaigns.length} //This is important field to render the next data
+            next={() => setPage(page + 1)}
+            loader={<Loading />}
+            endMessage={
+              <p style={{ textAlign: 'center' }}>
+                <b>Không còn hoạt động nào</b>
+              </p>
+            }
+          >
+            <Box py={6}>
+              {campaigns.map(campaign => (
+                <CampaignItem key={campaign._id} data={campaign} />
+              ))}
+            </Box>
+          </InfiniteScroll>
         </Box>
       )}
       {campaigns?.length === 0 && (

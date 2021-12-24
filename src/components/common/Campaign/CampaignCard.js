@@ -31,6 +31,7 @@ export default function CampaignCard(props) {
     }
   } = props;
   const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
+  console.log(props.campaign);
   return (
     <Link
       href={`/campaigns/${slug}`}

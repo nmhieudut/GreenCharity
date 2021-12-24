@@ -7,6 +7,7 @@ export default function SectionContainer({
   hasBg,
   hasParticle,
   semi,
+  noContainer,
   ...rest
 }) {
   const bg = useColorModeValue('gray.100', 'gray.700');
@@ -14,14 +15,18 @@ export default function SectionContainer({
   return (
     <Box as={'section'} bg={hasBg ? bg : bg2} {...rest} w='full'>
       {hasParticle && <Particle />}
-      <Container
-        mx='auto'
-        maxW={semi ? 'container.sm' : 'container.xl'}
-        h='full'
-        mt={4}
-      >
-        {children}
-      </Container>
+      {!noContainer ? (
+        <Container
+          mx='auto'
+          maxW={semi ? 'container.sm' : 'container.xl'}
+          h='full'
+          mt={4}
+        >
+          {children}
+        </Container>
+      ) : (
+        <>{children}</>
+      )}
     </Box>
   );
 }

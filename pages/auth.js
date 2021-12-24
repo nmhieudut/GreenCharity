@@ -346,7 +346,7 @@ export default function Auth() {
           <DividerWithText mb={4}>Hoặc</DividerWithText>
           <div className='px-8 flex flex-col md:flex-row'>
             <Button
-              nolinear='true'
+              noLinear='true'
               w={'full'}
               variant={'outline'}
               leftIcon={<FcGoogle />}
@@ -359,7 +359,7 @@ export default function Auth() {
             <div className='m-2'></div>
             <Button
               w={'full'}
-              nolinear='true'
+              noLinear='true'
               colorScheme={'facebook'}
               leftIcon={<FaFacebook />}
               onClick={loginWithFacebook}

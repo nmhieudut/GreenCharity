@@ -2,7 +2,7 @@ import { Box, Button as ChakraButton } from '@chakra-ui/react';
 import React from 'react';
 
 export default function AnimatedButton({
-  nolinear,
+  noLinear,
   children,
   leftIcon,
   ...rest
@@ -12,7 +12,7 @@ export default function AnimatedButton({
     <ChakraButton
       size='sm'
       bgGradient={
-        !nolinear && 'linear(to-r, purple.400, purple.500, purple.600)'
+        !noLinear && 'linear(to-r, purple.400, purple.500, purple.600)'
       }
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}

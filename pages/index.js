@@ -93,13 +93,173 @@ export default function Home({
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
       <SectionContainer
+        noContainer
         minH='100vh'
         pos='relative'
-        hasParticle
         overflow={'hidden'}
         background='none'
       >
-        <Stack
+        <Box pos='relative' overflow='hidden' bg={bg}>
+          <Box maxW='7xl' mx='auto'>
+            <Box
+              pos='relative'
+              pb={{ base: 8, sm: 16, md: 20, lg: 28, xl: 32 }}
+              maxW={{ lg: '2xl' }}
+              w={{ lg: 'full' }}
+              zIndex={1}
+              bg={bg}
+              border='solid 1px transparent'
+            >
+              <Icon
+                display={{ base: 'none', lg: 'block' }}
+                position='absolute'
+                right={0}
+                top={0}
+                bottom={0}
+                h='full'
+                w={48}
+                color={bg}
+                transform='translateX(50%)'
+                fill='currentColor'
+                viewBox='0 0 100 100'
+                preserveAspectRatio='none'
+                aria-hidden='true'
+              >
+                <polygon points='50,0 100,0 50,100 0,100' />
+              </Icon>
+              <Box
+                mx='auto'
+                maxW={{ base: '7xl' }}
+                px={{ base: 4, sm: 6, lg: 8 }}
+                mt={{ base: 10, sm: 12, md: 16, lg: 20, xl: 28 }}
+              >
+                <Box
+                  w='full'
+                  textAlign={{ sm: 'center', lg: 'left' }}
+                  justifyContent='center'
+                  alignItems='center'
+                >
+                  <chakra.h1
+                    fontSize={{ base: '4xl', sm: '5xl', md: '6xl' }}
+                    letterSpacing='tight'
+                    lineHeight='short'
+                    fontWeight='extrabold'
+                    color={useColorModeValue('gray.900', 'white')}
+                  >
+                    <chakra.span
+                      display={{ base: 'block', md: 'inline' }}
+                      color={'green.400'}
+                    >
+                      Green
+                    </chakra.span>
+                    <chakra.span
+                      display={{ base: 'block', md: 'inline' }}
+                      color={color.PRIMARY}
+                    >
+                      Charity
+                    </chakra.span>
+                  </chakra.h1>
+                  <chakra.p
+                    mt={{ base: 3, sm: 5, md: 5 }}
+                    fontSize={{ sm: 'lg', md: 'xl' }}
+                    maxW={{ sm: 'xl' }}
+                    mx={{ sm: 'auto', lg: 0 }}
+                    color='gray.500'
+                  >
+                    là nền tảng giúp bạn dễ dàng chung tay quyên góp tiền cùng
+                    hàng triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp
+                    cả nước.
+                  </chakra.p>
+                  <Flex
+                    justify='space-between'
+                    alignItems='center'
+                    mt={{ base: 3, sm: 5, md: 5 }}
+                  >
+                    <Box>
+                      <Box color={color.PRIMARY} fontWeight={600}>
+                        <CountUp end={total_campaigns} duration={3} />
+                      </Box>
+                      <Text>Hoạt động</Text>
+                    </Box>
+                    <Box>
+                      <Box color={color.PRIMARY} fontWeight={600}>
+                        <CountUp
+                          separator=','
+                          end={total_donors}
+                          duration={3}
+                        />
+                      </Box>
+                      <Text>Lượt quyên góp</Text>
+                    </Box>
+                    <Box>
+                      <Box color={color.PRIMARY} fontWeight={600}>
+                        <CountUp
+                          separator=','
+                          end={total_amount_donations}
+                          duration={3}
+                        />
+                      </Box>
+                      <Text>Đồng được quyên góp</Text>
+                    </Box>
+                  </Flex>
+                  <Box
+                    mt={{ base: 5, sm: 8 }}
+                    display={{ sm: 'flex' }}
+                    justifyContent={{ sm: 'center', lg: 'start' }}
+                    fontWeight='extrabold'
+                    fontFamily='fantasy'
+                  >
+                    <Link passHref href='/#current-campaigns'>
+                      <Button
+                        w={'full'}
+                        size='md'
+                        rounded={'full'}
+                        px={6}
+                        colorScheme={'purple'}
+                        bg={color.PRIMARY}
+                      >
+                        Tìm hiểu
+                      </Button>
+                    </Link>
+
+                    <Link passHref href='/#get-started'>
+                      <Button
+                        w={'full'}
+                        ml={[0, 4]}
+                        noLinear
+                        size='md'
+                        colorScheme={'purple'}
+                        rounded={'full'}
+                        px={6}
+                        variant='outline'
+                      >
+                        Bắt đầu ngay
+                      </Button>
+                    </Link>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            position={{ lg: 'absolute' }}
+            top={{ lg: 0 }}
+            bottom={{ lg: 0 }}
+            right={{ lg: 0 }}
+            w={{ lg: '50%' }}
+            border='solid 1px transparent'
+          >
+            <Image
+              h={[56, 72, 96, 'full']}
+              w='full'
+              fit='cover'
+              src='/images/tuthienlogin.jpeg'
+              alt=''
+              loading='lazy'
+            />
+          </Box>
+        </Box>
+        {/* <Stack
           align={'center'}
           spacing={{ base: 8, md: 10 }}
           py={{ base: 20, md: 28 }}
@@ -167,7 +327,7 @@ export default function Home({
 
               <Link passHref href='/#get-started'>
                 <Button
-                  nolinear='true'
+                  noLinear='true'
                   size='md'
                   colorScheme={'purple'}
                   rounded={'full'}
@@ -188,7 +348,7 @@ export default function Home({
           >
             <Image src='/images/hero.png' alt='hero' w='full' />
           </Flex>
-        </Stack>
+        </Stack> */}
       </SectionContainer>
       <SectionContainer>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={0}>
@@ -413,7 +573,7 @@ export default function Home({
         </Box>
         <Flex justify='center'>
           <Button
-            nolinear='true'
+            noLinear='true'
             size='md'
             px={4}
             variant='outline'

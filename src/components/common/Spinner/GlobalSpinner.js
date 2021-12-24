@@ -1,22 +1,22 @@
-import { Box, Image, Text, useColorModeValue } from "@chakra-ui/react";
-import React from "react";
-import { color } from "src/constants/color";
+import { Box, Image, Text, useColorModeValue } from '@chakra-ui/react';
+import React from 'react';
+import { color } from 'src/constants/color';
 
 export default function GlobalSpinner() {
-  const bg = useColorModeValue("white", "gray.800");
+  const bg = useColorModeValue('gray.600', 'gray.800');
   return (
     <Box
       bg={bg}
-      className="w-full h-full fixed block top-0 left-0 opacity-75 z-50"
+      className='w-full h-full fixed block top-0 left-0 opacity-75 z-50'
     >
-      <Box className="w-full h-full flex flex-col justify-center items-center">
-        <div className="spinner-wrapper">
+      <Box className='w-full h-full flex flex-col justify-center items-center'>
+        <div className='spinner-wrapper'>
           <span></span>
           <span></span>
           <span></span>
           <span></span>
         </div>
-        <Text fontSize="lg" mt={8}>
+        <Text fontSize='lg' mt={8}>
           Đang tải dữ liệu, vui lòng chờ...
         </Text>
       </Box>

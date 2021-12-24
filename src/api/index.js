@@ -20,7 +20,10 @@ const Rest = {
   balance: '/balance',
 
   //checkout
-  checkout: '/checkout'
+  checkout: '/checkout',
+
+  //auction
+  auction: '/auctions'
 };
 
 export default Rest;
