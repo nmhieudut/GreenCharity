@@ -14,6 +14,7 @@ import GlobalSpinner from 'src/components/common/Spinner/GlobalSpinner';
 import Layout from 'src/layout';
 import 'src/libs/firebase';
 import { AuthService } from 'src/services/auth';
+import { subscribeToUserChanges } from 'src/services/io';
 import { wrapper } from 'src/store';
 import { AuthActions } from 'src/store/auth/action';
 import { ModalActions } from 'src/store/modal/action';
@@ -37,17 +38,10 @@ const GlobalStyles = css`
 
 const queryClient = new QueryClient();
 
-// MyApp.getInitialProps = async (appContext) => {
-//   // calls page's `getInitialProps` and fills `appProps.pageProps`
-//   const appProps = await App.getInitialProps(appContext);
-//
-//   return { ...appProps }
-// }
-
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
   const globalLoading = useSelector(state => state.modal.globalLoading);
-
+  const currentUser = useSelector(state => state.auth.currentUser);
   useEffect(() => {
     const verifyUser = async () => {
       if (storage.getToken()) {
@@ -64,6 +58,17 @@ function MyApp({ Component, pageProps }) {
       }
     };
     verifyUser();
+
+    subscribeToUserChanges(event => {
+      const { user, type } = event;
+      if (type === 'update') {
+        if (currentUser && currentUser.id === user._id) {
+          return dispatch(
+            AuthActions.setCurrentUserSuccessAction({ ...user, id: user._id })
+          );
+        }
+      }
+    });
   }, []);
 
   useEffect(() => {

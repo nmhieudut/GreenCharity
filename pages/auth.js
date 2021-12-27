@@ -1,24 +1,21 @@
 import {
   Box,
   Center,
-  Divider,
-  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   Heading,
-  Image,
   Input,
   InputGroup,
   InputRightElement,
-  Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
   Text,
-  useColorModeValue
+  useColorModeValue,
+  useToast
 } from '@chakra-ui/react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -30,7 +27,9 @@ import { FcGoogle } from 'react-icons/fc';
 import { ImEye } from 'react-icons/im';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
-import CustomAlert from 'src/components/common/Alert';
+import Button from 'src/components/common/Button';
+import DividerWithText from 'src/components/common/DividerWithText';
+import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
 import {
   facebookProvider,
@@ -40,21 +39,17 @@ import { AuthService } from 'src/services/auth';
 import { firebaseService } from 'src/services/firebase';
 import { AuthActions } from 'src/store/auth/action';
 import { storage } from 'src/utils/storage';
-import Button from 'src/components/common/Button';
-import SectionContainer from 'src/components/common/SectionContainer';
-import DividerWithText from 'src/components/common/DividerWithText';
 
 export default function Auth() {
   const formBg = useColorModeValue('white', 'gray.800');
 
+  const toast = useToast();
   const router = useRouter();
   const dispatch = useDispatch();
 
   const user = useSelector(state => state.auth.currentUser);
-  const loading = useSelector(state => state.auth.loading);
-  const logInError = useSelector(state => state.auth.logInError);
-  const signUpError = useSelector(state => state.auth.signUpError);
 
+  const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({
     name: '',
@@ -97,23 +92,30 @@ export default function Auth() {
 
   const handleLogin = async e => {
     e.preventDefault();
+    setLoading(true);
     try {
       dispatch(AuthActions.loginAction());
       const res = await AuthService.login(email, password);
-      if (res.user) {
-        dispatch(AuthActions.loginSuccessAction(res.user));
-        storage.setToken(res.token);
-        return;
-      }
-      return dispatch(AuthActions.loginFailedAction(res.response.data.message));
+      dispatch(AuthActions.loginSuccessAction(res.user));
+      storage.setToken(res.token);
+      return;
     } catch (e) {
-      console.log('error', e.response.data.message);
-      dispatch(AuthActions.loginFailedAction(e.response.data.message));
+      toast({
+        position: 'top-right',
+        title: 'Thất bại.',
+        description: e.response.data.message,
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSignUp = async e => {
     e.preventDefault();
+    setLoading(true);
     try {
       dispatch(AuthActions.signUpAction());
       const res = await AuthService.register(
@@ -122,31 +124,25 @@ export default function Auth() {
         password,
         phoneNumber
       );
-      if (res.user) {
-        dispatch(AuthActions.signUpSuccessAction(res.user));
-        storage.setToken(res.token);
-      }
-      return dispatch(
-        AuthActions.signUpFailedAction(res.response.data.message)
-      );
+      dispatch(AuthActions.signUpSuccessAction(res.user));
+      storage.setToken(res.token);
     } catch (e) {
-      console.log('error', e.response.data.message);
-      dispatch(AuthActions.signUpFailedAction(e.response.data.message));
+      toast({
+        position: 'top-right',
+        title: 'Thất bại.',
+        description: e.response.data.message,
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   const loginWithGoogle = () => {
     firebaseService
       .socialMediaAuth(googleProvider)
-      .then(userCred => {})
-      .catch(e => {
-        console.log(e);
-      });
-  };
-
-  const loginWithFacebook = () => {
-    firebaseService
-      .socialMediaAuth(facebookProvider)
       .then(userCred => {})
       .catch(e => {
         console.log(e);
@@ -233,11 +229,6 @@ export default function Auth() {
                           </span>
                         </InputRightElement>
                       </InputGroup>
-                      {logInError && (
-                        <Box py={2}>
-                          <CustomAlert label={logInError} status='error' />
-                        </Box>
-                      )}
                     </FormControl>
                     <Button
                       w='full'
@@ -323,11 +314,6 @@ export default function Auth() {
                           </span>
                         </InputRightElement>
                       </InputGroup>
-                      {signUpError && (
-                        <Box py={2}>
-                          <CustomAlert label={signUpError} status='error' />
-                        </Box>
-                      )}
                     </FormControl>
                     <Button
                       w='full'
@@ -344,7 +330,7 @@ export default function Auth() {
             </TabPanels>
           </Tabs>
           <DividerWithText mb={4}>Hoặc</DividerWithText>
-          <div className='px-8 flex flex-col md:flex-row'>
+          <div className='px-8'>
             <Button
               noLinear='true'
               w={'full'}
@@ -354,18 +340,6 @@ export default function Auth() {
             >
               <Center>
                 <Text>Google</Text>
-              </Center>
-            </Button>
-            <div className='m-2'></div>
-            <Button
-              w={'full'}
-              noLinear='true'
-              colorScheme={'facebook'}
-              leftIcon={<FaFacebook />}
-              onClick={loginWithFacebook}
-            >
-              <Center>
-                <Text>Facebook</Text>
               </Center>
             </Button>
           </div>

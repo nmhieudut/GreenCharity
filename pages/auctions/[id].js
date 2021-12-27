@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Avatar,
   Badge,
   Box,
@@ -12,11 +14,6 @@ import {
   Link,
   List,
   ListItem,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   SimpleGrid,
   Slider,
   Stack,
@@ -26,20 +23,18 @@ import {
   useNumberInput,
   useToast
 } from '@chakra-ui/react';
-import vi from 'date-fns/locale/vi';
 import { formatDistanceToNow } from 'date-fns';
+import vi from 'date-fns/locale/vi';
 import FsLightbox from 'fslightbox-react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import campaigns from 'pages/admin/campaigns';
 import React, { useEffect, useState } from 'react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
+import { GiLaurelsTrophy } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
 import CountDown from 'src/components/common/CountDown';
 import NeedLogin from 'src/components/common/NeedLogin';
 import SectionContainer from 'src/components/common/SectionContainer';
-import Loading from 'src/components/common/Spinner/Loading';
 import { color } from 'src/constants/color';
 import { AuctionService } from 'src/services/auction';
 import { subscribeToAuctionChanges } from 'src/services/io';
@@ -75,7 +70,6 @@ export async function getServerSideProps(ctx) {
 }
 
 export default function AuctionDetails({ data }) {
-  const router = useRouter();
   const toast = useToast();
   const user = useSelector(state => state.auth.currentUser);
   const [slider, setSlider] = useState(null);
@@ -114,7 +108,6 @@ export default function AuctionDetails({ data }) {
 
   useEffect(() => {
     subscribeToAuctionChanges(event => {
-      console.log('====updating', event);
       const { auction, type } = event;
       if (type === 'update') {
         return setAuction(auction);
@@ -136,6 +129,7 @@ export default function AuctionDetails({ data }) {
     try {
       await AuctionService.bid(auction._id, amount);
       toast({
+        position: 'top-right',
         title: 'Thành công',
         description: 'Đã đặt giá thành công',
         status: 'success',
@@ -144,6 +138,7 @@ export default function AuctionDetails({ data }) {
       });
     } catch (e) {
       toast({
+        position: 'top-right',
         title: 'Thất bại.',
         description: e.response.data.message,
         status: 'error',
@@ -155,7 +150,7 @@ export default function AuctionDetails({ data }) {
       setLoading(false);
     }
   };
-
+  console.log(auction);
   return (
     <SectionContainer>
       <Head>
@@ -242,7 +237,7 @@ export default function AuctionDetails({ data }) {
                   ))}
                 </Slider>
               </Box>
-              <Box rounded='xl' shadow='md' mt={6} p={4}>
+              <Box rounded='xl' shadow='md' mt={6} p={4} bg={bg}>
                 <Grid templateColumns={['2fr 1fr']} gap={4}>
                   <Box>
                     <Heading
@@ -255,24 +250,22 @@ export default function AuctionDetails({ data }) {
                       Thông tin chi tiết
                     </Heading>
                     <Flex
-                      justify='space-between'
-                      align='center'
+                      flexDirection='column'
                       py={2}
                       borderBottom={'1px solid lightgray'}
                     >
                       <Text fontWeight={600} fontSize={'md'}>
-                        Tên sản phẩm:
+                        Tên sản phẩm
                       </Text>
                       <Text fontSize={'md'}>{title}</Text>
                     </Flex>
                     <Flex
-                      justify='space-between'
-                      align='center'
+                      flexDirection='column'
                       py={2}
                       borderBottom={'1px solid lightgray'}
                     >
                       <Text fontWeight={600} fontSize={'md'}>
-                        Hoạt động được tài trợ:
+                        Hoạt động được tài trợ
                       </Text>
                       <Link
                         href={`/campaigns/${campaign.slug}`}
@@ -282,8 +275,8 @@ export default function AuctionDetails({ data }) {
                       </Link>
                     </Flex>
                     <Flex flexDirection='column' py={2}>
-                      <Text fontWeight={600} fontSize={'md'} textAlign='center'>
-                        Mô tả:
+                      <Text fontWeight={600} fontSize={'md'}>
+                        Mô tả
                       </Text>
                       <Text fontSize={'md'}>{description}</Text>
                     </Flex>
@@ -316,24 +309,35 @@ export default function AuctionDetails({ data }) {
                       Cao nhất
                     </Heading>
                     <Text fontWeight={600}>
-                      {currentBid ? VNDFormatter(currentBid.amount) : 'Chưa có'}
+                      {currentBid ? (
+                        <>
+                          <Text textAlign='center'>
+                            {VNDFormatter(currentBid.amount)}
+                          </Text>
+
+                          <Flex
+                            my={2}
+                            p={2}
+                            flexDirection='column'
+                            align='center'
+                          >
+                            <Avatar size='sm' src={currentBid.author.picture} />
+                            <Text mt={2} color={color.PRIMARY}>
+                              {currentBid.author.name}
+                            </Text>
+                          </Flex>
+                        </>
+                      ) : (
+                        'Chưa có'
+                      )}
                     </Text>
                   </Stack>
                 </Grid>
               </Box>
             </Box>
 
-            <Flex flexDirection='column' rounded='xl' p={6} shadow='md'>
-              <Flex align='center' flexWrap='wrap'>
-                <Heading
-                  fontSize={{ base: 'lg', sm: 'xl', md: '2xl' }}
-                  lineHeight={'110%'}
-                  color={color.PRIMARY}
-                  mr={6}
-                >
-                  Thời hạn:
-                </Heading>
-
+            <Flex flexDirection='column' rounded='xl' p={6} shadow='lg' bg={bg}>
+              <Flex justify='center' align='center'>
                 <CountDown time={finishedAt} />
               </Flex>
               <Box border='1px solid #eaeaea ' p={8} my={4} rounded='xl'>
@@ -360,22 +364,29 @@ export default function AuctionDetails({ data }) {
                         -
                       </Button>
                     </HStack>
-
-                    {/* check if current user is owner of this auction */}
-                    <Box my={6}>
+                    <Box my={2}>
                       {user && user.id === author._id ? (
                         'Bạn không thể đấu giá chính mình'
                       ) : (
-                        <Button
-                          disabled={loading}
-                          isLoading={loading}
-                          colorScheme='purple'
-                          onClick={handleBid}
-                          w='full'
-                        >
-                          {' '}
-                          Đấu giá này{' '}
-                        </Button>
+                        <>
+                          <Button
+                            disabled={loading}
+                            isLoading={loading}
+                            colorScheme='purple'
+                            onClick={handleBid}
+                            w='full'
+                          >
+                            {' '}
+                            Đấu giá này{' '}
+                          </Button>
+                          <Alert mt={4} status='info'>
+                            <AlertIcon />
+                            Khi bạn đấu giá, vui lòng kiểm tra lại số dư khi đấu
+                            giá. Nếu thành công, bạn sẽ bị trừ tiền tài khoản
+                            của mình, nếu có người đấu giá hơn bạn sẽ được hoàn
+                            lại tiền tương ứng với giá đấu của bạn trước đó.
+                          </Alert>
+                        </>
                       )}
                     </Box>
                   </>
@@ -399,14 +410,26 @@ export default function AuctionDetails({ data }) {
                         .reverse()
                         .map((bid, idx) => (
                           <ListItem
+                            borderBottom='1px solid lightgray'
+                            className='fadeIn'
                             key={idx}
-                            rounded='lg'
-                            shadow='md'
-                            p={2}
-                            my={2}
-                            bg={bg}
+                            px={2}
+                            py={4}
+                            bgGradient={
+                              user &&
+                              user.id === bid.author._id &&
+                              'linear(to-r, purple.100, purple.200, purple.300)'
+                            }
                           >
                             <Flex align='center'>
+                              <Box w={8}>
+                                {idx === 0 && (
+                                  <GiLaurelsTrophy
+                                    size='1.5rem'
+                                    color='yellow'
+                                  />
+                                )}
+                              </Box>
                               <Avatar
                                 name={bid.author.name}
                                 src={bid.author.picture}
@@ -414,11 +437,12 @@ export default function AuctionDetails({ data }) {
                                 mr={4}
                               />
                               <Text fontWeight={600}>{bid.author.name}</Text>
-                              <Text fontSize={'md'} ml={4} color='green'>
+                              <Text fontSize={'sm'} ml={4} color='green'>
                                 +{' '}
                                 {VNDFormatter(
                                   auction.bids.length > 0 &&
-                                    bid.amount - auction.bids[0].amount
+                                    bid.amount - startPrice > 0 &&
+                                    bid.amount - startPrice
                                 )}
                               </Text>
                               <Text

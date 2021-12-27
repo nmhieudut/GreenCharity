@@ -1,6 +1,4 @@
 import {
-  Alert,
-  AlertIcon,
   Box,
   chakra,
   Flex,
@@ -53,7 +51,6 @@ function Create() {
   const activeCampaigns = campaigns?.filter(cam => cam.status === 'active');
   const [imageFiles, setImageFiles] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [res, setRes] = useState(null);
   const [auctionPayload, setPayloadAuction] = useState({
     title: '',
     description: '',
@@ -143,10 +140,22 @@ function Create() {
         campaign: '',
         finishedAt: null
       });
-      setRes('ok');
+      toast({
+        title: 'Tạo đấu giá thành công',
+        description: 'Yêu cầu tạo đấu giá đã được gửi đi thành công',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
     } catch (e) {
       console.log(e);
-      setRes('not ok');
+      toast({
+        title: 'Yêu cầu tạo thất bại',
+        description: `${err.response.data.message}`,
+        status: 'error',
+        duration: 3000,
+        isClosable: true
+      });
     } finally {
       dispatch(ModalActions.setModalOff());
     }
@@ -159,6 +168,15 @@ function Create() {
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
       <Box>
+        <Heading
+          textAlign='center'
+          fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
+          lineHeight={'110%'}
+          color={color.PRIMARY}
+          mb={14}
+        >
+          Tạo phiên đấu giá
+        </Heading>
         <SimpleGrid
           display={{ base: 'initial', md: 'grid' }}
           columns={{ md: 3 }}
@@ -445,15 +463,6 @@ function Create() {
                   ))}
                 </Grid>
               </Stack>
-              {res && (
-                <Alert status={res === 'ok' ? 'success' : 'error'}>
-                  <AlertIcon />
-                  {res === 'ok'
-                    ? 'Tạo thành công'
-                    : res === 'not ok' &&
-                      'Có lỗi xảy ra trong quá trình tạo, thử lại sau'}
-                </Alert>
-              )}
 
               <Box
                 px={{ base: 4, sm: 6 }}

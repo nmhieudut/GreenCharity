@@ -35,7 +35,7 @@ export default function CountDown({ time }) {
   const daysDuration = days * daySeconds;
 
   return (
-    <Box>
+    <>
       {remainingTime <= 0 ? (
         <Flex justify='center' align='center'>
           <Text color='red' fontWeight={600}>
@@ -43,7 +43,7 @@ export default function CountDown({ time }) {
           </Text>
         </Flex>
       ) : (
-        <Stack direction='row' spacing={6} w='full'>
+        <Stack direction='row' spacing={6}>
           <CountdownCircleTimer
             {...timerProps}
             colors={[['#7E2E84']]}
@@ -95,6 +95,6 @@ export default function CountDown({ time }) {
           </CountdownCircleTimer>
         </Stack>
       )}
-    </Box>
+    </>
   );
 }

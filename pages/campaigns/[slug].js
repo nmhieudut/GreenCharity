@@ -27,7 +27,8 @@ import {
   Text,
   useBreakpointValue,
   useColorModeValue,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import FsLightbox from 'fslightbox-react';
@@ -86,13 +87,14 @@ const settings = {
 
 export default function Detail({ campaign }) {
   const user = useSelector(state => state.auth.currentUser);
+  const toast = useToast();
   const router = useRouter();
   const dispatch = useDispatch();
   const bg = useColorModeValue('white', 'gray.900');
   const [slider, setSlider] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
   const [res, setRes] = useState(null);
-  const [resMessage, setResMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const [donatedInfo, setDonatedInfo] = useState({
     wished_amount: 0,
     message: ''
@@ -145,18 +147,27 @@ export default function Detail({ campaign }) {
       return;
     }
     dispatch(ModalActions.setModalOn());
+    setLoading(true);
     try {
       const res = await CampaignService.donate(campaign._id, {
         amount: parseInt(wished_amount),
         message
       });
       onOpen();
-      setRes('success');
-      setResMessage(res.message);
+      toast({
+        title: `Hihi, không có gì.`,
+        status: 'success',
+        isClosable: true
+      });
     } catch (e) {
-      setRes('error');
-      setResMessage(e.response.data.message);
+      toast({
+        title: `${e.response.data.message}`,
+        status: 'error',
+        isClosable: true
+      });
     }
+    onClose();
+    setLoading(false);
     dispatch(ModalActions.setModalOff());
   };
 
@@ -350,6 +361,10 @@ export default function Detail({ campaign }) {
                           {seconds} giây
                         </Text>
                       </Stack>
+                    ) : status === 'pending' ? (
+                      <Text color={'blue.500'} as={'b'}>
+                        Đang chờ duyệt
+                      </Text>
                     ) : (
                       <Text color={'red.500'} as={'b'}>
                         Hết hạn
@@ -379,8 +394,6 @@ export default function Detail({ campaign }) {
                   <form
                     onSubmit={e => {
                       e.preventDefault();
-                      setRes(null);
-                      setResMessage('');
                       onOpen();
                     }}
                   >
@@ -422,44 +435,29 @@ export default function Detail({ campaign }) {
                 >
                   <ModalOverlay />
                   <ModalContent py={4}>
-                    {res ? (
-                      <>
-                        <ModalHeader>Thông báo</ModalHeader>
-                        <ModalBody>{resMessage}</ModalBody>
-                        <ModalFooter>
-                          <Button
-                            colorScheme='gray'
-                            noLinear
-                            onClick={() => {
-                              onClose();
-                              res === 'success' && refreshData();
-                            }}
-                          >
-                            {res === 'success' ? 'Hihi, không có chi' : 'Đóng'}
-                          </Button>
-                        </ModalFooter>
-                      </>
-                    ) : (
-                      <>
-                        <ModalHeader>Xác nhận quyên góp</ModalHeader>
-                        <ModalBody>
-                          Bạn muốn quyên góp số tiền <b>{wished_amount}</b> đồng
-                          cho hoạt động này ?
-                        </ModalBody>
-                        <ModalFooter>
-                          <Button
-                            colorScheme={'purple'}
-                            mr={3}
-                            onClick={handleDonate}
-                          >
-                            Đúng dậy tui chắc chắn
-                          </Button>
-                          <Button colorScheme='gray' noLinear onClick={onClose}>
-                            Tui muốn suy nghĩ lại
-                          </Button>
-                        </ModalFooter>
-                      </>
-                    )}
+                    <ModalHeader>Xác nhận quyên góp</ModalHeader>
+                    <ModalBody>
+                      Bạn muốn quyên góp số tiền <b>{wished_amount}</b> đồng cho
+                      hoạt động này ?
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        isLoading={loading}
+                        colorScheme={'purple'}
+                        mr={3}
+                        onClick={handleDonate}
+                      >
+                        Đúng dậy tui chắc chắn
+                      </Button>
+                      <Button
+                        colorScheme='gray'
+                        noLinear
+                        onClick={onClose}
+                        isLoading={loading}
+                      >
+                        Tui muốn suy nghĩ lại
+                      </Button>
+                    </ModalFooter>
                   </ModalContent>
                 </Modal>
                 <Divider my={2} />

@@ -8,3 +8,7 @@ function createSocket() {
 export const subscribeToAuctionChanges = cb => {
   createSocket().on('auction-change', cb);
 };
+
+export const subscribeToUserChanges = cb => {
+  createSocket().on('user-change', cb);
+};

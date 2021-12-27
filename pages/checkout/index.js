@@ -1,34 +1,29 @@
 import {
   Box,
   Center,
+  Flex,
   FormControl,
   FormLabel,
-  Text,
-  Input,
-  Flex,
-  useColorModeValue,
   Image,
-  Divider,
+  Input,
+  Radio,
   RadioGroup,
   Stack,
-  Radio
+  Text,
+  useColorModeValue
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FaCcStripe } from 'react-icons/fa';
 import { ImArrowRight2 } from 'react-icons/im';
-import { MdOutlinePayment } from 'react-icons/md';
-import { useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
 import DividerWithText from 'src/components/common/DividerWithText';
 import SectionContainer from 'src/components/common/SectionContainer';
 import withAuth from 'src/HOCs/withAuth';
 import { CheckoutService } from 'src/services/checkout';
-import ignoreZeroBefore from 'src/utils/number';
 
 function CheckoutDetail(props) {
   const bg = useColorModeValue('gray.50', 'gray.700');
-  const { user } = props;
   const router = useRouter();
   const [method, setMethod] = React.useState('');
   const [amount, setAmount] = React.useState(0);
@@ -37,7 +32,6 @@ function CheckoutDetail(props) {
     const res = await CheckoutService.checkout(method, {
       amount_money: amount
     });
-    console.log('ressss', res);
     router.push(res.payUrl);
   };
 

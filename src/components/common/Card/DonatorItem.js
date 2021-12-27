@@ -3,7 +3,6 @@ import React from 'react';
 import { VNDFormatter } from 'src/utils/number';
 
 export default function DonatorItem({ donation }) {
-  console.log('---', donation);
   const { donator } = donation;
   return (
     <Flex p={4} shadow='md'>
@@ -14,9 +13,8 @@ export default function DonatorItem({ donation }) {
           {donator.phoneNumber.slice(0, -3) + '***'}
         </Text>
       </Stack>
-      {/* amount display */}
       <Flex align='center' ml='auto'>
-        <Text fontSize='sm' fontWeight='600' color='gray.600'>
+        <Text as={'i'} fontSize='xs' color='gray.500'>
           {VNDFormatter(donation.amount)}đ
         </Text>
       </Flex>

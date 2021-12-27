@@ -35,7 +35,7 @@ const AuctionCard = ({ auction }) => {
       href={`/auctions/${_id}`}
       cursor={'pointer'}
       flexDir={'column'}
-      className='transition duration-300 md:mx-2 mb-8'
+      className='transition duration-300 md:mx-2 mb-8 rounded-lg'
       _hover={{ boxShadow: 'lg' }}
       bg={useColorModeValue('white', 'gray.900')}
       w={['100%', '45%', '30%']}
@@ -54,7 +54,7 @@ const AuctionCard = ({ auction }) => {
       )}
 
       <Box className='w-full md:mb-0'>
-        <Box className='rounded-sm shadow' overflow='hidden'>
+        <Box className='rounded-lg shadow' overflow='hidden'>
           <Box
             backgroundImage={images[0]}
             backgroundSize='cover'
@@ -71,15 +71,14 @@ const AuctionCard = ({ auction }) => {
               bottom={0}
               right={0}
               p={2}
-              bg={useColorModeValue('gray.100', 'gray.700')}
+              bg={useColorModeValue('gray.200', 'gray.700')}
             >
-              <BsClock className='mr-2' size='.75rem' />
               {!DateUtils.isExpired(finishedAt) ? (
-                <Text as={'b'}>
-                  {days > 0 && days + ' : '}
-                  {hours > 0 && hours + ' : '}
-                  {minutes > 0 && minutes + ' : '}
-                  {seconds}
+                <Text as={'b'} className='tracking-wide'>
+                  {days > 0 && days + 'd:'}
+                  {hours > 0 && hours + 'h:'}
+                  {minutes > 0 && minutes + 'm:'}
+                  {seconds}s
                 </Text>
               ) : (
                 <Text color={'red.500'} as={'b'}>

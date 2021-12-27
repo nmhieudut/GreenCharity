@@ -22,7 +22,8 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import add from 'date-fns/add';
@@ -40,7 +41,6 @@ import { color } from 'src/constants/color';
 import { storage } from 'src/libs/firebase';
 import { CampaignService } from 'src/services/campaign';
 import * as Yup from 'yup';
-import Checkmark from '../Checkmark';
 import Loading from '../Spinner/Loading';
 // YUP
 const schema = Yup.object().shape({
@@ -55,13 +55,12 @@ const schema = Yup.object().shape({
 });
 
 export function CampaignForm({ isEdited, initialValues }) {
+  const toast = useToast();
+  const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState([]);
   const [imgUrls, setImgUrls] = useState(isEdited ? initialValues.images : []);
   const [imgLoading, setImgLoading] = useState(false);
   const [editorLoaded, setEditorLoaded] = useState(false);
-  const [event, setEvent] = useState('');
-  const [status, setStatus] = useState('');
-  const [isOpenModal, setIsOpenModal] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const router = useRouter();
@@ -131,32 +130,51 @@ export function CampaignForm({ isEdited, initialValues }) {
   }, [imgUrls]);
 
   const handleSubmit = async values => {
+    setSubmitting(true);
     if (!isEdited) {
       return CampaignService.create(values)
         .then(res => {
-          console.log('res', res);
-          setStatus('success');
+          toast({
+            title: 'Yêu cầu tạo thành công',
+            description: 'Yêu cầu vận động đã được gửi đi thành công',
+            status: 'success',
+            duration: 3000,
+            isClosable: true
+          });
         })
         .catch(err => {
-          console.log(err);
-          setStatus('error');
+          toast({
+            title: 'Yêu cầu tạo thất bại',
+            description: `${err.response.data.message}`,
+            status: 'error',
+            duration: 3000,
+            isClosable: true
+          });
         })
         .finally(() => {
-          setEvent('create');
-          setIsOpenModal(true);
+          setSubmitting(false);
         });
     }
     return CampaignService.update(initialValues._id, values)
       .then(res => {
-        setStatus('success');
+        toast({
+          title: 'Cập nhật thành công',
+          status: 'success',
+          duration: 3000,
+          isClosable: true
+        });
       })
       .catch(err => {
-        console.log(err);
-        setStatus('error');
+        toast({
+          title: 'Cập nhật thất bại',
+          description: `${err.response.data.message}`,
+          status: 'error',
+          duration: 3000,
+          isClosable: true
+        });
       })
       .finally(() => {
-        setEvent('update');
-        setIsOpenModal(true);
+        setSubmitting(false);
       });
   };
   return (
@@ -367,7 +385,11 @@ export function CampaignForm({ isEdited, initialValues }) {
                 </Alert>
 
                 <Divider my={4} />
-                <Button colorScheme='purple' type='submit'>
+                <Button
+                  colorScheme='purple'
+                  type='submit'
+                  isLoading={submitting}
+                >
                   {isEdited ? 'Cập nhật hoạt động' : 'Yêu cầu vận động'}
                 </Button>
               </Box>
@@ -392,66 +414,6 @@ export function CampaignForm({ isEdited, initialValues }) {
           </Form>
         )}
       </Formik>
-
-      <ResultModal
-        event={event}
-        status={status}
-        openModal={isOpenModal}
-        onPrimaryClick={() => {
-          router.push(`/me/my-campaigns`);
-        }}
-        onSecondaryClick={() => {
-          router.push('/');
-          setIsOpenModal(false);
-        }}
-      />
     </SectionContainer>
-  );
-}
-
-function ResultModal({
-  event,
-  status,
-  openModal,
-  onPrimaryClick,
-  onSecondaryClick
-}) {
-  const action = event === 'create' ? 'Yêu cầu tạo' : 'Cập nhật';
-  const statusMess = status === 'success' ? 'thành công' : 'thất bại';
-  return (
-    <Modal blockScrollOnMount={true} isOpen={openModal} size='xl'>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalBody>
-          <Box textAlign='center' py={10} px={6}>
-            <Checkmark status={status === 'success' ? 'success' : 'error'} />
-            <Heading as='h2' size='xl' mt={6} mb={2}>
-              {action} hoạt động {statusMess}
-            </Heading>
-            {status === 'success' &&
-              (event === 'create' ? (
-                <Text color={'gray.500'}>
-                  Hoạt động của bạn đã được gửi tới đội ngũ quản lí xem xét và
-                  sẽ xét duyệt trong vòng trễ nhất 24h tới. Xin chân thành cảm
-                  ơn.
-                </Text>
-              ) : (
-                <Text color={'gray.500'}>
-                  Hoạt động này đã được cập nhật thành công
-                </Text>
-              ))}
-          </Box>
-        </ModalBody>
-
-        <ModalFooter>
-          <Button colorScheme='purple' mr={3} onClick={onPrimaryClick}>
-            Kiểm tra hoạt động này
-          </Button>
-          <Button colorScheme='gray' noLinear onClick={onSecondaryClick}>
-            Về trang chính
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
   );
 }

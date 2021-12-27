@@ -26,7 +26,8 @@ import {
   Tfoot,
   Th,
   Thead,
-  Tr
+  Tr,
+  useToast
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import Head from 'next/head';
@@ -37,7 +38,6 @@ import { AiOutlineEye } from 'react-icons/ai';
 import { FcCalendar, FcPhone } from 'react-icons/fc';
 import { FiEdit3 } from 'react-icons/fi';
 import { useQuery } from 'react-query';
-import { useDispatch } from 'react-redux';
 import Button from 'src/components/common/Button';
 import ChargeItem from 'src/components/common/ChargeItem';
 import SectionContainer from 'src/components/common/SectionContainer';
@@ -46,11 +46,8 @@ import { color } from 'src/constants/color';
 import { meSideBar } from 'src/constants/sidebar';
 import withAuth from 'src/HOCs/withAuth';
 import { useStorage } from 'src/hooks/useStorage';
-import { AuthService } from 'src/services/auth';
 import { CampaignService } from 'src/services/campaign';
 import { UserService } from 'src/services/user';
-import { AuthActions } from 'src/store/auth/action';
-import { ModalActions } from 'src/store/modal/action';
 import { DateUtils } from 'src/utils/date';
 import { VNDFormatter } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
@@ -59,7 +56,7 @@ function AccountPage(props) {
   const { user } = props;
   const router = useRouter();
   const imageRef = useRef();
-  const dispatch = useDispatch();
+  const toast = useToast();
   const [info, setInfo] = useState({
     name: user.name,
     phoneNumber: user.phoneNumber,
@@ -87,25 +84,28 @@ function AccountPage(props) {
 
   const onUpdateInfo = async e => {
     e.preventDefault();
-    setSuccess(false);
     setLoading(true);
-    const res = await UserService.update(
-      user.id,
-      Object.assign(info, { picture: imageUrl })
-    );
-    setLoading(false);
-    if (res) {
-      setSuccess(true);
-      dispatch(AuthActions.setCurrentUserAction());
-      dispatch(ModalActions.setModalOn());
-      await AuthService.getInfo()
-        .then(res => {
-          dispatch(AuthActions.setCurrentUserSuccessAction(res.data));
-        })
-        .catch(e => dispatch(AuthActions.setCurrentUserFailedAction()))
-        .finally(() => {
-          dispatch(ModalActions.setModalOff());
-        });
+    try {
+      await UserService.update(user.id, Object.assign(info, { picture: url }));
+      toast({
+        position: 'top-right',
+        title: 'Thành công',
+        description: 'Cập nhật tài khoản thành công',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
+    } catch (e) {
+      toast({
+        position: 'top-right',
+        title: 'Lỗi',
+        description: e.response.data.message,
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+    } finally {
+      setLoading(false);
     }
   };
 

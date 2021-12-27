@@ -56,7 +56,7 @@ export default function Header() {
   const textColor = useColorModeValue(color.primary, color.primary);
   const { colorMode, toggleColorMode } = useColorMode();
   const borderColor = useColorModeValue(
-    '1px solid rgba(229,231,235,1)',
+    '1px solid rgba(229,231,235,.5)',
     '1px solid rgb(31, 41, 55)'
   );
   const user = useSelector(state => state.auth.currentUser);
@@ -94,7 +94,7 @@ export default function Header() {
 
   const onCreate = () => {
     if (user) {
-      router.push('/new-campaign');
+      router.push('/campaigns/create');
     } else {
       router.push('/auth');
     }
@@ -102,7 +102,7 @@ export default function Header() {
 
   const Logo = () => {
     return (
-      <a href='/#'>
+      <a href='/'>
         <img src='/images/GreenCharity.png' width={120} alt='logo' />
       </a>
     );
@@ -162,7 +162,6 @@ export default function Header() {
       color={textColor}
       bg={bg}
       borderBottom={borderColor}
-      boxShadow='0 .5rem 4.5rem rgba(0,0,0,.1)'
     >
       <Box w='full' bg={bg2}>
         <Container
