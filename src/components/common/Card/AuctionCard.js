@@ -1,4 +1,5 @@
 import {
+  AspectRatio,
   Badge,
   Box,
   color,
@@ -55,14 +56,10 @@ const AuctionCard = ({ auction }) => {
 
       <Box className='w-full md:mb-0'>
         <Box className='rounded-lg shadow' overflow='hidden'>
-          <Box
-            backgroundImage={images[0]}
-            backgroundSize='cover'
-            backgroundRepeat='no-repeat'
-            backgroundPosition='center'
-            h={'12rem'}
-            position='relative'
-          >
+          <Box position='relative'>
+            <AspectRatio maxW='400px' ratio={16 / 9}>
+              <Image src={images[0]} alt={title} objectFit='cover' />
+            </AspectRatio>
             <Flex
               color={'gray.500'}
               align='center'

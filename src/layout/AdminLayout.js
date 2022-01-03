@@ -9,6 +9,7 @@ import {
   useColorModeValue,
   useDisclosure
 } from '@chakra-ui/react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FiMenu } from 'react-icons/fi';
 import { color } from 'src/constants/color';
@@ -58,7 +59,7 @@ export default function AdminLayout({ children }) {
       overflowY='auto'
       bg={color.PRIMARY}
       borderRightWidth='1px'
-      w='60'
+      w='48'
       {...props}
     >
       <Flex
@@ -70,7 +71,7 @@ export default function AdminLayout({ children }) {
         {adminSideBar.map(item => (
           <NavItem
             key={item.title}
-            onClick={() => sidebar.onClose()}
+            onClick={() => router.push(`${item.path}`)}
             icon={item.icon}
           >
             {item.title}
@@ -86,6 +87,10 @@ export default function AdminLayout({ children }) {
       bg={useColorModeValue('gray.50', 'gray.700')}
       minH='100vh'
     >
+      <Head>
+        <title>Quản lí</title>
+        <link rel='icon' href='/images/thumbnail.png' />
+      </Head>
       <SidebarContent display={{ base: 'none', md: 'unset' }} />
       <IconButton
         aria-label='Menu'
@@ -104,7 +109,7 @@ export default function AdminLayout({ children }) {
           <SidebarContent w='full' borderRight='none' />
         </DrawerContent>
       </Drawer>
-      <Box ml={{ base: 0, md: 60 }} transition='.3s ease'>
+      <Box ml={{ base: 0, md: 48 }} transition='.3s ease'>
         <Box as='main' p='4'>
           {children}
         </Box>

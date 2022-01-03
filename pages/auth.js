@@ -71,6 +71,14 @@ export default function Auth() {
           })
           .catch(e => {
             console.log(e);
+            toast({
+              position: 'top-right',
+              title: 'Thất bại.',
+              description: e.response.data.message,
+              status: 'error',
+              duration: 9000,
+              isClosable: true
+            });
           });
       });
     });
@@ -145,7 +153,14 @@ export default function Auth() {
       .socialMediaAuth(googleProvider)
       .then(userCred => {})
       .catch(e => {
-        console.log(e);
+        toast({
+          position: 'top-right',
+          title: 'Thất bại.',
+          description: e.response.data.message,
+          status: 'error',
+          duration: 9000,
+          isClosable: true
+        });
       });
   };
   if (typeof window !== 'undefined' && user) {
@@ -200,12 +215,13 @@ export default function Auth() {
                         className='my-2'
                         focusBorderColor={color.PRIMARY}
                         type='email'
+                        placeholder='Email'
                       />
                     </FormControl>
 
                     <div className='my-4' />
                     <FormControl id='password' isRequired>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>Mật khẩu</FormLabel>
                       <InputGroup size='md'>
                         <Input
                           onChange={handleChange}
@@ -214,7 +230,7 @@ export default function Auth() {
                           focusBorderColor={color.PRIMARY}
                           pr='4.5rem'
                           type={show ? 'text' : 'password'}
-                          placeholder='Enter password'
+                          placeholder='Mật khẩu'
                         />
                         <InputRightElement className='my-2'>
                           <span

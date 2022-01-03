@@ -23,7 +23,10 @@ const Rest = {
   checkout: '/checkout',
 
   //auction
-  auction: '/auctions'
+  auction: '/auctions',
+
+  //admin
+  admin: '/admin'
 };
 
 export default Rest;

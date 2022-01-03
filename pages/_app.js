@@ -25,6 +25,13 @@ import '../styles/globals.scss';
 const hoverEffect =
   typeof window !== `undefined` ? require('hover-effect').default : null;
 
+NProgress.configure({
+  minimum: 0.3,
+  easing: 'ease',
+  speed: 800,
+  showSpinner: false
+});
+
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
@@ -42,23 +49,24 @@ function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
   const globalLoading = useSelector(state => state.modal.globalLoading);
   const currentUser = useSelector(state => state.auth.currentUser);
-  useEffect(() => {
-    const verifyUser = async () => {
-      if (storage.getToken()) {
-        dispatch(AuthActions.setCurrentUserAction());
-        dispatch(ModalActions.setModalOn());
-        await AuthService.getInfo()
-          .then(res => {
-            dispatch(AuthActions.setCurrentUserSuccessAction(res.data));
-          })
-          .catch(e => dispatch(AuthActions.setCurrentUserFailedAction()))
-          .finally(() => {
-            dispatch(ModalActions.setModalOff());
-          });
-      }
-    };
-    verifyUser();
 
+  const verifyUser = async () => {
+    if (storage.getToken() !== '') {
+      dispatch(AuthActions.setCurrentUserAction());
+      dispatch(ModalActions.setModalOn());
+      await AuthService.getInfo()
+        .then(res => {
+          dispatch(AuthActions.setCurrentUserSuccessAction(res.data));
+        })
+        .catch(e => dispatch(AuthActions.setCurrentUserFailedAction()))
+        .finally(() => {
+          dispatch(ModalActions.setModalOff());
+        });
+    }
+  };
+
+  useEffect(() => {
+    verifyUser();
     subscribeToUserChanges(event => {
       const { user, type } = event;
       if (type === 'update') {
@@ -79,7 +87,7 @@ function MyApp({ Component, pageProps }) {
       image1: '/images/damvinhhung.jpg',
       image2: '/images/thuytien.png',
       displacementImage: 'https://picsum.photos/id/237/200/300',
-      imagesRatio: 0.5
+      imagesRatio: 0.6
     });
   });
 

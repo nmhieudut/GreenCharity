@@ -1,4 +1,5 @@
 import {
+  AspectRatio,
   Badge,
   Box,
   Flex,
@@ -31,7 +32,7 @@ export default function CampaignCard(props) {
     }
   } = props;
   const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
-  console.log(props.campaign);
+
   return (
     <Link
       href={`/campaigns/${slug}`}
@@ -45,13 +46,9 @@ export default function CampaignCard(props) {
     >
       <Box className='w-full md:mb-0'>
         <Box className='rounded-sm shadow' overflow='hidden'>
-          <Box
-            backgroundImage={images[0]}
-            backgroundSize='cover'
-            backgroundRepeat='no-repeat'
-            backgroundPosition='center'
-            h={'12rem'}
-          />
+          <AspectRatio maxW='400px' ratio={16 / 9}>
+            <Image src={images[0]} alt={name} objectFit='cover' />
+          </AspectRatio>
 
           <Box className='px-4 pt-4 h-auto md:h-40 lg:h-40'>
             <Flex mb={2} alignItems='center' justify='space-between'>
@@ -68,9 +65,9 @@ export default function CampaignCard(props) {
                 {convertStatusToString(status)}
               </Badge>
               <Flex color={'gray.500'} align='center' justify='end'>
-                <BsClock className='mr-2' size='.75rem' />
+                <BsClock className='mr-1' />
                 {status === 'active' && (
-                  <Text fontSize='sm'>
+                  <Text fontSize='xs'>
                     {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
                   </Text>
                 )}
@@ -82,14 +79,14 @@ export default function CampaignCard(props) {
                 _hover={{
                   color: color.PRIMARY
                 }}
-                fontSize={'lg'}
+                fontSize={'md'}
                 fontFamily={'bold'}
               >
                 {name}
               </Heading>
               <Box className='text-gray-600 leading-relaxed block'>
                 <div
-                  className='text-sm line-clamp'
+                  className='text-xs line-clamp'
                   dangerouslySetInnerHTML={{
                     __html: content.replace(/<img .*?>/g, '')
                   }}

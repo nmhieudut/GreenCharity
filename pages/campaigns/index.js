@@ -32,25 +32,6 @@ export default function Campaigns({ total, campaigns }) {
         <title>Các hoạt động</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      {/* <Box
-        background="url('/images/tuthienlogin.jpeg') no-repeat"
-        backgroundSize='cover'
-      >
-        <Center
-          mx='auto'
-          py={48}
-          style={{ background: 'rgba(128,90,213,0.5)' }}
-        >
-          <Text
-            textAlign='center'
-            fontSize={{ base: '2xl', md: '4xl', lg: '5xl' }}
-            color='white'
-            fontWeight='bold'
-          >
-            Tham gia cộng đồng Green Charity ngay hôm nay!
-          </Text>
-        </Center>
-      </Box> */}
       <Box
         background="url('/images/tuthienlogin.jpeg') no-repeat"
         backgroundSize='cover'
@@ -82,24 +63,21 @@ const CampaignsList = ({ query, status }) => {
   const [page, setPage] = useState(0);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    async function fetchCampaigns() {
-      setLoading(true);
-      try {
-        const data = await CampaignService.fetchCampaigns(
-          query,
-          status,
-          5,
-          page
-        );
-        setCampaigns([...campaigns].concat(data.campaigns));
-      } catch (e) {
-        console.log(e);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchCampaigns() {
+    console.log('fetching');
+    setLoading(true);
+    try {
+      const data = await CampaignService.fetchCampaigns(query, status, 5, page);
+      setCampaigns([...campaigns].concat(data.campaigns));
+    } catch (e) {
+      console.log(e);
+      setError(true);
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
     fetchCampaigns();
   }, [query, status, page]);
   console.log('res', campaigns);
@@ -108,12 +86,13 @@ const CampaignsList = ({ query, status }) => {
       {error && <div>Có gì đó không ổn, thử lại sau</div>}
       {loading && Array.from({ length: 3 }, (_, i) => <CampaignItemSkeleton />)}
       {campaigns && (
-        <Box>
+        <>
           <Text as={'h6'}>Hiển thị {campaigns.length} kết quả</Text>
           <InfiniteScroll
             dataLength={campaigns.length} //This is important field to render the next data
             next={() => setPage(page + 1)}
             loader={<Loading />}
+            hasMore={true}
             endMessage={
               <p style={{ textAlign: 'center' }}>
                 <b>Không còn hoạt động nào</b>
@@ -126,7 +105,7 @@ const CampaignsList = ({ query, status }) => {
               ))}
             </Box>
           </InfiniteScroll>
-        </Box>
+        </>
       )}
       {campaigns?.length === 0 && (
         <Flex justify='center' align='center'>

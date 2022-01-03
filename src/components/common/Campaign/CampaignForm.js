@@ -131,51 +131,48 @@ export function CampaignForm({ isEdited, initialValues }) {
 
   const handleSubmit = async values => {
     setSubmitting(true);
+
     if (!isEdited) {
-      return CampaignService.create(values)
-        .then(res => {
-          toast({
-            title: 'Yêu cầu tạo thành công',
-            description: 'Yêu cầu vận động đã được gửi đi thành công',
-            status: 'success',
-            duration: 3000,
-            isClosable: true
-          });
-        })
-        .catch(err => {
-          toast({
-            title: 'Yêu cầu tạo thất bại',
-            description: `${err.response.data.message}`,
-            status: 'error',
-            duration: 3000,
-            isClosable: true
-          });
-        })
-        .finally(() => {
-          setSubmitting(false);
-        });
-    }
-    return CampaignService.update(initialValues._id, values)
-      .then(res => {
-        toast({
-          title: 'Cập nhật thành công',
+      try {
+        await CampaignService.create(values);
+        return toast({
+          title: 'Yêu cầu tạo thành công',
+          description: 'Yêu cầu vận động đã được gửi đi thành công',
           status: 'success',
           duration: 3000,
           isClosable: true
         });
-      })
-      .catch(err => {
-        toast({
-          title: 'Cập nhật thất bại',
-          description: `${err.response.data.message}`,
+      } catch (e) {
+        return toast({
+          title: 'Yêu cầu tạo thất bại',
+          description: `${e.response.data.message}`,
           status: 'error',
           duration: 3000,
           isClosable: true
         });
-      })
-      .finally(() => {
+      } finally {
         setSubmitting(false);
+      }
+    }
+    try {
+      await CampaignService.update(initialValues._id, values);
+      return toast({
+        title: 'Cập nhật thành công',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
       });
+    } catch (e) {
+      return toast({
+        title: 'Cập nhật thất bại',
+        description: `${e.response.data.message}`,
+        status: 'error',
+        duration: 3000,
+        isClosable: true
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
   return (
     <SectionContainer>
@@ -218,7 +215,6 @@ export function CampaignForm({ isEdited, initialValues }) {
           <Form
             onSubmit={e => {
               e.preventDefault();
-              console.log('isValid', isValid, errors, values);
               handleSubmit(e);
             }}
           >

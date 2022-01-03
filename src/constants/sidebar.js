@@ -41,26 +41,32 @@ export const adminSideBar = [
   },
   {
     title: 'Các hoạt động',
-    icon: MdCampaign
+    icon: MdCampaign,
+    path: 'campaigns'
   },
   {
     title: 'Giao dịch hệ thống',
-    icon: AiOutlineTransaction
+    icon: AiOutlineTransaction,
+    path: 'transactions'
   },
   {
     title: 'Các quyên góp',
-    icon: BiDonateHeart
+    icon: BiDonateHeart,
+    path: 'donations'
   },
   {
     title: 'Các phiên đấu giá',
-    icon: RiAuctionFill
+    icon: RiAuctionFill,
+    path: 'auctions'
   },
   {
     title: 'Tin tức',
-    icon: BsNewspaper
+    icon: BsNewspaper,
+    path: 'news'
   },
   {
     title: 'Cài đặt',
     icon: FiSettings
+    // path: 'settings'
   }
 ];

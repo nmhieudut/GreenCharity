@@ -150,7 +150,6 @@ export default function AuctionDetails({ data }) {
       setLoading(false);
     }
   };
-  console.log(auction);
   return (
     <SectionContainer>
       <Head>

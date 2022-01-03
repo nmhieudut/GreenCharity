@@ -1,6 +1,4 @@
 import {
-  Alert,
-  AlertIcon,
   Box,
   Flex,
   FormControl,
@@ -27,6 +25,7 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
   useToast
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
@@ -57,6 +56,7 @@ function AccountPage(props) {
   const router = useRouter();
   const imageRef = useRef();
   const toast = useToast();
+  const bg = useColorModeValue('white', 'gray.700');
   const [info, setInfo] = useState({
     name: user.name,
     phoneNumber: user.phoneNumber,
@@ -64,7 +64,6 @@ function AccountPage(props) {
   });
   const { name, phoneNumber, dateOfBirth } = info;
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [image, setImage] = useState(null);
 
   const { url, uploadLoading } = useStorage(user.picture, image, 'avatars');
@@ -115,18 +114,21 @@ function AccountPage(props) {
         <title>Tài khoản</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      <Box w={'full'} py={4} mx={'auto'}>
+      <Box w={'full'} mx={'auto'} bg={bg} border='1px solid #d9d9d9'>
         <Tabs
           isFitted
           isLazy
-          mt={8}
+          colorScheme='purple'
           orientation='vertical'
-          border='1px solid #d9d9d9'
-          bg={'white'}
+          minH={'100vh'}
         >
-          <TabList h={'50vh'} w='240px'>
+          <TabList w='240px' borderRight='1px solid #d9d9d9'>
             {meSideBar.map((item, index) => (
-              <Tab key={index} width='full'>
+              <Tab
+                key={index}
+                width='full'
+                _selected={{ color: 'white', bg: color.PRIMARY }}
+              >
                 <Flex w='full' alignItems='center'>
                   <Icon key={index} as={item.icon} fontSize='1rem' />
                   <Text ml={2} fontSize='sm'>
@@ -137,47 +139,68 @@ function AccountPage(props) {
             ))}
           </TabList>
 
-          <TabPanels borderLeft='1px solid #d9d9d9'>
-            <TabPanel>
+          <TabPanels>
+            <TabPanel
+              maxW={'3xl'}
+              mx='auto'
+              display='flex'
+              flexDirection='column'
+              alginItem='center'
+            >
               <Flex
                 flexDir={{ base: 'column', md: 'row' }}
                 justify='space-between'
               >
-                <Box className='flex justify-end relative w-24 h-24'>
-                  {url ? (
-                    <Image
-                      className='absolute h-full w-full rounded-full object-cover object-center'
-                      src={url}
-                      alt={user.name}
-                    />
-                  ) : (
-                    uploadLoading && (
-                      <Spinner
-                        color={color.PRIMARY}
-                        thickness='4px'
-                        speed='0.65s'
-                        emptyColor='gray.200'
-                        size='xl'
+                <Stack
+                  direction={{ base: 'column', md: 'row' }}
+                  spacing={4}
+                  align='center'
+                >
+                  <Box className='flex justify-end relative w-24 h-24'>
+                    {url ? (
+                      <Image
+                        className='absolute h-full w-full rounded-full object-cover object-center'
+                        src={url}
+                        alt={user.name}
                       />
-                    )
-                  )}
-                  <IconButton
-                    colorScheme='purple'
-                    rounded='full'
-                    pos='absolute'
-                    size='sm'
-                    bottom={0}
-                    right={0}
-                    onClick={() => imageRef.current.click()}
-                    icon={<FiEdit3 />}
-                  />
-                  <input
-                    ref={imageRef}
-                    type='file'
-                    className='hidden'
-                    onChange={handleImageChange}
-                  />
-                </Box>
+                    ) : (
+                      uploadLoading && (
+                        <Spinner
+                          color={color.PRIMARY}
+                          thickness='4px'
+                          speed='0.65s'
+                          emptyColor='gray.200'
+                          size='xl'
+                        />
+                      )
+                    )}
+                    <IconButton
+                      colorScheme='purple'
+                      rounded='full'
+                      pos='absolute'
+                      size='sm'
+                      bottom={0}
+                      right={0}
+                      onClick={() => imageRef.current.click()}
+                      icon={<FiEdit3 />}
+                    />
+                    <input
+                      ref={imageRef}
+                      type='file'
+                      className='hidden'
+                      onChange={handleImageChange}
+                    />
+                  </Box>
+                  <Box>
+                    <Text fontWeight={600} fontSize='lg'>
+                      {user.name}
+                    </Text>
+                    <Text as={'i'} fontSize='sm'>
+                      {user.email}
+                    </Text>
+                  </Box>
+                </Stack>
+
                 <Flex flexDir={'column'}>
                   <Text fontSize='lg'>
                     Số dư: <b> {VNDFormatter(user.balance)} VND</b>
@@ -278,14 +301,6 @@ function AccountPage(props) {
                   </InputGroup>
                 </FormControl>
                 <div className='mt-4'></div>
-                {success && (
-                  <Box py={2}>
-                    <Alert status='success'>
-                      <AlertIcon />
-                      Cập nhật tài khoản thành công
-                    </Alert>
-                  </Box>
-                )}
                 <div className='mt-8' isDisable={loading}></div>
                 <Box textAlign='right'>
                   <Button
@@ -321,14 +336,13 @@ export default withAuth(AccountPage);
 
 function RsPassword(props) {
   const { user } = props;
+  const toast = useToast();
   const [passwordPayload, setPasswordPayload] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   });
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const { currentPassword, newPassword, confirmPassword } = passwordPayload;
   const onChange = (key, value) => {
     setPasswordPayload({
@@ -339,10 +353,15 @@ function RsPassword(props) {
   const onSubmit = async e => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-    setSuccess(false);
     if (newPassword !== confirmPassword) {
-      setError('Mật khẩu mới không khớp');
+      toast({
+        position: 'top-right',
+        title: 'Lỗi',
+        description: 'Mật khẩu mới không khớp',
+        status: 'error',
+        duration: 2000,
+        isClosable: true
+      });
       setLoading(false);
       return;
     }
@@ -352,9 +371,23 @@ function RsPassword(props) {
         newPassword
       };
       await UserService.resetPassword(user.id, payload);
-      setSuccess(true);
+      toast({
+        position: 'top-right',
+        title: 'Thành công',
+        description: 'Cập nhật mật khẩu thành công',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
     } catch (e) {
-      setError(e.response.data.message);
+      toast({
+        position: 'top-right',
+        title: 'Lỗi',
+        description: e.response.data.message,
+        status: 'error',
+        duration: 2000,
+        isClosable: true
+      });
     } finally {
       setLoading(false);
     }
@@ -413,19 +446,6 @@ function RsPassword(props) {
           onChange={e => onChange('confirmPassword', e.target.value)}
         />
       </FormControl>
-      <div className='my-8'></div>
-      {error && (
-        <Alert status='error'>
-          <AlertIcon />
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert status='success'>
-          <AlertIcon />
-          Đổi mật khẩu thành công
-        </Alert>
-      )}
       <div className='my-8'></div>
       <Box textAlign='right'>
         <Button colorScheme={'purple'} type='submit' isLoading={loading}>
@@ -588,7 +608,6 @@ function ChargeTab(props) {
     UserService.getTransactions(user.id)
   );
   const { histories } = data || {};
-  console.log(data);
   return (
     <>
       <Head>

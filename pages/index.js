@@ -101,7 +101,7 @@ export default function Home({
         <Box
           w='full'
           h='container.sm'
-          background="url('/images/tuthienlogin.jpeg') no-repeat"
+          background="url('/images/tuthienhero.jpg') no-repeat"
           bgPos='center'
           bgSize='cover'
         >
@@ -146,7 +146,7 @@ export default function Home({
                   mx={{ sm: 'auto', lg: 0 }}
                   color='gray.100'
                 >
-                  là nền tảng giúp bạn dễ dàng chung tay quyên góp tiền cùng
+                  Là nền tảng giúp bạn dễ dàng chung tay quyên góp tiền cùng
                   hàng triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả
                   nước.
                 </chakra.p>
@@ -217,47 +217,6 @@ export default function Home({
             </Stack>
           </Flex>
         </Box>
-        {/* <Box pos='relative' overflow='hidden' bg={bg}>
-          <Box maxW='7xl' mx='auto'>
-            <Box
-              pos='relative'
-              pb={{ base: 8, sm: 16, md: 20, lg: 28, xl: 32 }}
-              maxW={{ lg: '2xl' }}
-              w={{ lg: 'full' }}
-              zIndex={1}
-              bg={bg}
-              h='full'
-              border='solid 1px transparent'
-            >
-              <Icon
-                display={{ base: 'none', lg: 'block' }}
-                position='absolute'
-                right={0}
-                top={0}
-                bottom={0}
-                h='full'
-                w={48}
-                color={bg}
-                transform='translateX(50%)'
-                fill='currentColor'
-                viewBox='0 0 100 100'
-                preserveAspectRatio='none'
-                aria-hidden='true'
-              >
-                <polygon points='50,0 100,0 50,100 0,100' />
-              </Icon>
-              <Box
-                mx='auto'
-                maxW={{ base: '7xl' }}
-                px={{ base: 4, sm: 6, lg: 8 }}
-                mt={{ base: 10, sm: 12, md: 16, lg: 20, xl: 28 }}
-              >
-               
-              </Box>
-            </Box>
-          </Box>
-      
-        </Box> */}
       </SectionContainer>
       <SectionContainer>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={0}>

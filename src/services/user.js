@@ -4,6 +4,8 @@ import Rest from 'src/api';
 export const UserService = {
   getMany: () => _http.get(Rest.user),
 
+  getUser: id => _http.get(Rest.admin + '/user/' + id),
+
   update: (userId, payload) => _http.put(`${Rest.user}/${userId}`, payload),
 
   resetPassword: (userId, payload) =>

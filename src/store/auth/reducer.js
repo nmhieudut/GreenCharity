@@ -1,4 +1,4 @@
-import { actionTypes } from "./types";
+import { actionTypes } from './types';
 
 const initialState = {
   loading: false,
@@ -8,7 +8,6 @@ const initialState = {
 };
 
 export default function authReducer(state = initialState, action) {
-  console.log("action: ", action);
   switch (action.type) {
     case actionTypes.LOG_IN:
       return { ...state, loading: true, logInError: null };

@@ -39,7 +39,6 @@ export default function Auctions() {
     }
     fetchAuctions();
     subscribeToAuctionChanges(event => {
-      console.log('====update');
       const { auction, type } = event;
       if (type === 'update') {
         return setAuctions(a => [

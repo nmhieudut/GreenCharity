@@ -5,7 +5,13 @@ module.exports = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')]
   },
-  serverRuntimeConfig: {
-    server_url: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080'
+  async redirects() {
+    return [
+      {
+        source: '/admin',
+        destination: '/admin/users',
+        permanent: true
+      }
+    ];
   }
 };
