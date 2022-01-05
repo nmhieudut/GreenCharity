@@ -31,7 +31,7 @@ const SectionContainer = dynamic(() =>
   import('src/components/common/SectionContainer')
 );
 const CampaignCard = dynamic(() =>
-  import('src/components/common/Campaign/CampaignCard')
+  import('src/components/common/core/Campaign/CampaignCard')
 );
 
 export default function Home({
@@ -100,12 +100,13 @@ export default function Home({
       >
         <Box
           w='full'
-          h='container.sm'
+          h='100vh'
           background="url('/images/tuthienhero.jpg') no-repeat"
           bgPos='center'
           bgSize='cover'
         >
           <Flex
+            px={4}
             align='center'
             pos='relative'
             justify='center'
@@ -178,10 +179,10 @@ export default function Home({
                     <Text color={'white'}>Đồng được quyên góp</Text>
                   </Box>
                 </Flex>
-                <Box
+                <Stack
+                  spacing={6}
                   mt={{ base: 5, sm: 8 }}
-                  display={{ sm: 'flex' }}
-                  justifyContent={{ sm: 'center', lg: 'start' }}
+                  direction={{ base: 'column', md: 'row' }}
                   fontWeight='extrabold'
                   fontFamily='fantasy'
                 >
@@ -212,7 +213,7 @@ export default function Home({
                       Bắt đầu ngay
                     </Button>
                   </Link>
-                </Box>
+                </Stack>
               </Box>
             </Stack>
           </Flex>

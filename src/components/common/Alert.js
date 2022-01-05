@@ -1,27 +1,73 @@
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  CloseButton
-} from "@chakra-ui/react";
-import React, { useState } from "react";
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Box,
+  useDisclosure
+} from '@chakra-ui/react';
+import React, { useState, useRef } from 'react';
+import Button from './Button';
 
-export default function CustomAlert({ label, ...rest }) {
-  const [visible, setVisible] = useState(true);
+export default function CustomAlertModal({
+  modalHeader,
+  modalBody,
+  handleOk,
+  children
+}) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [loading, setLoading] = useState(false);
+  const cancelRef = React.useRef();
+  const onOk = async () => {
+    setLoading(true);
+    await handleOk();
+    setLoading(false);
+    onClose();
+  };
+
   return (
     <>
-      {visible && (
-        <Alert {...rest}>
-          <AlertIcon />
-          <AlertDescription>{label}</AlertDescription>
-          <CloseButton
-            onClick={() => setVisible(false)}
-            position="absolute"
-            right="8px"
-            top="8px"
-          />
-        </Alert>
-      )}
+      <Box onClick={onOpen}>{children}</Box>
+      <AlertDialog
+        motionPreset='slideInBottom'
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        isOpen={isOpen}
+        isCentered
+      >
+        <AlertDialogOverlay />
+
+        <AlertDialogContent>
+          <AlertDialogHeader>{modalHeader}</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>{modalBody}</AlertDialogBody>
+          <AlertDialogFooter>
+            <Button
+              noLinear
+              isDisabled={loading}
+              isLoading={loading}
+              ref={cancelRef}
+              onClick={onClose}
+            >
+              Hủy
+            </Button>
+            {handleOk && (
+              <Button
+                isDisabled={loading}
+                isLoading={loading}
+                colorScheme='purple'
+                onClick={onOk}
+                ml={3}
+              >
+                Chấp nhận
+              </Button>
+            )}
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

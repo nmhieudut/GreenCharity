@@ -10,8 +10,8 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useQuery } from 'react-query';
-import CampaignItem from 'src/components/common/Campaign/CampaignItem';
-import CampaignItemSkeleton from 'src/components/common/Campaign/CampaignItemSkeleton';
+import CampaignItem from 'src/components/common/core/Campaign/CampaignItem';
+import CampaignItemSkeleton from 'src/components/common/core/Campaign/CampaignItemSkeleton';
 import Search from 'src/components/common/Search';
 import SectionContainer from 'src/components/common/SectionContainer';
 import Loading from 'src/components/common/Spinner/Loading';
@@ -62,13 +62,18 @@ const CampaignsList = ({ query, status }) => {
   const [campaigns, setCampaigns] = useState([]);
   const [page, setPage] = useState(0);
   const [error, setError] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
 
   async function fetchCampaigns() {
     console.log('fetching');
     setLoading(true);
     try {
       const data = await CampaignService.fetchCampaigns(query, status, 5, page);
-      setCampaigns([...campaigns].concat(data.campaigns));
+      if (data.campaigns.length === 0) {
+        setHasMore(false);
+        return;
+      }
+      return setCampaigns([...campaigns].concat(data.campaigns));
     } catch (e) {
       console.log(e);
       setError(true);
@@ -89,10 +94,10 @@ const CampaignsList = ({ query, status }) => {
         <>
           <Text as={'h6'}>Hiển thị {campaigns.length} kết quả</Text>
           <InfiniteScroll
-            dataLength={campaigns.length} //This is important field to render the next data
+            dataLength={campaigns.length}
             next={() => setPage(page + 1)}
             loader={<Loading />}
-            hasMore={true}
+            hasMore={hasMore}
             endMessage={
               <p style={{ textAlign: 'center' }}>
                 <b>Không còn hoạt động nào</b>

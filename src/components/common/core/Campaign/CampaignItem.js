@@ -14,7 +14,7 @@ import { color } from 'src/constants/color';
 import { DateUtils } from 'src/utils/date';
 import { VNDFormatter } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
-import ProgressBar from '../Progress/ProgressBar';
+import ProgressBar from '../../Progress/ProgressBar';
 
 export default function CampaignItem({
   data: {

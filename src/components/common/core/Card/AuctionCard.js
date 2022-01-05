@@ -16,7 +16,7 @@ import useCountdown from 'src/hooks/useCountdown';
 import { DateUtils } from 'src/utils/date';
 import { VNDFormatter } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
-import Button from '../Button';
+import Button from '../../Button';
 
 const AuctionCard = ({ auction }) => {
   const {

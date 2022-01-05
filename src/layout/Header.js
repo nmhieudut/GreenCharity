@@ -19,12 +19,13 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
+  useOutsideClick,
   VisuallyHidden
 } from '@chakra-ui/react';
 import Hamburger from 'hamburger-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { AiFillBell } from 'react-icons/ai';
 import { BsBrightnessHigh } from 'react-icons/bs';
 import {
@@ -51,31 +52,22 @@ import { storage } from 'src/utils/storage';
 
 export default function Header() {
   const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.currentUser);
+  const router = useRouter();
+  const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue('white', 'gray.800');
   const bg2 = useColorModeValue('gray.50', 'gray.700');
   const textColor = useColorModeValue(color.primary, color.primary);
-  const { colorMode, toggleColorMode } = useColorMode();
   const borderColor = useColorModeValue(
     '1px solid rgba(229,231,235,.5)',
     '1px solid rgb(31, 41, 55)'
   );
-  const user = useSelector(state => state.auth.currentUser);
   const [showLinks, setShowLinks] = useState(false);
   const wrapperRef = useRef(null);
-  const router = useRouter();
-  function handleClickOutside(event) {
-    if (!wrapperRef.current.contains(event.target)) {
-      setShowLinks(false);
-    }
-  }
-  useEffect(() => {
-    if (showLinks) {
-      document.addEventListener('click', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [wrapperRef, showLinks]);
+  useOutsideClick({
+    ref: wrapperRef,
+    handler: () => setShowLinks(false)
+  });
 
   const onLogout = () => {
     router.reload('/');

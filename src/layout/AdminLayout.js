@@ -18,11 +18,11 @@ import { adminSideBar } from 'src/constants/sidebar';
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const sidebar = useDisclosure();
-  const integrations = useDisclosure();
   const { pathname } = router;
 
   const NavItem = props => {
-    const { icon, children, ...rest } = props;
+    const { icon, children, path, ...rest } = props;
+
     return (
       <Flex
         align='center'
@@ -30,7 +30,14 @@ export default function AdminLayout({ children }) {
         pl='4'
         py='3'
         cursor='pointer'
-        color='white'
+        bg={
+          pathname.includes(path) && useColorModeValue('gray.100', 'gray.900')
+        }
+        color={
+          pathname.includes(path)
+            ? useColorModeValue('gray.900', 'gray.200')
+            : useColorModeValue('white', 'gray.200')
+        }
         _hover={{
           bg: useColorModeValue('gray.100', 'gray.900'),
           color: useColorModeValue('gray.900', 'gray.200')
@@ -55,7 +62,7 @@ export default function AdminLayout({ children }) {
       zIndex='30'
       h='full'
       py='10'
-      overflowX='hidden'
+      overflowX='scroll'
       overflowY='auto'
       bg={color.PRIMARY}
       borderRightWidth='1px'
@@ -73,6 +80,7 @@ export default function AdminLayout({ children }) {
             key={item.title}
             onClick={() => router.push(`${item.path}`)}
             icon={item.icon}
+            path={item.path}
           >
             {item.title}
           </NavItem>

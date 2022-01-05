@@ -42,9 +42,9 @@ import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import Slider from 'react-slick';
 import Button from 'src/components/common/Button';
-import { CampaignForm } from 'src/components/common/Campaign/CampaignForm';
-import CommentItem from 'src/components/common/Campaign/CommentItem';
-import DonatorItem from 'src/components/common/Card/DonatorItem';
+import { CampaignForm } from 'src/components/common/core/Campaign/CampaignForm';
+import CommentItem from 'src/components/common/core/Campaign/CommentItem';
+import DonatorItem from 'src/components/common/core/Card/DonatorItem';
 import DividerWithText from 'src/components/common/DividerWithText';
 import NeedLogin from 'src/components/common/NeedLogin';
 import ProgressBar from 'src/components/common/Progress/ProgressBar';
@@ -155,7 +155,9 @@ export default function Detail({ campaign }) {
       });
       onOpen();
       toast({
-        title: `Hihi, không có gì.`,
+        title: `Đã quyên góp thành công số tiền ${VNDFormatter(
+          wished_amount
+        )}. Cảm ơn tấm lòng đại bác của bạn!`,
         status: 'success',
         isClosable: true
       });

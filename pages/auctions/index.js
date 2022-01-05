@@ -12,8 +12,8 @@ import React, { useEffect, useState } from 'react';
 import { RiAuctionFill } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
-import CardSkeleton from 'src/components/common/Campaign/CardSkeleton';
-import AuctionCard from 'src/components/common/Card/AuctionCard';
+import CardSkeleton from 'src/components/common/core/Campaign/CardSkeleton';
+import AuctionCard from 'src/components/common/core/Card/AuctionCard';
 import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
 import { AuctionService } from 'src/services/auction';
@@ -112,6 +112,11 @@ export default function Auctions() {
           </Button>
         </Flex>
         <Flex className='flex-wrap mt-14 mb-10' width='100%'>
+          {auctions.length === 0 && !loading && (
+            <div>
+              <Text>Hiện tại chưa có phiên đấu giá nào đang diễn ra.</Text>
+            </div>
+          )}
           {loading &&
             Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
           {!loading &&

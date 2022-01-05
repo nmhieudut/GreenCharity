@@ -13,7 +13,6 @@
     "@chakra-ui/react": "^1.6.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@hookform/devtools": "^4.0.1",
     "@tailwindcss/line-clamp": "^0.2.2",
     "axios": "^0.22.0",
     "date-fns": "^2.24.0",

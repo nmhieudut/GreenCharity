@@ -39,9 +39,9 @@ const ListHeader = ({ children }) => {
   );
 };
 
-export default function LargeWithNewsletter() {
+export default function Footer() {
   return (
-    <SectionContainer hasBg>
+    <SectionContainer hasBg position='relative' zIndex='100'>
       <SimpleGrid
         templateColumns={{ sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
         spacing={8}

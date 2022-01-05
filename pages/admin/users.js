@@ -74,8 +74,10 @@ function UserItem({
     picture,
     balance,
     phoneNumber,
+    role,
     dateOfBirth,
-    isActive
+    isActive,
+    createdAt
   } = userData;
 
   const { url, uploadLoading } = useStorage(picture, image, 'avatars');
@@ -104,26 +106,28 @@ function UserItem({
         bg: bg
       }}
     >
-      <Td>
+      <Td py={0}>
         <Stack direction='row' align='center'>
-          <Avatar name={user.name} size='sm' src={user.picture} />
+          <Avatar name={name} size='sm' src={picture} />
           <Flex direction='column'>
             <Heading as='h3' size='sm'>
-              {user.name}
+              {name}
             </Heading>
             <Text as='i' size='xs'>
-              {user.email}
+              {email}
             </Text>
           </Flex>
         </Stack>
       </Td>
-      <Td>{user.role}</Td>
-      <Td>{format(new Date(user.createdAt), 'dd/MM/yyyy')}</Td>
-      <Td isNumeric>{VNDFormatter(user.balance)}</Td>
+      <Td>
+        <Badge>{role === 'user' ? 'Thành viên' : 'Khác'}</Badge>
+      </Td>
+      <Td>{format(new Date(createdAt), 'dd/MM/yyyy')}</Td>
+      <Td isNumeric>{VNDFormatter(balance)}</Td>
       <Td>
         <Flex align='center' justify='space-between'>
-          <Badge colorScheme={user.isActive ? 'green' : 'red'}>
-            {user.isActive ? 'Bình thường' : 'Bị khóa'}
+          <Badge colorScheme={isActive ? 'green' : 'red'}>
+            {isActive ? 'Bình thường' : 'Bị khóa'}
           </Badge>
           <Menu ml='auto'>
             <MenuButton as={IconButton} icon={<BsThreeDotsVertical />} />
@@ -133,15 +137,11 @@ function UserItem({
               </MenuItem>
               <MenuItem
                 icon={
-                  user.isActive ? (
-                    <AiOutlineCloseCircle />
-                  ) : (
-                    <AiOutlineCheckCircle />
-                  )
+                  isActive ? <AiOutlineCloseCircle /> : <AiOutlineCheckCircle />
                 }
                 onClick={() => onToggleActive(_id)}
               >
-                {user.isActive ? 'Vô hiệu hóa' : ' Kích hoạt'}
+                {isActive ? 'Vô hiệu hóa' : ' Kích hoạt'}
               </MenuItem>
 
               <MenuDivider />
@@ -377,11 +377,11 @@ function Users() {
         Quản lí người dùng
       </Heading>
 
-      <Table size='sm' shadow='xl' rounded='md' overflow='hidden'>
+      <Table shadow='xl' rounded='md' overflow='hidden'>
         <Thead bg={bg}>
           <Tr>
             <Th>Tên / Email</Th>
-            <Th>Phân quyền</Th>
+            <Th>Tư cách</Th>
             <Th>Tham gia vào</Th>
             <Th isNumeric>Số dư (VND)</Th>
             <Th>Tình trạng</Th>
@@ -389,9 +389,11 @@ function Users() {
         </Thead>
         <Tbody>
           {isLoading && (
-            <Center>
-              <Loading />
-            </Center>
+            <Tr>
+              <Td colSpan={5}>
+                <Spinner />
+              </Td>
+            </Tr>
           )}
           {users?.map(user => (
             <UserItem

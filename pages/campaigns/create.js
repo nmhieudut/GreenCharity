@@ -1,6 +1,8 @@
+import { Heading, Text } from '@chakra-ui/react';
 import Head from 'next/head';
 import React from 'react';
-import { CampaignForm } from 'src/components/common/Campaign/CampaignForm';
+import { CampaignForm } from 'src/components/common/core/Campaign/CampaignForm';
+import SectionContainer from 'src/components/common/SectionContainer';
 import withAuth from 'src/HOCs/withAuth';
 
 function CreateCampaign() {
@@ -10,7 +12,20 @@ function CreateCampaign() {
         <title>Tạo hoạt động mới</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      <CampaignForm />
+      <SectionContainer>
+        <Heading
+          textAlign='center'
+          fontSize={{ base: '3xl', sm: '4xl', md: '5xl' }}
+          lineHeight={'110%'}
+          color={color.PRIMARY}
+        >
+          {isEdited ? 'Chỉnh sửa hoạt động' : 'Tạo hoạt động từ thiện mới'}
+        </Heading>
+        <Text my={8} textAlign={'center'} fontSize={'lg'} color={'gray.500'}>
+          Điền vào form dưới để tạo 1 hoạt động mới
+        </Text>
+        <CampaignForm />
+      </SectionContainer>
     </>
   );
 }
