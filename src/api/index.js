@@ -1,6 +1,7 @@
 const Rest = {
   // auth services
   login: '/auth/login',
+  logout: '/auth/logout',
   loginGG: '/auth/google',
   loginFB: '/auth/facebook',
   register: '/auth/register',

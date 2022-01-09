@@ -56,17 +56,12 @@ export default function AdminLayout({ children }) {
   const SidebarContent = props => (
     <Box
       as='nav'
-      pos='fixed'
-      top='110'
-      left='0'
-      zIndex='30'
-      h='full'
+      minH='100vh'
       py='10'
-      overflowX='scroll'
       overflowY='auto'
       bg={color.PRIMARY}
       borderRightWidth='1px'
-      w='48'
+      minW='48'
       {...props}
     >
       <Flex
@@ -99,7 +94,6 @@ export default function AdminLayout({ children }) {
         <title>Quản lí</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      <SidebarContent display={{ base: 'none', md: 'unset' }} />
       <IconButton
         aria-label='Menu'
         display={{ base: 'inline-flex', md: 'none' }}
@@ -117,11 +111,14 @@ export default function AdminLayout({ children }) {
           <SidebarContent w='full' borderRight='none' />
         </DrawerContent>
       </Drawer>
-      <Box ml={{ base: 0, md: 48 }} transition='.3s ease'>
-        <Box as='main' p='4'>
-          {children}
+      <Flex>
+        <SidebarContent display={{ base: 'none', md: 'unset' }} />
+        <Box transition='.3s ease' w='full'>
+          <Box as='main' p='4'>
+            {children}
+          </Box>
         </Box>
-      </Box>
+      </Flex>
     </Box>
   );
 }

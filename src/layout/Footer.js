@@ -41,7 +41,7 @@ const ListHeader = ({ children }) => {
 
 export default function Footer() {
   return (
-    <SectionContainer hasBg position='relative' zIndex='100'>
+    <SectionContainer hasBg position='relative' marginTop={'auto'} zIndex='50'>
       <SimpleGrid
         templateColumns={{ sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
         spacing={8}

@@ -53,15 +53,12 @@ function MyApp({ Component, pageProps }) {
   const verifyUser = async () => {
     if (storage.getToken() !== '') {
       dispatch(AuthActions.setCurrentUserAction());
-      dispatch(ModalActions.setModalOn());
-      await AuthService.getInfo()
-        .then(res => {
-          dispatch(AuthActions.setCurrentUserSuccessAction(res.data));
-        })
-        .catch(e => dispatch(AuthActions.setCurrentUserFailedAction()))
-        .finally(() => {
-          dispatch(ModalActions.setModalOff());
-        });
+      try {
+        const res = await AuthService.getInfo();
+        dispatch(AuthActions.setCurrentUserSuccessAction(res.data));
+      } catch {
+        dispatch(AuthActions.setCurrentUserFailedAction());
+      }
     }
   };
 

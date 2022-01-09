@@ -1,20 +1,14 @@
 import {
   Avatar,
   Badge,
-  Center,
   Drawer,
-  DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   Flex,
-  FormControl,
-  FormLabel,
   Heading,
   IconButton,
-  Input,
   Menu,
   MenuButton,
   MenuDivider,
@@ -41,31 +35,23 @@ import {
   AiOutlineCloseCircle,
   AiOutlineDelete
 } from 'react-icons/ai';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import { BsPlus, BsThreeDotsVertical } from 'react-icons/bs';
 import { FiEdit } from 'react-icons/fi';
 import { useQuery } from 'react-query';
 import Button from 'src/components/common/Button';
-import Loading from 'src/components/common/Spinner/Loading';
+import UserForm from 'src/components/common/core/User/UserForm';
+import CustomDrawer from 'src/components/common/CustomDrawer';
 import { color } from 'src/constants/color';
 import withAdmin from 'src/HOCs/withAdmin';
-import { useStorage } from 'src/hooks/useStorage';
 import AdminLayout from 'src/layout/AdminLayout';
 import { AdminService } from 'src/services/admin';
 import { VNDFormatter } from 'src/utils/number';
 
-function UserItem({
-  user,
-  onToggleActive,
-  onUpdateUser,
-  onDeleteUser,
-  loading
-}) {
+function UserItem({ user, onToggleActive, onDeleteUser }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef();
-  const imageRef = useRef();
   const bg = useColorModeValue('gray.100', 'gray.800');
   const [userData, setUserData] = useState(user);
-  const [image, setImage] = useState(null);
 
   const {
     _id,
@@ -80,25 +66,6 @@ function UserItem({
     createdAt
   } = userData;
 
-  const { url, uploadLoading } = useStorage(picture, image, 'avatars');
-
-  const handleImageChange = e => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  };
-  const onChange = e => {
-    setUserData({
-      ...userData,
-      [e.target.id]: e.target.value
-    });
-  };
-
-  const onUpdateInfo = async () => {
-    await onUpdateUser(_id, Object.assign(userData, { picture: url }));
-    onClose();
-  };
-  console.log('----', userData);
   return (
     <Tr
       cursor='pointer'
@@ -106,7 +73,7 @@ function UserItem({
         bg: bg
       }}
     >
-      <Td py={0}>
+      <Td>
         <Stack direction='row' align='center'>
           <Avatar name={name} size='sm' src={picture} />
           <Flex direction='column'>
@@ -166,115 +133,7 @@ function UserItem({
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth='1px'>{name}</DrawerHeader>
-
-          <DrawerBody>
-            <Stack spacing='24px'>
-              <FormControl id='userName'>
-                <Stack direction={['column', 'row']} spacing={6}>
-                  <Center>
-                    {url ? (
-                      <Avatar size='xl' src={url} />
-                    ) : (
-                      uploadLoading && (
-                        <Spinner
-                          color={color.PRIMARY}
-                          thickness='4px'
-                          speed='0.65s'
-                          emptyColor='gray.200'
-                          size='xl'
-                        />
-                      )
-                    )}
-                  </Center>
-                  <Center w='full'>
-                    <Button
-                      w='full'
-                      onClick={() => imageRef.current.click()}
-                      colorScheme='purple'
-                      color='white'
-                      variant='solid'
-                    >
-                      Đổi hình đại diện
-                    </Button>
-                    <input
-                      ref={imageRef}
-                      type='file'
-                      className='hidden'
-                      onChange={handleImageChange}
-                    />
-                  </Center>
-                </Stack>
-              </FormControl>
-              <FormControl id='name' isRequired>
-                <FormLabel htmlFor='name'>Tên</FormLabel>
-                <Input
-                  ref={firstField}
-                  name='name'
-                  id='name'
-                  value={name}
-                  onChange={e => onChange(e)}
-                />
-              </FormControl>
-              <FormControl id='email'>
-                <FormLabel htmlFor='email'>Email</FormLabel>
-                <Input value={email} readOnly id='email' />
-              </FormControl>
-              <FormControl id='password' isRequired>
-                <FormLabel htmlFor='password'>Mật khẩu</FormLabel>
-                <Input
-                  onChange={e => onChange(e)}
-                  type='password'
-                  name='password'
-                  id='password'
-                  placeholder='Nhập mật khẩu mới'
-                />
-              </FormControl>
-              <FormControl id='balance' isRequired>
-                <FormLabel htmlFor='balance'>Số dư</FormLabel>
-                <Input
-                  onChange={e => onChange(e)}
-                  value={balance}
-                  type='number'
-                  name='balance'
-                  id='balance'
-                />
-              </FormControl>
-              <FormControl id='phoneNumber' isRequired>
-                <FormLabel htmlFor='phoneNumber'>Số điện thoại</FormLabel>
-                <Input
-                  onChange={e => onChange(e)}
-                  value={phoneNumber}
-                  type='number'
-                  name='phoneNumber'
-                  id='phoneNumber'
-                />
-              </FormControl>
-            </Stack>
-          </DrawerBody>
-
-          <DrawerFooter borderTopWidth='1px'>
-            <Stack spacing={6} direction={['column', 'row']}>
-              <Button
-                noLinear
-                variant='solid'
-                disabled={loading}
-                isLoading={loading}
-                onClick={onClose}
-              >
-                Hủy bỏ
-              </Button>
-              <Button
-                colorScheme='purple'
-                color='white'
-                variant='solid'
-                disabled={loading}
-                isLoading={loading}
-                onClick={onUpdateInfo}
-              >
-                Cập nhật
-              </Button>
-            </Stack>
-          </DrawerFooter>
+          <UserForm isEdited initialValue={userData} />
         </DrawerContent>
       </Drawer>
     </Tr>
@@ -315,33 +174,6 @@ function Users() {
     }
   };
 
-  const onUpdateUser = async (id, payload) => {
-    setLoading(true);
-    try {
-      await AdminService.updateUser(id, payload);
-      toast({
-        position: 'top-right',
-        title: 'Thành công',
-        description: 'Cập nhật tài khoản thành công',
-        status: 'success',
-        duration: 9000,
-        isClosable: true
-      });
-      router.replace(router.asPath);
-    } catch (e) {
-      toast({
-        position: 'top-right',
-        title: 'Lỗi',
-        description: e.response.data.message,
-        status: 'error',
-        duration: 9000,
-        isClosable: true
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const onDeleteUser = async id => {
     try {
       await AdminService.deleteUser(id);
@@ -368,14 +200,36 @@ function Users() {
 
   return (
     <AdminLayout>
-      <Heading
-        fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
-        lineHeight={'110%'}
-        color={color.PRIMARY}
+      <Stack
+        direction={['column', 'row']}
+        spacing={4}
+        align='center'
+        justify='space-between'
         mb={4}
       >
-        Quản lí người dùng
-      </Heading>
+        <Heading
+          fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
+          lineHeight={'110%'}
+          color={color.PRIMARY}
+          mb={4}
+        >
+          Quản lí người dùng
+        </Heading>
+        <CustomDrawer
+          showModalButtonText={
+            <Button
+              ml='auto'
+              noLinear
+              leftIcon={<BsPlus />}
+              colorScheme='purple'
+            >
+              Thêm mới
+            </Button>
+          }
+          drawerHeader='Thêm mới hoạt động'
+          drawerBody={<UserForm />}
+        ></CustomDrawer>
+      </Stack>
 
       <Table shadow='xl' rounded='md' overflow='hidden'>
         <Thead bg={bg}>
@@ -399,8 +253,6 @@ function Users() {
             <UserItem
               key={user._id}
               user={user}
-              loading={loading}
-              onUpdateUser={onUpdateUser}
               onToggleActive={handleToggleActive}
               onDeleteUser={onDeleteUser}
             />

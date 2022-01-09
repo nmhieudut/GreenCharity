@@ -14,7 +14,6 @@ const theme = extendTheme(CalendarDefaultTheme, {
         }
       },
       button: {
-        fontFamily: 'Open Sans',
         fontWeight: 400
       }
     }

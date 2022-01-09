@@ -108,7 +108,7 @@ function CampaignRow({
               {status === 'active' && (
                 <>
                   <CustomDrawer
-                    size='md'
+                    size='lg'
                     showModalButtonText={
                       <MenuItem icon={<FiEdit />}>Sửa</MenuItem>
                     }

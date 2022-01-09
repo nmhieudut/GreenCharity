@@ -1,4 +1,9 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   chakra,
   Flex,
@@ -25,6 +30,7 @@ import { useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
 import Loading from 'src/components/common/Spinner/Loading';
 import { color } from 'src/constants/color';
+import { qa } from 'src/constants/qa';
 import { CampaignService } from 'src/services/campaign';
 
 const SectionContainer = dynamic(() =>
@@ -190,7 +196,6 @@ export default function Home({
                     <Button
                       w={'full'}
                       size='md'
-                      rounded={'full'}
                       px={6}
                       colorScheme={'purple'}
                       bg={color.PRIMARY}
@@ -206,7 +211,6 @@ export default function Home({
                       noLinear
                       size='md'
                       colorScheme={'purple'}
-                      rounded={'full'}
                       px={6}
                       variant='outline'
                     >
@@ -273,67 +277,7 @@ export default function Home({
           </Flex>
         </SimpleGrid>
       </SectionContainer>
-      <SectionContainer hasBg>
-        <Flex w='auto' justifyContent='center' alignItems='center'>
-          <Box px={8} py={20} mx='auto'>
-            <Heading
-              textAlign='center'
-              fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
-              lineHeight={'110%'}
-              color={color.PRIMARY}
-              mb={14}
-            >
-              Vì sao lại chọn Green Charity?
-            </Heading>
-            <SimpleGrid
-              columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-              spacingX={{ base: 16, lg: 24 }}
-              spacingY={20}
-              mt={6}
-            >
-              <Feature
-                color='yellow'
-                title='Thao tác nhanh, dễ sử dụng'
-                icon={<GiClick />}
-              >
-                Dễ dàng kêu gọi, quyên góp chỉ với vài thao tác cơ bản.
-              </Feature>
-
-              <Feature
-                color='pink'
-                title='Bạn có thể quyên góp cho nhiều người'
-                icon={<FaDonate />}
-              >
-                Bạn có thể quyên góp cho nhiều người, nhưng chỉ cần chọn một
-                người để quyên góp. Và nếu bạn không thể chọn được người để
-                quyên góp, bạn có thể quyên góp cho chính mình.
-              </Feature>
-
-              <Feature
-                color='green'
-                title='Quyên góp trực tuyến'
-                icon={<AiOutlineTransaction />}
-              >
-                Bạn không thể quyên góp trực tiếp cho người kêu gọi ? Đừng lo
-                bạn có thể quyên góp thông qua nạp tiền vào số dư của bạn và
-                quyên góp.
-              </Feature>
-              <Feature
-                color='blue'
-                title='Đội ngũ hỗ trợ nhiệt tình'
-                icon={<FcOnlineSupport />}
-              >
-                Đội ngũ hỗ trợ nhiệt tình và chuyên nghiệp sẽ giúp bạn đạt được
-                mục tiêu của bạn. Bạn có thể liên hệ với chúng tôi qua số điện
-                thoại, email hoặc thông qua Facebook messenger trên màn hình.
-                Chúng tôi sẽ phản hồi bạn trong vòng nhiều nhất 24h kể từ khi
-                nhận được yêu cầu.
-              </Feature>
-            </SimpleGrid>
-          </Box>
-        </Flex>
-      </SectionContainer>
-      <SectionContainer id='get-started'>
+      <SectionContainer id='get-started' hasBg>
         <Heading
           textAlign='center'
           fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
@@ -425,7 +369,7 @@ export default function Home({
           </Flex>
         </Grid>
       </SectionContainer>
-      <SectionContainer id='current-campaigns' hasBg>
+      <SectionContainer id='current-campaigns'>
         <Heading
           textAlign='center'
           fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
@@ -451,6 +395,66 @@ export default function Home({
           >
             Xem thêm
           </Button>
+        </Flex>
+      </SectionContainer>
+      <SectionContainer hasBg>
+        <Flex w='auto' justifyContent='center' alignItems='center'>
+          <Box px={8} py={20} mx='auto'>
+            <Heading
+              textAlign='center'
+              fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
+              lineHeight={'110%'}
+              color={color.PRIMARY}
+              mb={14}
+            >
+              Vì sao lại chọn Green Charity?
+            </Heading>
+            <SimpleGrid
+              columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+              spacingX={{ base: 16, lg: 24 }}
+              spacingY={20}
+              mt={6}
+            >
+              <Feature
+                color='yellow'
+                title='Thao tác nhanh, dễ sử dụng'
+                icon={<GiClick />}
+              >
+                Dễ dàng kêu gọi, quyên góp chỉ với vài thao tác cơ bản.
+              </Feature>
+
+              <Feature
+                color='pink'
+                title='Bạn có thể quyên góp cho nhiều người'
+                icon={<FaDonate />}
+              >
+                Bạn có thể quyên góp cho nhiều người, nhưng chỉ cần chọn một
+                người để quyên góp. Và nếu bạn không thể chọn được người để
+                quyên góp, bạn có thể quyên góp cho chính mình.
+              </Feature>
+
+              <Feature
+                color='green'
+                title='Quyên góp trực tuyến'
+                icon={<AiOutlineTransaction />}
+              >
+                Bạn không thể quyên góp trực tiếp cho người kêu gọi ? Đừng lo
+                bạn có thể quyên góp thông qua nạp tiền vào số dư của bạn và
+                quyên góp.
+              </Feature>
+              <Feature
+                color='blue'
+                title='Đội ngũ hỗ trợ nhiệt tình'
+                icon={<FcOnlineSupport />}
+              >
+                Đội ngũ hỗ trợ nhiệt tình và chuyên nghiệp sẽ giúp bạn đạt được
+                mục tiêu của bạn. Bạn có thể liên hệ với chúng tôi qua số điện
+                thoại, email hoặc thông qua Facebook messenger trên màn hình.
+                Chúng tôi sẽ phản hồi bạn trong vòng nhiều nhất 24h kể từ khi
+                nhận được yêu cầu.
+              </Feature>
+            </SimpleGrid>
+          </Box>
         </Flex>
       </SectionContainer>
       <SectionContainer>
@@ -501,6 +505,46 @@ export default function Home({
               </h3>
             </div>
           </Box>
+        </Flex>
+      </SectionContainer>
+      <SectionContainer hasBg></SectionContainer>
+      <SectionContainer id='qanda'>
+        <Heading
+          textAlign='center'
+          fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
+          lineHeight={'110%'}
+          color={color.PRIMARY}
+        >
+          Câu hỏi thường gặp
+        </Heading>
+        <Flex mt={14} w='full'>
+          <Accordion allowToggle w='full' colorScheme='purple'>
+            {qa.map((item, index) => (
+              <AccordionItem
+                key={index}
+                py={2}
+                borderBottom='.5px solid lightgray'
+                borderTop='none'
+              >
+                <h2>
+                  <AccordionButton>
+                    <Box flex='1' textAlign='left'>
+                      <Text
+                        fontSize='xl'
+                        color={color.PRIMARY}
+                        fontWeight={600}
+                      >
+                        {item.question}
+                      </Text>
+                    </Box>
+
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>{item.answer}</AccordionPanel>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </Flex>
       </SectionContainer>
     </>

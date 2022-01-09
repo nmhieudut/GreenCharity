@@ -1,4 +1,4 @@
-import { actionTypes } from "./types";
+import { actionTypes } from './types';
 export const AuthActions = {
   loginAction() {
     return {
@@ -35,10 +35,6 @@ export const AuthActions = {
       type: actionTypes.SIGN_UP_FAILED,
       payload
     };
-  },
-
-  signOutAction() {
-    return { type: actionTypes.SIGN_OUT };
   },
 
   setCurrentUserAction() {

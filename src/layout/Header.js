@@ -14,6 +14,8 @@ import {
   MenuGroup,
   MenuItem,
   MenuList,
+  Skeleton,
+  SkeletonCircle,
   Stack,
   Switch,
   Text,
@@ -49,11 +51,13 @@ import { AuthActions } from 'src/store/auth/action';
 import removeCookie from 'src/utils/cookie';
 import { VNDFormatter } from 'src/utils/number';
 import { storage } from 'src/utils/storage';
+import { AuthService } from 'src/services/auth';
 
 export default function Header() {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.auth.currentUser);
   const router = useRouter();
+  const user = useSelector(state => state.auth.currentUser);
+  const loadingUser = useSelector(state => state.auth.loading);
   const { colorMode, toggleColorMode } = useColorMode();
   const bg = useColorModeValue('white', 'gray.800');
   const bg2 = useColorModeValue('gray.50', 'gray.700');
@@ -69,19 +73,23 @@ export default function Header() {
     handler: () => setShowLinks(false)
   });
 
-  const onLogout = () => {
-    router.reload('/');
-    storage.removeToken();
-    dispatch(AuthActions.setCurrentUserSuccessAction(null));
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        removeCookie();
-      })
-      .catch(error => {
-        // An error happened.
-      });
+  const onLogout = async () => {
+    try {
+      const res = await AuthService.logout();
+      removeCookie();
+      storage.removeToken();
+      dispatch(AuthActions.setCurrentUserSuccessAction(null));
+      await firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          removeCookie();
+        })
+        .catch(error => {
+          // An error happened.
+        });
+      router.push('/');
+    } catch (e) {}
   };
 
   const onCreate = () => {
@@ -191,12 +199,10 @@ export default function Header() {
             />
             <FaMoon className='ml-2' />
           </Flex>
-          {user ? (
+          {loadingUser ? (
+            <SkeletonCircle size='7' />
+          ) : user && !loadingUser ? (
             <Flex>
-              <chakra.a p={3} rounded='sm'>
-                <AiFillBell />
-                <VisuallyHidden>Notifications</VisuallyHidden>
-              </chakra.a>
               <Menu isLazy>
                 <MenuButton
                   as={'span'}
@@ -209,7 +215,6 @@ export default function Header() {
                   </Flex>
                 </MenuButton>
                 <MenuList>
-                  {/* role bagde */}
                   <div className='px-4'>
                     <Badge
                       colorScheme={user.role === 'admin' ? 'blue' : 'green'}
@@ -235,14 +240,21 @@ export default function Header() {
                     <b className='ml-1'>{VNDFormatter(user.balance)} VND</b>
                   </div>
                   <MenuDivider />
-                  <MenuGroup title='Cá nhân'>
+                  {user.role === 'admin' ? (
                     <MenuItem>
-                      <a href='/account'>Tài khoản</a>
+                      <a href='/admin/users'>Quản lí</a>
                     </MenuItem>
-                    <MenuItem>
-                      <a href='/checkout'>Nạp tiền</a>
-                    </MenuItem>
-                  </MenuGroup>
+                  ) : (
+                    <MenuGroup title='Cá nhân'>
+                      <MenuItem>
+                        <a href='/account'>Tài khoản</a>
+                      </MenuItem>
+                      <MenuItem>
+                        <a href='/checkout'>Nạp tiền</a>
+                      </MenuItem>
+                    </MenuGroup>
+                  )}
+
                   <MenuDivider />
                   <MenuGroup title='Trợ giúp'>
                     <MenuItem>Tài liệu</MenuItem>

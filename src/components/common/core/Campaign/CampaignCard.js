@@ -43,9 +43,12 @@ export default function CampaignCard(props) {
       bg={useColorModeValue('white', 'gray.900')}
       w={['100%', '45%', '31%']}
       mx={2}
+      rounded={'lg'}
+      overflow='hidden'
+      border={'.5px solid lightgray'}
     >
       <Box className='w-full md:mb-0'>
-        <Box className='rounded-sm shadow' overflow='hidden'>
+        <Box className='rounded-lg shadow' overflow='hidden'>
           <AspectRatio maxW='400px' ratio={16 / 9}>
             <Image src={images[0]} alt={name} objectFit='cover' />
           </AspectRatio>
@@ -62,16 +65,17 @@ export default function CampaignCard(props) {
                     : 'red'
                 }
               >
-                {convertStatusToString(status)}
+                <Text p={1} fontSize='xs'>
+                  {convertStatusToString(status)}
+                </Text>
               </Badge>
-              <Flex color={'gray.500'} align='center' justify='end'>
-                <BsClock className='mr-1' />
+              <Badge colorScheme={'purple'} rounded='full'>
                 {status === 'active' && (
-                  <Text fontSize='xs'>
+                  <Text fontSize='.6rem' p={1}>
                     {DateUtils.calculateDaysFromNow(finishedAt)} ngày còn lại
                   </Text>
                 )}
-              </Flex>
+              </Badge>
             </Flex>
 
             <Stack>

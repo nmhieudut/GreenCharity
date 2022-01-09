@@ -1,6 +1,7 @@
 import {
   Heading,
   Spinner,
+  Stack,
   Table,
   Tbody,
   Td,
@@ -12,13 +13,18 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { BsPlus } from 'react-icons/bs';
 import { useQuery } from 'react-query';
 import CampaignRow from 'src/components/admin/CampaignRow';
+import Button from 'src/components/common/Button';
+import { CampaignForm } from 'src/components/common/core/Campaign/CampaignForm';
+import CustomDrawer from 'src/components/common/CustomDrawer';
 import { color } from 'src/constants/color';
+import withAdmin from 'src/HOCs/withAdmin';
 import AdminLayout from 'src/layout/AdminLayout';
 import { AdminService } from 'src/services/admin';
 
-export default function Campaigns() {
+function Campaigns() {
   const toast = useToast();
   const router = useRouter();
   const bg = useColorModeValue('gray.100', 'gray.800');
@@ -126,14 +132,36 @@ export default function Campaigns() {
 
   return (
     <AdminLayout>
-      <Heading
-        fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
-        lineHeight={'110%'}
-        color={color.PRIMARY}
+      <Stack
+        direction={['column', 'row']}
+        spacing={4}
+        align='center'
+        justify='space-between'
         mb={4}
       >
-        Quản lí các hoạt động
-      </Heading>
+        <Heading
+          fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
+          lineHeight={'110%'}
+          color={color.PRIMARY}
+        >
+          Quản lí các hoạt động
+        </Heading>
+        <CustomDrawer
+          size='lg'
+          showModalButtonText={
+            <Button
+              ml='auto'
+              noLinear
+              leftIcon={<BsPlus />}
+              colorScheme='purple'
+            >
+              Thêm mới
+            </Button>
+          }
+          drawerHeader='Thêm mới hoạt động'
+          drawerBody={<CampaignForm />}
+        ></CustomDrawer>
+      </Stack>
 
       <Table shadow='xl' rounded='md' overflow='hidden'>
         <Thead bg={bg}>
@@ -171,3 +199,4 @@ export default function Campaigns() {
     </AdminLayout>
   );
 }
+export default withAdmin(Campaigns);

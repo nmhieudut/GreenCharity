@@ -3,6 +3,7 @@ import Head from 'next/head';
 import React from 'react';
 import { CampaignForm } from 'src/components/common/core/Campaign/CampaignForm';
 import SectionContainer from 'src/components/common/SectionContainer';
+import { color } from 'src/constants/color';
 import withAuth from 'src/HOCs/withAuth';
 
 function CreateCampaign() {
@@ -19,7 +20,7 @@ function CreateCampaign() {
           lineHeight={'110%'}
           color={color.PRIMARY}
         >
-          {isEdited ? 'Chỉnh sửa hoạt động' : 'Tạo hoạt động từ thiện mới'}
+          Tạo hoạt động từ thiện mới
         </Heading>
         <Text my={8} textAlign={'center'} fontSize={'lg'} color={'gray.500'}>
           Điền vào form dưới để tạo 1 hoạt động mới

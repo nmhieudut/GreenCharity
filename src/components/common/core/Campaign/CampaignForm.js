@@ -167,7 +167,7 @@ export function CampaignForm({ isEdited, initialValues }) {
           ? format(new Date(initialValues.finishedAt), 'yyyy/MM/dd')
           : add(new Date(), { days: 1 }),
         bank_account_number: isEdited ? initialValues.bank_account_number : '',
-        goal: isEdited ? initialValues.goal : 100000
+        goal: isEdited ? initialValues.goal : 10000000
       }}
       validationSchema={schema}
       onSubmit={values => handleSubmit(values)}
@@ -324,7 +324,7 @@ export function CampaignForm({ isEdited, initialValues }) {
                 isRequired
                 className='w-full'
               >
-                <FormLabel>Nội dung câu chuyện </FormLabel>
+                <FormLabel>Nội dung câu chuyện</FormLabel>
                 <InputGroup focusBorderColor={color.PRIMARY}>
                   <Editor
                     name='5'
@@ -340,13 +340,6 @@ export function CampaignForm({ isEdited, initialValues }) {
               <Button my={4} colorScheme='purple' onClick={onOpen}>
                 Xem trước bài đăng
               </Button>
-              <Alert status='info'>
-                <AlertIcon />
-                Khi gửi yêu cầu này, bạn đã đồng ý với điều khoản sử dụng của
-                GreenCharity. Yêu cầu của bạn sẽ được duyệt trong vòng 24 tiếng.
-                Các yêu cầu điền đúng đầy đủ thông tin sẽ được duyệt nhanh hơn.
-              </Alert>
-
               <Divider my={4} />
               <Button colorScheme='purple' type='submit' isLoading={submitting}>
                 {isEdited ? 'Cập nhật hoạt động' : 'Yêu cầu vận động'}

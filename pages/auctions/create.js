@@ -19,6 +19,7 @@ import {
   Text,
   Textarea,
   useColorModeValue,
+  useToast,
   VisuallyHidden
 } from '@chakra-ui/react';
 import Head from 'next/head';
@@ -43,6 +44,7 @@ import { VNDFormatter } from 'src/utils/number';
 
 function Create() {
   const dispatch = useDispatch();
+  const toast = useToast();
   const user = useSelector(state => state.auth.currentUser);
   const { data, isLoading, error } = useQuery('own campaigns', () =>
     CampaignService.getByAuthor(user.id)
@@ -151,7 +153,7 @@ function Create() {
       console.log(e);
       toast({
         title: 'Yêu cầu tạo thất bại',
-        description: `${err.response.data.message}`,
+        description: e.response.data.message,
         status: 'error',
         duration: 3000,
         isClosable: true
@@ -227,6 +229,7 @@ function Create() {
           </GridItem>
           <GridItem mt={[5, null, 0]} colSpan={{ md: 2 }}>
             <chakra.form
+              onSubmit={onCreate}
               shadow='base'
               rounded={[null, 'md']}
               overflow={{ sm: 'hidden' }}
@@ -471,12 +474,12 @@ function Create() {
                 textAlign='right'
               >
                 <Button
-                  onClick={onCreate}
+                  type='submit'
                   colorScheme='purple'
                   _focus={{ shadow: '' }}
                   fontWeight='md'
                 >
-                  Save
+                  Bắt đầu
                 </Button>
               </Box>
             </chakra.form>

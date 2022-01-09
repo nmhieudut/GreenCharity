@@ -1,21 +1,12 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  SkeletonCircle,
-  SkeletonText,
-  Text
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useQuery } from 'react-query';
 import CampaignItem from 'src/components/common/core/Campaign/CampaignItem';
 import CampaignItemSkeleton from 'src/components/common/core/Campaign/CampaignItemSkeleton';
 import Search from 'src/components/common/Search';
 import SectionContainer from 'src/components/common/SectionContainer';
 import Loading from 'src/components/common/Spinner/Loading';
-import { color } from 'src/constants/color';
 import { options } from 'src/constants/filter';
 import { CampaignService } from 'src/services/campaign';
 
@@ -66,6 +57,21 @@ const CampaignsList = ({ query, status }) => {
 
   async function fetchCampaigns() {
     console.log('fetching');
+    setCampaigns([]);
+    setLoading(true);
+    setPage(0);
+    try {
+      const data = await CampaignService.fetchCampaigns(query, status, 5, page);
+      return setCampaigns(data.campaigns);
+    } catch (e) {
+      console.log(e);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function fetchMore() {
     setLoading(true);
     try {
       const data = await CampaignService.fetchCampaigns(query, status, 5, page);
@@ -84,7 +90,12 @@ const CampaignsList = ({ query, status }) => {
 
   useEffect(() => {
     fetchCampaigns();
-  }, [query, status, page]);
+  }, [query, status]);
+
+  useEffect(() => {
+    fetchMore();
+  }, [page]);
+
   console.log('res', campaigns);
   return (
     <div>

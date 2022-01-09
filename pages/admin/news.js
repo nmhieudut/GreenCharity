@@ -1,5 +1,8 @@
 import React from 'react';
+import withAdmin from 'src/HOCs/withAdmin';
 
-export default function news() {
+function News() {
   return <div></div>;
 }
+
+export default withAdmin(News);
