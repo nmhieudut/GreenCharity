@@ -1,7 +1,8 @@
-import { Box, Heading } from '@chakra-ui/react';
+import { Box, Flex, Heading } from '@chakra-ui/react';
 import Head from 'next/head';
 import React from 'react';
 import { useQuery } from 'react-query';
+import Button from 'src/components/common/Button';
 import CampaignItemSkeleton from 'src/components/common/core/Campaign/CampaignItemSkeleton';
 import NewsItem from 'src/components/common/core/Card/NewsItem';
 import SectionContainer from 'src/components/common/SectionContainer';
@@ -19,7 +20,7 @@ export default function News() {
         <title>Tin tức</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-
+      
       <Heading
         textAlign='center'
         fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
@@ -36,6 +37,18 @@ export default function News() {
         {news?.map((item, index) => (
           <NewsItem key={index} data={item} />
         ))}
+       <Flex justify='center'>
+          <Button
+            noLinear='true'
+            size='md'
+            px={4}
+            variant='outline'
+            colorScheme={'purple'}
+            onClick={() => router.push('/news')}
+          >
+            Xem thêm
+          </Button>
+        </Flex>
       </Box>
     </SectionContainer>
   );

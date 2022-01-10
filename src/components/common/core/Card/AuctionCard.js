@@ -107,7 +107,7 @@ const AuctionCard = ({ auction }) => {
                   color: color.PRIMARY
                 }}
                 fontSize={'lg'}
-                fontFamily={'bold'}
+                fontWeight={'bold'}
               >
                 {title}
               </Heading>
@@ -116,7 +116,7 @@ const AuctionCard = ({ auction }) => {
               </Box>
             </Stack>
             <Flex fontSize='sm' className='mt-4' justify='space-between'>
-              <Text fontFamily={'bold'}>Khởi điểm:</Text>
+              <Text fontWeight={'bold'}>Khởi điểm:</Text>
               <Text>{VNDFormatter(startPrice)} đ</Text>
             </Flex>
             {currentBid && (
@@ -126,7 +126,7 @@ const AuctionCard = ({ auction }) => {
                 justify='space-between'
                 color={color.PRIMARY}
               >
-                <Text fontFamily={'bold'}>Hiện tại:</Text>
+                <Text fontWeight={'bold'}>Hiện tại:</Text>
                 <Text>{VNDFormatter(currentBid.amount)} đ</Text>
               </Flex>
             )}

@@ -65,7 +65,7 @@ export default function AuctionForm() {
               </Flex>
 
               <Stack>
-                <Heading fontSize={'lg'} fontFamily={'bold'}>
+                <Heading fontSize={'lg'} fontWeight={'bold'}>
                   {title}
                 </Heading>
                 <Box className='text-gray-600 leading-relaxed block'>
@@ -73,7 +73,7 @@ export default function AuctionForm() {
                 </Box>
               </Stack>
               <Flex fontSize='sm' className='mt-4' justify='space-between'>
-                <Text fontFamily={'bold'}>Khởi điểm:</Text>
+                <Text fontWeight={'bold'}>Khởi điểm:</Text>
                 <Text>{VNDFormatter(startPrice)} đ</Text>
               </Flex>
             </Box>

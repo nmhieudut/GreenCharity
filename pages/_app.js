@@ -17,7 +17,6 @@ import { AuthService } from 'src/services/auth';
 import { subscribeToUserChanges } from 'src/services/io';
 import { wrapper } from 'src/store';
 import { AuthActions } from 'src/store/auth/action';
-import { ModalActions } from 'src/store/modal/action';
 import { storage } from 'src/utils/storage';
 import theme from 'src/utils/theme';
 import '../styles/globals.scss';

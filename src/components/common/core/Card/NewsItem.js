@@ -1,6 +1,6 @@
 import {
+  AspectRatio,
   Box,
-  chakra,
   Flex,
   Image,
   Link,
@@ -12,33 +12,32 @@ import React from 'react';
 import { BsClock } from 'react-icons/bs';
 
 export default function NewsItem({ data }) {
-  const { _id, thumbnail, title, shortContent, url, createdAt } = data;
+  const { _id, thumbnail, title, shortContent, createdAt } = data;
   return (
     <Box
-      pb={4}
       bg={useColorModeValue('white', 'gray.900')}
       className='rounded-sm shadow hover:shadow-xl duration-500 overflow-hidden'
       cursor={'pointer'}
       flexDir={'column'}
       _hover={{ boxShadow: 'lg' }}
+      mb={4}
     >
       <div className='grid grid-cols-1 sm:grid-cols-12'>
-        <div className='col-span-0 sm:col-span-3 flex items-center justify-center'>
-          <Image
-            className='w-full object-cover object-center h-56'
-            src={thumbnail}
-            alt={title}
-            layout='fill'
-          />
+        <div className='col-span-0 sm:col-span-3'>
+          <AspectRatio maxW='400px' ratio={16 / 9}>
+            <Image
+              layout='fill'
+              src={thumbnail}
+              alt={title}
+              className='object-cover object-center w-full h-56'
+            />
+          </AspectRatio>
         </div>
         <div className='col-span-12 sm:col-start-4 sm:col-end-13 p-4'>
           <Flex mb={2} alignItems='center' justify='space-between'>
-            <Flex color={'gray.500'} align='center' justify='end'>
-              <BsClock className='mr-2' size='.75rem' />
-              <Text fontSize='sm'>
-                {format(new Date(createdAt), 'MMM dd, yyyy')}
-              </Text>
-            </Flex>
+            <Text fontSize='sm' color={'gray.500'}>
+              {format(new Date(createdAt), 'MMM dd, yyyy')}
+            </Text>
           </Flex>
           <div className='mt-2'>
             <Link
@@ -48,9 +47,7 @@ export default function NewsItem({ data }) {
               {title}
             </Link>
 
-            <Box className='mt-2 text-sm md:text-md line-clamp'>
-              {shortContent}
-            </Box>
+            <Box className='mt-2 text-sm md:text-md line-clamp'>{shortContent}</Box>
           </div>
         </div>
       </div>

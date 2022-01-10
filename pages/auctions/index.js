@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { RiAuctionFill } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
-import CardSkeleton from 'src/components/common/core/Campaign/CardSkeleton';
+import CardSkeleton from 'src/components/common/core/Card/CardSkeleton';
 import AuctionCard from 'src/components/common/core/Card/AuctionCard';
 import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';

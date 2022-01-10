@@ -84,7 +84,7 @@ export default function CampaignCard(props) {
                   color: color.PRIMARY
                 }}
                 fontSize={'md'}
-                fontFamily={'bold'}
+                fontWeight={'bold'}
               >
                 {name}
               </Heading>
