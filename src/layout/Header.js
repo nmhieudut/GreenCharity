@@ -27,7 +27,7 @@ import {
 import Hamburger from 'hamburger-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AiFillBell } from 'react-icons/ai';
 import { BsBrightnessHigh } from 'react-icons/bs';
 import {
@@ -39,7 +39,7 @@ import {
   FaRegUserCircle
 } from 'react-icons/fa';
 import { FcManager } from 'react-icons/fc';
-import { MdCampaign } from 'react-icons/md';
+import { MdCampaign, MdEmail, MdOutlinePhoneInTalk } from 'react-icons/md';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import AnimatedButton from 'src/components/common/AnimatedButton';
@@ -68,10 +68,16 @@ export default function Header() {
   );
   const [showLinks, setShowLinks] = useState(false);
   const wrapperRef = useRef(null);
+  const marqueeRef = useRef(null);
   useOutsideClick({
     ref: wrapperRef,
     handler: () => setShowLinks(false)
   });
+  useEffect(() => {
+    if (marqueeRef.current) {
+      marqueeRef.current.start();
+    }
+  }, []);
 
   const onLogout = async () => {
     try {
@@ -94,7 +100,7 @@ export default function Header() {
 
   const onCreate = () => {
     if (user) {
-      router.push('/campaigns/create');
+      router.push('/hoat-dong/tao-moi');
     } else {
       router.push('/auth');
     }
@@ -171,110 +177,123 @@ export default function Header() {
           justifyContent={'flex-end'}
           py={2}
         >
-          <Text as={'i'} fontSize='xs' fontWeight={600}>
-            Đường giây siêu nóng: (+84) 905245054
-          </Text>
-          <Stack direction={'row'} spacing={1} ml='auto' mr={2} align='center'>
-            <SocialButton rounded='none' bg='none' label={'Twitter'} href={'#'}>
-              <FaFacebook />
-            </SocialButton>
-            <SocialButton rounded='none' bg='none' label={'YouTube'} href={'#'}>
-              <FaGithub />
-            </SocialButton>
-            <SocialButton
-              rounded='none'
-              bg='none'
-              label={'Instagram'}
-              href={'#'}
-            >
-              <FaInstagram />
-            </SocialButton>
-          </Stack>
-          <Flex align='center' mr={6}>
-            <BsBrightnessHigh className='mr-2' />
-            <Switch
-              defaultChecked={colorMode === 'dark'}
-              onChange={toggleColorMode}
-              colorScheme='purple'
-            />
-            <FaMoon className='ml-2' />
-          </Flex>
-          {loadingUser ? (
-            <SkeletonCircle size='7' />
-          ) : user && !loadingUser ? (
+          <marquee
+            ref={marqueeRef}
+            behavior='scroll'
+            direction='left'
+            onMouseOver={() => marqueeRef.current.stop()}
+            onMouseOut={() => marqueeRef.current.start()}
+          >
             <Flex>
-              <Menu isLazy>
-                <MenuButton
-                  as={'span'}
-                  className='flex justify-between cursor-pointer'
-                >
-                  <Flex align='center' px={2} py={1} fontSize='xs'>
-                    <Avatar size='xs' src={user.picture} name={user.name}>
-                      <AvatarBadge boxSize='1.25em' bg='green.500' />
-                    </Avatar>
-                  </Flex>
-                </MenuButton>
-                <MenuList>
-                  <div className='px-4'>
-                    <Badge
-                      colorScheme={user.role === 'admin' ? 'blue' : 'green'}
-                    >
-                      {user.role === 'admin' ? (
-                        <Flex align='center' p={1}>
-                          <FaCrown className='mr-2' size='1.2rem' />
-                          <Text>Quản trị viên</Text>
-                        </Flex>
-                      ) : (
-                        <Flex align='center' p={1}>
-                          <FcManager className='mr-2' size='1.2rem' />{' '}
-                          <Text>Thành viên</Text>
-                        </Flex>
-                      )}
-                    </Badge>
-                  </div>
-                  <div className='p-4'>
-                    Đang đăng nhập với tên: <b className='ml-1'>{user.name}</b>
-                  </div>
-                  <div className='px-4'>
-                    Số dư:{' '}
-                    <b className='ml-1'>{VNDFormatter(user.balance)} VND</b>
-                  </div>
-                  <MenuDivider />
-                  {user.role === 'admin' ? (
-                    <MenuItem>
-                      <a href='/admin/users'>Quản lí</a>
-                    </MenuItem>
-                  ) : (
-                    <MenuGroup title='Cá nhân'>
-                      <MenuItem>
-                        <a href='/account'>Tài khoản</a>
-                      </MenuItem>
-                      <MenuItem>
-                        <a href='/checkout'>Nạp tiền</a>
-                      </MenuItem>
-                    </MenuGroup>
-                  )}
-
-                  <MenuDivider />
-                  <MenuGroup title='Trợ giúp'>
-                    <MenuItem>Tài liệu</MenuItem>
-                    <MenuItem>Hỏi đáp</MenuItem>
-                  </MenuGroup>
-                  <MenuDivider />
-                  <MenuItem onClick={onLogout}>
-                    <span className='mr-4'>Đăng xuất</span>
-                    <RiLogoutBoxRLine />
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Flex>
-          ) : (
-            <ChakraLink href='/auth'>
               <Flex align='center'>
-                <FaRegUserCircle className='mr-2' /> Đăng nhập | Đăng ký
+                <MdOutlinePhoneInTalk size='1.25rem' />
+                <Text fontSize='sm' fontWeight={600} ml={2}>
+                  Đường giây siêu nóng: (+84) 905245054
+                </Text>
               </Flex>
-            </ChakraLink>
-          )}
+              <Box className='mx-4'>|</Box>
+              <Flex align='center'>
+                <MdEmail size='1.25rem' />
+                <Text fontSize='sm' fontWeight={600} ml={2}>
+                  Email: greencharity.help@gmail.com / hieutk5@gmail.com
+                </Text>
+              </Flex>
+            </Flex>
+          </marquee>
+          <Flex>
+            <Flex align='center' mx={6}>
+              <BsBrightnessHigh className='mr-2' />
+              <Switch
+                defaultChecked={colorMode === 'dark'}
+                onChange={toggleColorMode}
+                colorScheme='purple'
+              />
+              <FaMoon className='ml-2' />
+            </Flex>
+            {loadingUser ? (
+              <SkeletonCircle size='7' />
+            ) : user && !loadingUser ? (
+              <Flex>
+                <Menu isLazy>
+                  <MenuButton
+                    as={'span'}
+                    className='flex justify-between cursor-pointer'
+                  >
+                    <Flex align='center' px={2} py={1} fontSize='xs'>
+                      <Avatar size='xs' src={user.picture} name={user.name}>
+                        <AvatarBadge boxSize='1.25em' bg='green.500' />
+                      </Avatar>
+                    </Flex>
+                  </MenuButton>
+                  <MenuList>
+                    <div className='px-4'>
+                      <Badge
+                        colorScheme={user.role === 'admin' ? 'blue' : 'green'}
+                      >
+                        {user.role === 'admin' ? (
+                          <Flex align='center' p={1}>
+                            <FaCrown className='mr-2' size='1.2rem' />
+                            <Text>Quản trị viên</Text>
+                          </Flex>
+                        ) : (
+                          <Flex align='center' p={1}>
+                            <FcManager className='mr-2' size='1.2rem' />{' '}
+                            <Text>Thành viên</Text>
+                          </Flex>
+                        )}
+                      </Badge>
+                    </div>
+                    <div className='p-4'>
+                      Đang đăng nhập với tên:{' '}
+                      <b className='ml-1'>{user.name}</b>
+                    </div>
+                    <div className='px-4'>
+                      Số dư:{' '}
+                      <b className='ml-1'>{VNDFormatter(user.balance)} VND</b>
+                    </div>
+                    <MenuDivider />
+                    {user.role === 'admin' ? (
+                      <MenuItem>
+                        <a href='/admin/users'>Quản lí</a>
+                      </MenuItem>
+                    ) : (
+                      <MenuGroup title='Cá nhân'>
+                        <MenuItem>
+                          <a href='/account'>Tài khoản</a>
+                        </MenuItem>
+                        <MenuItem>
+                          <a href='/checkout'>Nạp tiền</a>
+                        </MenuItem>
+                      </MenuGroup>
+                    )}
+
+                    <MenuDivider />
+                    <MenuGroup title='Trợ giúp'>
+                      <MenuItem>Tài liệu</MenuItem>
+                      <MenuItem>Hỏi đáp</MenuItem>
+                    </MenuGroup>
+                    <MenuDivider />
+                    <MenuItem onClick={onLogout}>
+                      <span className='mr-4'>Đăng xuất</span>
+                      <RiLogoutBoxRLine />
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </Flex>
+            ) : (
+              <AnimatedButton
+                ml='auto'
+                variant={'solid'}
+                size={'sm'}
+                colorScheme='purple'
+                mr={2}
+                leftIcon={<FaRegUserCircle />}
+                onClick={() => router.push('/auth')}
+              >
+                Đăng nhập | Đăng ký
+              </AnimatedButton>
+            )}
+          </Flex>
         </Container>
       </Box>
       <Container

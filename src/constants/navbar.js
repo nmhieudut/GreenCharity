@@ -4,20 +4,20 @@ export const navs = [
     label: 'Trang chủ'
   },
   {
-    to: '/campaigns',
+    to: '/hoat-dong',
     label: 'Các hoạt động'
   },
   {
-    to: '/auctions',
+    to: '/dau-gia',
     label: 'Đấu giá',
     new: true
   },
   {
-    to: '/news',
+    to: '/tin-tuc',
     label: 'Tin tức'
   },
   {
-    to: '/about',
+    to: '/ve-chung-toi',
     label: 'Về chúng tôi'
   }
 ];

@@ -41,13 +41,15 @@ export default function NewsItem({ data }) {
           </Flex>
           <div className='mt-2'>
             <Link
-              href={`news/${_id}`}
+              href={`tin-tuc/${_id}`}
               className='text-md sm:text-sm lg:text-lg font-bold'
             >
               {title}
             </Link>
 
-            <Box className='mt-2 text-sm md:text-md line-clamp'>{shortContent}</Box>
+            <Box className='mt-2 text-sm md:text-md line-clamp'>
+              {shortContent}
+            </Box>
           </div>
         </div>
       </div>

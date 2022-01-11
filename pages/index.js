@@ -37,12 +37,18 @@ import { qa } from 'src/constants/qa';
 import { CampaignService } from 'src/services/campaign';
 import { newsService } from 'src/services/news';
 
-const SectionContainer = dynamic(() => import('src/components/common/SectionContainer'));
+const SectionContainer = dynamic(() =>
+  import('src/components/common/SectionContainer')
+);
 const CampaignCard = dynamic(() =>
   import('src/components/common/core/Campaign/CampaignCard')
 );
 
-export default function Home({ total_campaigns, total_amount_donations, total_donors }) {
+export default function Home({
+  total_campaigns,
+  total_amount_donations,
+  total_donors
+}) {
   const router = useRouter();
   const bg = useColorModeValue('white', 'gray.800');
   const { data, isLoading } = useQuery('campaigns', () =>
@@ -78,7 +84,10 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
         >
           {props.title}
         </chakra.h3>
-        <chakra.p fontSize='sm' color={useColorModeValue('gray.500', 'gray.400')}>
+        <chakra.p
+          fontSize='sm'
+          color={useColorModeValue('gray.500', 'gray.400')}
+        >
           {props.children}
         </chakra.p>
       </Box>
@@ -152,8 +161,9 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
                   mx={{ sm: 'auto', lg: 0 }}
                   color='gray.100'
                 >
-                  Là nền tảng giúp bạn dễ dàng chung tay quyên góp tiền cùng hàng triệu
-                  người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả nước.
+                  Là nền tảng giúp bạn dễ dàng chung tay quyên góp tiền cùng
+                  hàng triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả
+                  nước.
                 </chakra.p>
                 <Flex
                   justify='space-between'
@@ -174,7 +184,11 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
                   </Box>
                   <Box>
                     <Box color={color.PRIMARY} fontWeight={600}>
-                      <CountUp separator=',' end={total_amount_donations} duration={3} />
+                      <CountUp
+                        separator=','
+                        end={total_amount_donations}
+                        duration={3}
+                      />
                     </Box>
                     <Text color={'white'}>Đồng được quyên góp</Text>
                   </Box>
@@ -253,8 +267,8 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
               color={useColorModeValue('brand.600', 'gray.400')}
               letterSpacing='wider'
             >
-              Là nền tảng #1 giúp bạn dễ dàng chung tay quyên góp tiền cùng hàng triệu
-              người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả nước.
+              Là nền tảng #1 giúp bạn dễ dàng chung tay quyên góp tiền cùng hàng
+              triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả nước.
             </chakra.p>
             {!user && (
               <Button
@@ -284,7 +298,11 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
           my={12}
           mx='auto'
           maxW={'3xl'}
-          templateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(2, 1fr)']}
+          templateColumns={[
+            'repeat(1, 1fr)',
+            'repeat(1, 1fr)',
+            'repeat(2, 1fr)'
+          ]}
         >
           <Flex
             direction='column'
@@ -308,14 +326,14 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
             </Box>
             <Box px={6} pb={6} pt={'auto'}>
               <Text fontSize={'sm'}>
-                Bạn gặp vài hoàn cảnh khó khăn mà không thể kêu gọi. Hãy thông tin đến
-                chúng tôi ngay
+                Bạn gặp vài hoàn cảnh khó khăn mà không thể kêu gọi. Hãy thông
+                tin đến chúng tôi ngay
               </Text>
               <Button
                 mt={10}
                 w={'full'}
                 colorScheme={'purple'}
-                onClick={() => router.push('/campaigns/create')}
+                onClick={() => router.push('/hoat-dong/tao-moi')}
               >
                 Vận động ngay
               </Button>
@@ -343,8 +361,8 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
             </Box>
             <Box px={6} pb={6} mt='auto'>
               <Text fontSize={'sm'}>
-                Chỉ với vài thao tác đơn giản, bạn đã góp phần giúp đỡ 1 hoàn cảnh khó
-                khăn có cuộc sống tốt đẹp hơn.
+                Chỉ với vài thao tác đơn giản, bạn đã góp phần giúp đỡ 1 hoàn
+                cảnh khó khăn có cuộc sống tốt đẹp hơn.
               </Text>
               <Button
                 mt={10}
@@ -368,7 +386,8 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
           Các hoạt động đang diễn ra 🔥
         </Heading>
         <Box className='flex flex-wrap mt-14 mb-10'>
-          {isLoading && Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
+          {isLoading &&
+            Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
           {campaigns?.map((campaign, index) => (
             <CampaignCard key={index} campaign={campaign} />
           ))}
@@ -417,9 +436,9 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
                 title='Bạn có thể quyên góp cho nhiều người'
                 icon={<FaDonate />}
               >
-                Bạn có thể quyên góp cho nhiều người, nhưng chỉ cần chọn một người để
-                quyên góp. Và nếu bạn không thể chọn được người để quyên góp, bạn có thể
-                quyên góp cho chính mình.
+                Bạn có thể quyên góp cho nhiều người, nhưng chỉ cần chọn một
+                người để quyên góp. Và nếu bạn không thể chọn được người để
+                quyên góp, bạn có thể quyên góp cho chính mình.
               </Feature>
 
               <Feature
@@ -427,18 +446,20 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
                 title='Quyên góp trực tuyến'
                 icon={<AiOutlineTransaction />}
               >
-                Bạn không thể quyên góp trực tiếp cho người kêu gọi ? Đừng lo bạn có thể
-                quyên góp thông qua nạp tiền vào số dư của bạn và quyên góp.
+                Bạn không thể quyên góp trực tiếp cho người kêu gọi ? Đừng lo
+                bạn có thể quyên góp thông qua nạp tiền vào số dư của bạn và
+                quyên góp.
               </Feature>
               <Feature
                 color='blue'
                 title='Đội ngũ hỗ trợ nhiệt tình'
                 icon={<FcOnlineSupport />}
               >
-                Đội ngũ hỗ trợ nhiệt tình và chuyên nghiệp sẽ giúp bạn đạt được mục tiêu
-                của bạn. Bạn có thể liên hệ với chúng tôi qua số điện thoại, email hoặc
-                thông qua Facebook messenger trên màn hình. Chúng tôi sẽ phản hồi bạn
-                trong vòng nhiều nhất 24h kể từ khi nhận được yêu cầu.
+                Đội ngũ hỗ trợ nhiệt tình và chuyên nghiệp sẽ giúp bạn đạt được
+                mục tiêu của bạn. Bạn có thể liên hệ với chúng tôi qua số điện
+                thoại, email hoặc thông qua Facebook messenger trên màn hình.
+                Chúng tôi sẽ phản hồi bạn trong vòng nhiều nhất 24h kể từ khi
+                nhận được yêu cầu.
               </Feature>
             </SimpleGrid>
           </Box>
@@ -472,8 +493,8 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
               Cùng với những người nổi tiếng
             </Heading>
             <Text>
-              Nhiều gương mặt đại diện đã đứng ra kêu gọi từ thiện, tiêu biểu là những ca
-              sĩ, nghệ sĩ trong những năm gần đây.
+              Nhiều gương mặt đại diện đã đứng ra kêu gọi từ thiện, tiêu biểu là
+              những ca sĩ, nghệ sĩ trong những năm gần đây.
             </Text>
           </Flex>
           <Box
@@ -503,12 +524,22 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
         >
           Tin tức mới nhất 📰
         </Heading>
-        <Box className='flex flex-wrap mt-14 mb-10'>
-          {isLoading && Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
+        <Grid
+          templateColumns={[
+            'repeat(1, 1fr)',
+            'repeat(2, 1fr)',
+            'repeat(3, 1fr)',
+            'repeat(4, 1fr)'
+          ]}
+          gap={4}
+          className='mt-14 mb-10'
+        >
+          {isLoading &&
+            Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
           {news?.map((item, index) => (
-            <NewsCard key={index} item={item} w={['100%', '45%', '30%', '23%']} />
+            <NewsCard key={index} item={item} />
           ))}
-        </Box>
+        </Grid>
         <Flex justify='center'>
           <Button
             noLinear='true'
@@ -516,7 +547,7 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
             px={4}
             variant='outline'
             colorScheme={'purple'}
-            onClick={() => router.push('/news')}
+            onClick={() => router.push('/tin-tuc')}
           >
             Xem thêm
           </Button>
@@ -543,7 +574,11 @@ export default function Home({ total_campaigns, total_amount_donations, total_do
                 <h2>
                   <AccordionButton>
                     <Box flex='1' textAlign='left'>
-                      <Text fontSize='xl' color={color.PRIMARY} fontWeight={600}>
+                      <Text
+                        fontSize='xl'
+                        color={color.PRIMARY}
+                        fontWeight={600}
+                      >
                         {item.question}
                       </Text>
                     </Box>

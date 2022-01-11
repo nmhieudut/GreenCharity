@@ -11,6 +11,8 @@ export const AdminService = {
   getCampaigns: () => _http.get(Rest.admin + '/campaigns'),
   updateCampaign: (id, data) =>
     _http.put(Rest.admin + '/campaigns/' + id, data),
+  renewalCampaign: (id, data) =>
+    _http.put(Rest.admin + '/campaigns/' + id + '/renewal', data),
   activeCampaign: id => _http.put(Rest.admin + '/campaigns/' + id + '/active'),
   deleteCampaign: id => _http.delete(Rest.admin + '/campaigns/' + id),
   endCampaign: id => _http.put(Rest.admin + '/campaigns/' + id + '/end')

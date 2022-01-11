@@ -18,7 +18,6 @@ export default function NewsCard({ item, ...rest }) {
       borderWidth='1px'
       borderColor='gray.200'
       rounded='lg'
-      m={3}
       overflow='hidden'
       {...rest}
     >
@@ -31,9 +30,9 @@ export default function NewsCard({ item, ...rest }) {
       </AspectRatio>
 
       <Flex direction='column' p={4}>
-        <Box className="h-auto md:h-40 lg:h-40 mb-2">
-          <Link href={`/news/${item._id}`} flex='1'>
-            <Text as={'h3'} fontSize={'md'} fontWeight={600}>
+        <Box className='h-auto md:h-40 lg:h-40 mb-2'>
+          <Link href={`/tin-tuc/${item._id}`} flex='1'>
+            <Text as={'h3'} fontWeight={600}>
               {item.title}
             </Text>
           </Link>
@@ -42,7 +41,7 @@ export default function NewsCard({ item, ...rest }) {
           </Text>
         </Box>
 
-        <Text mt={'auto'} as={'p'} fontSize='sm' color='gray.500'>
+        <Text mt={'auto'} as={'p'} fontSize='xs' color='gray.500'>
           {format(new Date(item.createdAt), 'dd/MM/yyyy')}
         </Text>
       </Flex>

@@ -33,7 +33,7 @@ export default function CampaignItem({
   const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
   return (
     <Link
-      href={`/campaigns/${slug}`}
+      href={`/hoat-dong/${slug}`}
       bg={useColorModeValue('white', 'gray.900')}
       className='rounded-sm shadow hover:shadow-xl duration-500 overflow-hidden'
       cursor={'pointer'}

@@ -144,11 +144,11 @@ function Users() {
   const router = useRouter();
   const toast = useToast();
   const bg = useColorModeValue('gray.100', 'gray.800');
-  const { data, isLoading, isError, error } = useQuery('users', () =>
+  const { data, isLoading, isError, error } = useQuery(['users', refresh], () =>
     AdminService.getUsers()
   );
   const { users } = data || [];
-  const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(0);
 
   const handleToggleActive = async id => {
     try {
@@ -161,7 +161,7 @@ function Users() {
         duration: 9000,
         isClosable: true
       });
-      router.replace(router.asPath);
+      setRefresh(refresh + 1);
     } catch (e) {
       toast({
         position: 'top-right',
@@ -185,7 +185,7 @@ function Users() {
         duration: 9000,
         isClosable: true
       });
-      router.replace(router.asPath);
+      setRefresh(refresh + 1);
     } catch (e) {
       toast({
         position: 'top-right',

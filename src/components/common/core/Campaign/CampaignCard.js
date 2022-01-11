@@ -35,7 +35,7 @@ export default function CampaignCard(props) {
 
   return (
     <Link
-      href={`/campaigns/${slug}`}
+      href={`/hoat-dong/${slug}`}
       cursor={'pointer'}
       flexDir={'column'}
       className='transition duration-300 md:mx-2 mb-8'

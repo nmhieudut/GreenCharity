@@ -1,9 +1,9 @@
-import { Button } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { BsSearch } from "react-icons/bs";
+import { Button } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { BsSearch } from 'react-icons/bs';
 
-export default function Search({ hasOptions, options, onSearch }) {
-  const [query, setQuery] = useState("");
+export default function Search({ options, onSearch }) {
+  const [query, setQuery] = useState('');
   const [status, setStatus] = useState(options[0].value);
 
   const handleSubmit = e => {
@@ -13,24 +13,24 @@ export default function Search({ hasOptions, options, onSearch }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="sm:flex items-center bg-white rounded-lg overflow-hidden justify-between px-2 py-1"
+      className='sm:flex items-center bg-white rounded-lg overflow-hidden justify-between px-2 py-1'
     >
       <input
-        className="text-base text-gray-400 flex-grow outline-none px-2 "
-        type="text"
+        className='text-base text-gray-400 flex-grow outline-none px-2 '
+        type='text'
         value={query}
         onChange={e => setQuery(e.target.value)}
-        placeholder="Nhập từ khóa ở đây..."
+        placeholder='Nhập từ khóa ở đây...'
       />
 
-      <div className="sm:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
-        {hasOptions && (
+      <div className='sm:flex items-center px-2 rounded-lg space-x-4 mx-auto '>
+        {options && (
           <select
             defaultValue={status}
             onChange={e => setStatus(e.target.value)}
-            className="text-base text-gray-800 outline-none border-2 px-4 py-2 rounded-lg"
+            className='text-base text-gray-800 outline-none border-2 px-4 py-2 rounded-lg'
           >
-            {options?.map((opt, idx) => (
+            {options.map((opt, idx) => (
               <option key={idx} value={opt.value}>
                 {opt.label}
               </option>
@@ -38,8 +38,8 @@ export default function Search({ hasOptions, options, onSearch }) {
           </select>
         )}
         <Button
-          type="submit"
-          colorScheme="purple"
+          type='submit'
+          colorScheme='purple'
           p={4}
           rightIcon={<BsSearch />}
         >

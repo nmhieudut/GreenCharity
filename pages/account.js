@@ -512,7 +512,7 @@ function CampaignTab(props) {
                       leftIcon={<AiOutlineEye />}
                       colorScheme='pink'
                       variant='solid'
-                      onClick={() => router.push(`/campaigns/${campaign.slug}`)}
+                      onClick={() => router.push(`/hoat-dong/${campaign.slug}`)}
                     >
                       Xem
                     </Button>
@@ -570,7 +570,7 @@ function DonateTab(props) {
                         variant='solid'
                         onClick={() =>
                           router.push(
-                            `/campaigns/${donation.campaignInfo.slug}`
+                            `/hoat-dong/${donation.campaignInfo.slug}`
                           )
                         }
                       >

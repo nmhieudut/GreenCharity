@@ -84,13 +84,6 @@ export default function Auth() {
     });
   }, [idToken]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(AuthActions.loginFailedAction(null));
-      dispatch(AuthActions.signUpFailedAction(null));
-    };
-  }, []);
-
   const handleChange = e => {
     setForm({
       ...form,

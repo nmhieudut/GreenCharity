@@ -11,7 +11,6 @@ import {
   useColorModeValue,
   useToast
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { BsPlus } from 'react-icons/bs';
 import { useQuery } from 'react-query';
@@ -25,27 +24,25 @@ import AdminLayout from 'src/layout/AdminLayout';
 import { AdminService } from 'src/services/admin';
 
 function Campaigns() {
+  const [refresh, setRefresh] = useState(0);
   const toast = useToast();
-  const router = useRouter();
   const bg = useColorModeValue('gray.100', 'gray.800');
-  const { data, isLoading, isError, error } = useQuery('campaigns', () =>
-    AdminService.getCampaigns()
+  const { data, isLoading, isError, error } = useQuery(
+    ['campaigns', refresh],
+    () => AdminService.getCampaigns()
   );
   const { campaigns } = data || [];
 
-  const [updating, setUpdating] = useState(false);
-
-  const handleUpdate = async (id, data) => {
-    setUpdating(true);
+  const handleRenewal = async (id, days) => {
     try {
-      await AdminService.updateCampaign(id, data);
+      await AdminService.renewalCampaign(id, { addedDays: days });
       toast({
-        title: 'Cập nhật thành công',
+        title: 'Gia hạn thành công',
         status: 'success',
         duration: 9000,
         isClosable: true
       });
-      router.replace(router.asPath);
+      setRefresh(refresh + 1);
     } catch (error) {
       toast({
         title: 'Có lỗi xảy ra',
@@ -55,11 +52,9 @@ function Campaigns() {
         isClosable: true
       });
     }
-    setUpdating(false);
   };
 
   const handleActive = async id => {
-    setUpdating(true);
     try {
       await AdminService.activeCampaign(id);
       toast({
@@ -69,7 +64,7 @@ function Campaigns() {
         duration: 5000,
         isClosable: true
       });
-      router.replace(router.asPath);
+      setRefresh(refresh + 1);
     } catch (e) {
       toast({
         title: 'Có lỗi xảy ra',
@@ -79,11 +74,9 @@ function Campaigns() {
         isClosable: true
       });
     }
-    setUpdating(false);
   };
 
   const handleEnd = async id => {
-    setUpdating(true);
     try {
       await AdminService.endCampaign(id);
       toast({
@@ -93,7 +86,7 @@ function Campaigns() {
         duration: 5000,
         isClosable: true
       });
-      router.replace(router.asPath);
+      setRefresh(refresh + 1);
     } catch (e) {
       toast({
         title: 'Có lỗi xảy ra',
@@ -103,11 +96,9 @@ function Campaigns() {
         isClosable: true
       });
     }
-    setUpdating(false);
   };
 
   const handleDelete = async id => {
-    setUpdating(true);
     try {
       await AdminService.deleteCampaign(id);
       toast({
@@ -117,7 +108,7 @@ function Campaigns() {
         duration: 5000,
         isClosable: true
       });
-      router.replace(router.asPath);
+      setRefresh(refresh + 1);
     } catch (e) {
       toast({
         title: 'Có lỗi xảy ra',
@@ -127,7 +118,6 @@ function Campaigns() {
         isClosable: true
       });
     }
-    setUpdating(false);
   };
 
   return (
@@ -187,8 +177,7 @@ function Campaigns() {
             <CampaignRow
               key={campaign._id}
               campaign={campaign}
-              loading={updating}
-              onUpdate={handleUpdate}
+              onRenewal={handleRenewal}
               onActive={handleActive}
               onEnd={handleEnd}
               onDelete={handleDelete}

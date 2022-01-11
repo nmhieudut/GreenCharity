@@ -4,18 +4,27 @@ import {
   Flex,
   Heading,
   IconButton,
+  Input,
+  InputGroup,
+  InputRightAddon,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Stack,
   Td,
+  Text,
   Tr,
   useColorModeValue,
   useDisclosure
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AiOutlineCheckCircle, AiOutlineDelete } from 'react-icons/ai';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiEdit } from 'react-icons/fi';
@@ -26,17 +35,7 @@ import CustomAlertModal from '../common/Alert';
 import { CampaignForm } from '../common/core/Campaign/CampaignForm';
 import CustomDrawer from '../common/CustomDrawer';
 
-function CampaignRow({
-  campaign,
-  onActive,
-  onEnd,
-  onDelete,
-  onUpdate,
-  loading
-}) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const firstField = useRef();
-  const imageRef = useRef();
+function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
   const bg = useColorModeValue('gray.100', 'gray.800');
   const [campaignData, setCampaignData] = useState(campaign);
   console.log('====', campaignData);
@@ -58,12 +57,7 @@ function CampaignRow({
 
   console.log('----', campaignData);
   return (
-    <Tr
-      cursor='pointer'
-      _hover={{
-        bg: bg
-      }}
-    >
+    <Tr cursor='pointer' _hover={{ bg }}>
       <Td>{name}</Td>
       <Td py={0}>
         <Stack direction='row' align='center'>
@@ -127,6 +121,9 @@ function CampaignRow({
                   </CustomAlertModal>
                 </>
               )}
+              {status === 'ended' && (
+                <Renewal campaignId={_id} onRenewal={onRenewal} />
+              )}
               <CustomAlertModal
                 modalHeader={'Kết thúc'}
                 modalBody='Bạn chắc chắn muốn kết thúc hoạt động này?'
@@ -138,130 +135,59 @@ function CampaignRow({
           </Menu>
         </Flex>
       </Td>
-      {/* <Drawer
-           size='sm'
-           isOpen={isOpen}
-           placement='right'
-           initialFocusRef={firstField}
-           onClose={onClose}
-         >
-           <DrawerOverlay />
-           <DrawerContent>
-             <DrawerCloseButton />
-             <DrawerHeader borderBottomWidth='1px'>{name}</DrawerHeader>
-   
-             <DrawerBody>
-               <Stack spacing='24px'>
-                 <FormControl id='userName'>
-                   <Stack direction={['column', 'row']} spacing={6}>
-                     <Center>
-                       {url ? (
-                         <Avatar size='xl' src={url} />
-                       ) : (
-                         uploadLoading && (
-                           <Spinner
-                             color={color.PRIMARY}
-                             thickness='4px'
-                             speed='0.65s'
-                             emptyColor='gray.200'
-                             size='xl'
-                           />
-                         )
-                       )}
-                     </Center>
-                     <Center w='full'>
-                       <Button
-                         w='full'
-                         onClick={() => imageRef.current.click()}
-                         colorScheme='purple'
-                         color='white'
-                         variant='solid'
-                       >
-                         Đổi hình đại diện
-                       </Button>
-                       <input
-                         ref={imageRef}
-                         type='file'
-                         className='hidden'
-                         onChange={handleImageChange}
-                       />
-                     </Center>
-                   </Stack>
-                 </FormControl>
-                 <FormControl id='name' isRequired>
-                   <FormLabel htmlFor='name'>Tên</FormLabel>
-                   <Input
-                     ref={firstField}
-                     name='name'
-                     id='name'
-                     value={name}
-                     onChange={e => onChange(e)}
-                   />
-                 </FormControl>
-                 <FormControl id='email'>
-                   <FormLabel htmlFor='email'>Email</FormLabel>
-                   <Input value={email} readOnly id='email' />
-                 </FormControl>
-                 <FormControl id='password' isRequired>
-                   <FormLabel htmlFor='password'>Mật khẩu</FormLabel>
-                   <Input
-                     onChange={e => onChange(e)}
-                     type='password'
-                     name='password'
-                     id='password'
-                     placeholder='Nhập mật khẩu mới'
-                   />
-                 </FormControl>
-                 <FormControl id='balance' isRequired>
-                   <FormLabel htmlFor='balance'>Số dư</FormLabel>
-                   <Input
-                     onChange={e => onChange(e)}
-                     value={balance}
-                     type='number'
-                     name='balance'
-                     id='balance'
-                   />
-                 </FormControl>
-                 <FormControl id='phoneNumber' isRequired>
-                   <FormLabel htmlFor='phoneNumber'>Số điện thoại</FormLabel>
-                   <Input
-                     onChange={e => onChange(e)}
-                     value={phoneNumber}
-                     type='number'
-                     name='phoneNumber'
-                     id='phoneNumber'
-                   />
-                 </FormControl>
-               </Stack>
-             </DrawerBody>
-   
-             <DrawerFooter borderTopWidth='1px'>
-               <Stack spacing={6} direction={['column', 'row']}>
-                 <Button
-                   noLinear
-                   variant='solid'
-                   disabled={loading}
-                   isLoading={loading}
-                   onClick={onClose}
-                 >
-                   Hủy bỏ
-                 </Button>
-                 <Button
-                   colorScheme='purple'
-                   color='white'
-                   variant='solid'
-                   disabled={loading}
-                   isLoading={loading}
-                   onClick={onUpdateInfo}
-                 >
-                   Cập nhật
-                 </Button>
-               </Stack>
-             </DrawerFooter>
-           </DrawerContent>
-         </Drawer> */}
     </Tr>
   );
 }
 
 export default CampaignRow;
+
+function Renewal({ campaignId, onRenewal }) {
+  const [days, setDays] = useState(0);
+  useEffect(() => {
+    setDays(0);
+  }, []);
+
+  return (
+    <CustomAlertModal
+      modalHeader={'Thêm thời hạn'}
+      modalBody={
+        <>
+          <Text lineHeight={'110%'} mb={10}>
+            Nhập số ngày muốn gia hạn (tối đa 30 ngày):
+          </Text>
+
+          <InputGroup size='sm'>
+            <NumberInput
+              size='sm'
+              defaultValue={0}
+              min={0}
+              max={30}
+              value={days}
+              onChange={e => setDays(e)}
+            >
+              <NumberInputField focusBorderColor='red.200' />
+              <NumberInputStepper>
+                <NumberIncrementStepper
+                  bg='green.200'
+                  _active={{ bg: 'green.300' }}
+                >
+                  +
+                </NumberIncrementStepper>
+                <NumberDecrementStepper
+                  bg='pink.200'
+                  _active={{ bg: 'pink.300' }}
+                >
+                  -
+                </NumberDecrementStepper>
+              </NumberInputStepper>
+            </NumberInput>
+            <InputRightAddon>Ngày</InputRightAddon>
+          </InputGroup>
+        </>
+      }
+      handleOk={() => onRenewal(campaignId, days)}
+    >
+      <MenuItem icon={<AiOutlineDelete />}>Gia hạn thêm</MenuItem>
+    </CustomAlertModal>
+  );
+}
