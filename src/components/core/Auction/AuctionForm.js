@@ -28,8 +28,8 @@ import Button from 'src/components/common/Button';
 import Loading from 'src/components/common/Spinner/Loading';
 import { color } from 'src/constants/color';
 import { DateUtils } from 'src/utils/date';
-import { VNDFormatter } from 'src/utils/number';
-s;
+import { toVND } from 'src/utils/number';
+
 export default function AuctionForm() {
   return (
     <SimpleGrid
@@ -74,7 +74,7 @@ export default function AuctionForm() {
               </Stack>
               <Flex fontSize='sm' className='mt-4' justify='space-between'>
                 <Text fontWeight={'bold'}>Khởi điểm:</Text>
-                <Text>{VNDFormatter(startPrice)} đ</Text>
+                <Text>{toVND(startPrice)} đ</Text>
               </Flex>
             </Box>
           </Box>

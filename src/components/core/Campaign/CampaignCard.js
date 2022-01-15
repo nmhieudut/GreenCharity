@@ -13,9 +13,9 @@ import {
 import { BsClock } from 'react-icons/bs';
 import { color } from 'src/constants/color';
 import { DateUtils } from 'src/utils/date';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
-import ProgressBar from '../../Progress/ProgressBar';
+import ProgressBar from '../../common/Progress/ProgressBar';
 
 export default function CampaignCard(props) {
   const {
@@ -31,7 +31,7 @@ export default function CampaignCard(props) {
       finishedAt
     }
   } = props;
-  const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
+  const percent = ((donated_amount / goal) * 100).toFixed(2);
 
   return (
     <Link
@@ -104,14 +104,15 @@ export default function CampaignCard(props) {
               alignItems='center'
               fontSize='sm'
             >
-              <Text>
-                <b>{VNDFormatter(donated_amount)}đ</b> quyên góp
-              </Text>
-              <Text as='b'>{percent}</Text>
+              <Flex>
+                <b>{toVND(donated_amount)}đ</b>&nbsp;/&nbsp;
+                <Text color='gray.500'>{toVND(goal)}đ</Text>
+              </Flex>
+              <Text as='b'>{percent > 100 ? 100 : percent}%</Text>
             </Flex>
 
             <Stack my={2} w={'full'}>
-              <ProgressBar color={color.PRIMARY} percent={percent} />
+              <ProgressBar color={color.PRIMARY} percent={`${percent}%`} />
             </Stack>
           </Box>
         </Box>

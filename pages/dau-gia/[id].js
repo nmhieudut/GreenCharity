@@ -14,6 +14,7 @@ import {
   Link,
   List,
   ListItem,
+  ScaleFade,
   SimpleGrid,
   Slider,
   Stack,
@@ -38,7 +39,7 @@ import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
 import { AuctionService } from 'src/services/auction';
 import { subscribeToAuctionChanges } from 'src/services/io';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
 
 const settings = {
@@ -173,8 +174,6 @@ export default function AuctionDetails({ data }) {
           >
             {convertStatusToString(status)}
           </Badge>
-
-          {/* two column layout */}
           <SimpleGrid
             columns={{ base: 1, md: 2 }}
             spacing={10}
@@ -201,7 +200,6 @@ export default function AuctionDetails({ data }) {
                     >
                       <BiLeftArrowAlt size='40px' />
                     </IconButton>
-                    {/* Right Icon */}
                     <IconButton
                       aria-label='right-arrow'
                       position='absolute'
@@ -296,7 +294,7 @@ export default function AuctionDetails({ data }) {
                     >
                       Giá khởi điểm
                     </Heading>
-                    <Text fontWeight={600}>{VNDFormatter(startPrice)}</Text>
+                    <Text fontWeight={600}>{toVND(startPrice)}</Text>
                     <Divider />
                     <Heading
                       textAlign='center'
@@ -311,7 +309,7 @@ export default function AuctionDetails({ data }) {
                       {currentBid ? (
                         <>
                           <Text textAlign='center'>
-                            {VNDFormatter(currentBid.amount)}
+                            {toVND(currentBid.amount)}
                           </Text>
 
                           <Flex
@@ -408,55 +406,59 @@ export default function AuctionDetails({ data }) {
                         .slice(0)
                         .reverse()
                         .map((bid, idx) => (
-                          <ListItem
-                            borderBottom='1px solid lightgray'
-                            className='fadeIn'
-                            key={idx}
-                            px={2}
-                            py={4}
-                            bgGradient={
-                              user &&
-                              user.id === bid.author._id &&
-                              'linear(to-r, purple.100, purple.200, purple.300)'
-                            }
-                          >
-                            <Flex align='center'>
-                              <Box w={8}>
-                                {idx === 0 && (
-                                  <GiLaurelsTrophy
-                                    size='1.5rem'
-                                    color='yellow'
-                                  />
-                                )}
-                              </Box>
-                              <Avatar
-                                name={bid.author.name}
-                                src={bid.author.picture}
-                                size='sm'
-                                mr={4}
-                              />
-                              <Text fontWeight={600}>{bid.author.name}</Text>
-                              <Text fontSize={'sm'} ml={4} color='green'>
-                                +{' '}
-                                {VNDFormatter(
-                                  auction.bids.length > 0 &&
-                                    bid.amount - startPrice > 0 &&
-                                    bid.amount - startPrice
-                                )}
-                              </Text>
-                              <Text
-                                as='i'
-                                color='gray.500'
-                                ml={'auto'}
-                                fontSize='xs'
-                              >
-                                {formatDistanceToNow(new Date(bid.createdAt), {
-                                  locale: vi
-                                })}{' '}
-                                trước
-                              </Text>
-                            </Flex>
-                          </ListItem>
+                          <ScaleFade key={idx} initialScale={0.9} in={true}>
+                            <ListItem
+                              borderBottom='1px solid lightgray'
+                              className='fadeIn'
+                              px={2}
+                              py={4}
+                              bgGradient={
+                                user &&
+                                user.id === bid.author._id &&
+                                'linear(to-r, purple.100, purple.200, purple.300)'
+                              }
+                            >
+                              <Flex align='center'>
+                                <Box w={8}>
+                                  {idx === 0 && (
+                                    <GiLaurelsTrophy
+                                      size='1.5rem'
+                                      color='yellow'
+                                    />
+                                  )}
+                                </Box>
+                                <Avatar
+                                  name={bid.author.name}
+                                  src={bid.author.picture}
+                                  size='sm'
+                                  mr={4}
+                                />
+                                <Text fontWeight={600}>{bid.author.name}</Text>
+                                <Text fontSize={'sm'} ml={4} color='green'>
+                                  +{' '}
+                                  {toVND(
+                                    auction.bids.length > 0 &&
+                                      bid.amount - startPrice > 0 &&
+                                      bid.amount - startPrice
+                                  )}
+                                </Text>
+                                <Text
+                                  as='i'
+                                  color='gray.500'
+                                  ml={'auto'}
+                                  fontSize='xs'
+                                >
+                                  {formatDistanceToNow(
+                                    new Date(bid.createdAt),
+                                    {
+                                      locale: vi
+                                    }
+                                  )}{' '}
+                                  trước
+                                </Text>
+                              </Flex>
+                            </ListItem>
+                          </ScaleFade>
                         ))}
                     </List>
                   ) : (

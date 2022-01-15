@@ -40,14 +40,14 @@ import { AuctionService } from 'src/services/auction';
 import { CampaignService } from 'src/services/campaign';
 import { ModalActions } from 'src/store/modal/action';
 import { DateUtils } from 'src/utils/date';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 
 function Create() {
   const dispatch = useDispatch();
   const toast = useToast();
   const user = useSelector(state => state.auth.currentUser);
   const { data, isLoading, error } = useQuery('own campaigns', () =>
-    CampaignService.getByAuthor(user.id)
+    CampaignService.getByAuthor(user?.id)
   );
   const { campaigns } = data || [];
   const activeCampaigns = campaigns?.filter(cam => cam.status === 'active');
@@ -221,7 +221,7 @@ function Create() {
                   </Stack>
                   <Flex fontSize='sm' className='mt-4' justify='space-between'>
                     <Text fontWeight={'bold'}>Khởi điểm:</Text>
-                    <Text>{VNDFormatter(startPrice)} đ</Text>
+                    <Text>{toVND(startPrice)} đ</Text>
                   </Flex>
                 </Box>
               </Box>
@@ -360,7 +360,7 @@ function Create() {
                     />
                   </InputGroup>
                 </FormControl>
-                <FormControl isRequired>
+                <FormControl>
                   <FormLabel
                     fontSize='sm'
                     fontWeight='md'

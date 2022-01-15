@@ -28,9 +28,9 @@ import { GiClick } from 'react-icons/gi';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
-import CardSkeleton from 'src/components/common/core/Card/CardSkeleton';
-import NewsCard from 'src/components/common/core/Card/NewsCard';
-import NewsItem from 'src/components/common/core/Card/NewsItem';
+import CardSkeleton from 'src/components/core/Card/CardSkeleton';
+import NewsCard from 'src/components/core/Card/NewsCard';
+import NewsItem from 'src/components/core/Card/NewsItem';
 import Loading from 'src/components/common/Spinner/Loading';
 import { color } from 'src/constants/color';
 import { qa } from 'src/constants/qa';
@@ -41,7 +41,7 @@ const SectionContainer = dynamic(() =>
   import('src/components/common/SectionContainer')
 );
 const CampaignCard = dynamic(() =>
-  import('src/components/common/core/Campaign/CampaignCard')
+  import('src/components/core/Campaign/CampaignCard')
 );
 
 export default function Home({
@@ -368,7 +368,7 @@ export default function Home({
                 mt={10}
                 w={'full'}
                 colorScheme={'purple'}
-                onClick={() => router.push('/campaigns')}
+                onClick={() => router.push('/hoat-dong')}
               >
                 Ủng hộ ngay
               </Button>
@@ -415,11 +415,11 @@ export default function Home({
               color={color.PRIMARY}
               mb={14}
             >
-              Vì sao lại chọn Green Charity?
+              Vì sao nên chọn Green Charity?
             </Heading>
             <SimpleGrid
               columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-              spacingX={{ base: 16, lg: 24 }}
+              spacingX={{ base: 12, lg: 20 }}
               spacingY={20}
               mt={6}
             >
@@ -443,12 +443,11 @@ export default function Home({
 
               <Feature
                 color='green'
-                title='Quyên góp trực tuyến'
+                title='Đấu giá từ thiện trực tiếp'
                 icon={<AiOutlineTransaction />}
               >
-                Bạn không thể quyên góp trực tiếp cho người kêu gọi ? Đừng lo
-                bạn có thể quyên góp thông qua nạp tiền vào số dư của bạn và
-                quyên góp.
+                Đấu giá trực tiếp với những người khác, không cần phải chờ đợi
+                người khác đấu giá.
               </Feature>
               <Feature
                 color='blue'
@@ -492,9 +491,10 @@ export default function Home({
             <Heading fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}>
               Cùng với những người nổi tiếng
             </Heading>
-            <Text>
+            <Text mt={4}>
               Nhiều gương mặt đại diện đã đứng ra kêu gọi từ thiện, tiêu biểu là
-              những ca sĩ, nghệ sĩ trong những năm gần đây.
+              những ca sĩ, nghệ sĩ, gừng sĩ trong những năm gần đây và nhận được
+              nhiều sự ủng hộ và quyên góp của nhân dân trên khắp cả nước.
             </Text>
           </Flex>
           <Box
@@ -535,7 +535,7 @@ export default function Home({
           className='mt-14 mb-10'
         >
           {isLoading &&
-            Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
+            Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)}
           {news?.map((item, index) => (
             <NewsCard key={index} item={item} />
           ))}

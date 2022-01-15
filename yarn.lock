@@ -4724,6 +4724,11 @@ react-countup@^6.0.0:
   dependencies:
     countup.js "^2.0.8"
 
+react-csv@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-csv/-/react-csv-2.2.1.tgz#2ec723dd3ce8069269bffb3a95d968302fc87740"
+  integrity sha512-QdImVwsFQIUcOti2dJFTLnxZ8dW/q+DDpjTmD1m1UVBxh2OaEwIBg7PSGA71m7GQEEoz8M5BfvEc1rd7q8rgPw==
+
 react-dom-factories@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-dom-factories/-/react-dom-factories-1.0.2.tgz#eb7705c4db36fb501b3aa38ff759616aa0ff96e0"

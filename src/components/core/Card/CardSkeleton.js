@@ -1,8 +1,6 @@
 import {
   Box,
-  Flex,
   Skeleton,
-  SkeletonCircle,
   SkeletonText,
   useColorModeValue
 } from '@chakra-ui/react';
@@ -13,7 +11,6 @@ export default function CardSkeleton() {
     <Box
       m={2}
       bg={useColorModeValue('white', 'gray.900')}
-      w={['100%', '45%', '31%']}
       className='rounded-lg shadow-sm hover:shadow-lg duration-500 overflow-hidden'
     >
       <div className='flex flex-col w-full'>

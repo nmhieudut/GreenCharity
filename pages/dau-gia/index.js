@@ -12,8 +12,8 @@ import React, { useEffect, useState } from 'react';
 import { RiAuctionFill } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
-import CardSkeleton from 'src/components/common/core/Card/CardSkeleton';
-import AuctionCard from 'src/components/common/core/Card/AuctionCard';
+import CardSkeleton from 'src/components/core/Card/CardSkeleton';
+import AuctionCard from 'src/components/core/Card/AuctionCard';
 import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
 import { AuctionService } from 'src/services/auction';
@@ -53,7 +53,7 @@ export default function Auctions() {
   }, []);
 
   const redirectToCreateAuction = () => {
-    if (user) router.push('/auctions/tao-moi');
+    if (user) router.push('/dau-gia/tao-moi');
     else router.push('/auth');
   };
   return (

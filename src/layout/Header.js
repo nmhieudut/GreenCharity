@@ -49,7 +49,7 @@ import { navs } from 'src/constants/navbar';
 import firebase from 'src/libs/firebase';
 import { AuthActions } from 'src/store/auth/action';
 import removeCookie from 'src/utils/cookie';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 import { storage } from 'src/utils/storage';
 import { AuthService } from 'src/services/auth';
 
@@ -109,7 +109,7 @@ export default function Header() {
   const Logo = () => {
     return (
       <a href='/'>
-        <img src='/images/GreenCharity.png' width={120} alt='logo' />
+        <img src='/images/thumbnail.png' width={40} alt='logo' />
       </a>
     );
   };
@@ -248,8 +248,7 @@ export default function Header() {
                       <b className='ml-1'>{user.name}</b>
                     </div>
                     <div className='px-4'>
-                      Số dư:{' '}
-                      <b className='ml-1'>{VNDFormatter(user.balance)} VND</b>
+                      Số dư: <b className='ml-1'>{toVND(user.balance)} VND</b>
                     </div>
                     <MenuDivider />
                     {user.role === 'admin' ? (

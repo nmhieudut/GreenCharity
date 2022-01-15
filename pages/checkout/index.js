@@ -21,7 +21,7 @@ import DividerWithText from 'src/components/common/DividerWithText';
 import SectionContainer from 'src/components/common/SectionContainer';
 import withAuth from 'src/HOCs/withAuth';
 import { CheckoutService } from 'src/services/checkout';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 
 function CheckoutDetail(props) {
   const bg = useColorModeValue('gray.50', 'gray.700');
@@ -75,7 +75,7 @@ function CheckoutDetail(props) {
                     </FormLabel>
                     <Input
                       type='number'
-                      value={VNDFormatter(amount)}
+                      value={amount}
                       onChange={e => setAmount(e.target.value)}
                       placeholder='Nhập tại đây'
                     />

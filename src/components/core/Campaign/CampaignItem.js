@@ -12,9 +12,9 @@ import React from 'react';
 import { BsClock } from 'react-icons/bs';
 import { color } from 'src/constants/color';
 import { DateUtils } from 'src/utils/date';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
-import ProgressBar from '../../Progress/ProgressBar';
+import ProgressBar from '../../common/Progress/ProgressBar';
 
 export default function CampaignItem({
   data: {
@@ -98,9 +98,9 @@ export default function CampaignItem({
               fontSize={'sm'}
             >
               <Text color={color.PRIMARY}>
-                {VNDFormatter(donated_amount)} VND quyên góp
+                {toVND(donated_amount)} VND quyên góp
               </Text>
-              <Text>/ {VNDFormatter(goal)} VND</Text>
+              <Text>/ {toVND(goal)} VND</Text>
             </Stack>
           </Flex>
         </div>

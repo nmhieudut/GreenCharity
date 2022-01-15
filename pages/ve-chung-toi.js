@@ -6,11 +6,12 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Text
+  Text,
+  useColorModeValue
 } from '@chakra-ui/react';
 import Head from 'next/head';
 import React from 'react';
-import MemberCard from 'src/components/common/core/Card/MemberCard';
+import MemberCard from 'src/components/core/Card/MemberCard';
 import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
 import { members } from 'src/constants/members';
@@ -30,7 +31,6 @@ const About = () => {
         >
           Đội ngũ phát triển
         </Heading>
-        {/* description text */}
         <Text
           my={8}
           textAlign='center'
@@ -42,15 +42,41 @@ const About = () => {
           nghiệp và có kinh nghiệm lâu dài trong lĩnh vực phát triển ứng dụng.
         </Text>
         <Tabs my={14} isFitted variant='soft-rounded' colorScheme='purple'>
-          <TabList>
-            <Tab _selected={{ color: 'white', bg: 'purple.500' }}>
+          <TabList
+            background={useColorModeValue('white', 'gray.700')}
+            p={2}
+            rounded='full'
+          >
+            <Tab
+              mx={2}
+              color={useColorModeValue('gray.600', 'white')}
+              bg={useColorModeValue('gray.200', 'gray.600')}
+              _selected={{ color: 'white', bg: 'purple.500' }}
+            >
               Những người đứng đầu
             </Tab>
-            <Tab _selected={{ color: 'white', bg: 'purple.500' }}>Thiết kế</Tab>
-            <Tab _selected={{ color: 'white', bg: 'purple.500' }}>
+            <Tab
+              mx={2}
+              color={useColorModeValue('gray.600', 'white')}
+              bg={useColorModeValue('gray.200', 'gray.600')}
+              _selected={{ color: 'white', bg: 'purple.500' }}
+            >
+              Thiết kế
+            </Tab>
+            <Tab
+              mx={2}
+              color={useColorModeValue('gray.600', 'white')}
+              bg={useColorModeValue('gray.200', 'gray.600')}
+              _selected={{ color: 'white', bg: 'purple.500' }}
+            >
               Phát triển
             </Tab>
-            <Tab _selected={{ color: 'white', bg: 'purple.500' }}>
+            <Tab
+              mx={2}
+              color={useColorModeValue('gray.600', 'white')}
+              bg={useColorModeValue('gray.200', 'gray.600')}
+              _selected={{ color: 'white', bg: 'purple.500' }}
+            >
               Marketing
             </Tab>
           </TabList>

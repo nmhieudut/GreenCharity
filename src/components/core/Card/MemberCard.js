@@ -3,6 +3,7 @@ import {
   Flex,
   Grid,
   Heading,
+  Image,
   Text,
   useColorModeValue
 } from '@chakra-ui/react';
@@ -14,12 +15,12 @@ import {
   FaTiktok
 } from 'react-icons/fa';
 import { color } from 'src/constants/color';
-import Button from '../../Button';
+import Button from '../../common/Button';
 
 export default function MemberCard({ data }) {
   const bg = useColorModeValue('gray.100', 'gray.700');
   const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-  const { picture, name, as, github, instagram, facebook, tiktok } = data;
+  const { picture, name, as, github, instagram, facebook } = data;
   return (
     <>
       <Box
@@ -34,7 +35,7 @@ export default function MemberCard({ data }) {
         my={8}
       >
         <div className='card__img'>
-          <img src={picture} alt={name} />
+          <Image src={picture} alt={name} />
         </div>
         <Heading
           mt={10}
@@ -48,32 +49,25 @@ export default function MemberCard({ data }) {
         <Text mt={4} textTransform='uppercase'>
           {as}
         </Text>
-        <Grid p={4} templateColumns='repeat(4, 1fr)' gap={4} my={4}>
+        <Grid p={4} templateColumns='repeat(3, 1fr)' gap={4} my={4}>
           <a
             className='flex justify-center align-center'
             target='_black'
-            href='https://www.facebook.com/nam.nodemy'
+            href={facebook}
           >
             <FaFacebookSquare />
           </a>
           <a
             className='flex justify-center align-center'
             target='_black'
-            href='https://www.youtube.com/c/Nodemy'
+            href={instagram}
           >
             <FaInstagram />
           </a>
           <a
             className='flex justify-center align-center'
             target='_black'
-            href='https://www.tiktok.com/@manindev'
-          >
-            <FaTiktok />
-          </a>
-          <a
-            className='flex justify-center align-center'
-            target='_black'
-            href='https://github.com/namndwebdev/html-css-js-thuc-chien'
+            href={github}
           >
             <FaGithub />
           </a>

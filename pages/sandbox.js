@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
-import MemberCard from 'src/components/common/core/Card/MemberCard';
+import MemberCard from 'src/components/core/Card/MemberCard';
 import CountDown from 'src/components/common/CountDown';
 
 export default function sandbox() {

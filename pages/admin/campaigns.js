@@ -16,7 +16,7 @@ import { BsPlus } from 'react-icons/bs';
 import { useQuery } from 'react-query';
 import CampaignRow from 'src/components/admin/CampaignRow';
 import Button from 'src/components/common/Button';
-import { CampaignForm } from 'src/components/common/core/Campaign/CampaignForm';
+import { CampaignForm } from 'src/components/core/Campaign/CampaignForm';
 import CustomDrawer from 'src/components/common/CustomDrawer';
 import { color } from 'src/constants/color';
 import withAdmin from 'src/HOCs/withAdmin';
@@ -24,7 +24,6 @@ import AdminLayout from 'src/layout/AdminLayout';
 import { AdminService } from 'src/services/admin';
 
 function Campaigns() {
-  const [refresh, setRefresh] = useState(0);
   const toast = useToast();
   const bg = useColorModeValue('gray.100', 'gray.800');
   const { data, isLoading, isError, error } = useQuery(
@@ -32,6 +31,7 @@ function Campaigns() {
     () => AdminService.getCampaigns()
   );
   const { campaigns } = data || [];
+  const [refresh, setRefresh] = useState(0);
 
   const handleRenewal = async (id, days) => {
     try {

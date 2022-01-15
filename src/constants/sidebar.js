@@ -26,10 +26,6 @@ export const meSideBar = [
   {
     title: 'Lịch sử giao dịch',
     icon: AiOutlineTransaction
-  },
-  {
-    title: 'Cài đặt',
-    icon: FiSettings
   }
 ];
 
@@ -45,6 +41,11 @@ export const adminSideBar = [
     path: 'campaigns'
   },
   {
+    title: 'Các phiên đấu giá',
+    icon: RiAuctionFill,
+    path: 'auctions'
+  },
+  {
     title: 'Giao dịch hệ thống',
     icon: AiOutlineTransaction,
     path: 'transactions'
@@ -55,18 +56,8 @@ export const adminSideBar = [
     path: 'donations'
   },
   {
-    title: 'Các phiên đấu giá',
-    icon: RiAuctionFill,
-    path: 'auctions'
-  },
-  {
     title: 'Tin tức',
     icon: BsNewspaper,
     path: 'news'
-  },
-  {
-    title: 'Cài đặt',
-    icon: FiSettings
-    // path: 'settings'
   }
 ];

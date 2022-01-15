@@ -48,7 +48,7 @@ import { useStorage } from 'src/hooks/useStorage';
 import { CampaignService } from 'src/services/campaign';
 import { UserService } from 'src/services/user';
 import { DateUtils } from 'src/utils/date';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
 
 function AccountPage(props) {
@@ -203,7 +203,7 @@ function AccountPage(props) {
 
                 <Flex flexDir={'column'}>
                   <Text fontSize='lg'>
-                    Số dư: <b> {VNDFormatter(user.balance)} VND</b>
+                    Số dư: <b> {toVND(user.balance)} VND</b>
                   </Text>
                   <Button
                     mt={2}
@@ -488,11 +488,14 @@ function CampaignTab(props) {
               {campaigns?.map(campaign => (
                 <Tr key={campaign._id}>
                   <Td>{campaign.name}</Td>
-                  <Td isNumeric>{VNDFormatter(campaign.goal)}</Td>
-                  <Td isNumeric>{VNDFormatter(campaign.donated_amount)}</Td>
+                  <Td isNumeric>{toVND(campaign.goal)}</Td>
+                  <Td isNumeric>{toVND(campaign.donated_amount)}</Td>
                   <Td>{format(new Date(campaign.finishedAt), 'dd/MM/yyyy')}</Td>
                   <Td>
-                    {DateUtils.calculateDaysFromNow(campaign.finishedAt)} ngày
+                    {campaign.status === 'active'
+                      ? DateUtils.calculateDaysFromNow(campaign.finishedAt)
+                      : 0}{' '}
+                    ngày
                   </Td>
                   <Td>
                     <Tag
@@ -559,7 +562,7 @@ function DonateTab(props) {
               {donations?.map(donation => (
                 <Tr key={donation._id}>
                   <Td>{donation.campaignInfo.name}</Td>
-                  <Td isNumeric>{VNDFormatter(donation.amount)}</Td>
+                  <Td isNumeric>{toVND(donation.amount)}</Td>
                   <Td>{format(new Date(donation.createdAt), 'dd/MM/yyyy')}</Td>
                   <Td>{donation.message}</Td>
                   <Td>
@@ -585,7 +588,7 @@ function DonateTab(props) {
               <Tr>
                 <Th>Tổng sô tiền</Th>
                 <Th isNumeric>
-                  {VNDFormatter(
+                  {toVND(
                     donations?.reduce(
                       (total, currentVal) => total + currentVal.amount,
                       0

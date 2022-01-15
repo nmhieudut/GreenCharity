@@ -14,9 +14,9 @@ import {
 import { BsClock } from 'react-icons/bs';
 import useCountdown from 'src/hooks/useCountdown';
 import { DateUtils } from 'src/utils/date';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
-import Button from '../../Button';
+import Button from '../../common/Button';
 
 const AuctionCard = ({ auction }) => {
   const {
@@ -33,7 +33,7 @@ const AuctionCard = ({ auction }) => {
   const { days, hours, minutes, seconds } = useCountdown(finishedAt);
   return (
     <Link
-      href={`/auctions/${_id}`}
+      href={`/dau-gia/${_id}`}
       cursor={'pointer'}
       flexDir={'column'}
       className='transition duration-300 md:mx-2 mb-8 rounded-lg'
@@ -117,7 +117,7 @@ const AuctionCard = ({ auction }) => {
             </Stack>
             <Flex fontSize='sm' className='mt-4' justify='space-between'>
               <Text fontWeight={'bold'}>Khởi điểm:</Text>
-              <Text>{VNDFormatter(startPrice)} đ</Text>
+              <Text>{toVND(startPrice)} đ</Text>
             </Flex>
             {currentBid && (
               <Flex
@@ -127,7 +127,7 @@ const AuctionCard = ({ auction }) => {
                 color={color.PRIMARY}
               >
                 <Text fontWeight={'bold'}>Hiện tại:</Text>
-                <Text>{VNDFormatter(currentBid.amount)} đ</Text>
+                <Text>{toVND(currentBid.amount)} đ</Text>
               </Flex>
             )}
 

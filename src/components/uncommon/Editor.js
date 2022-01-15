@@ -53,7 +53,7 @@ function Editor({ onChange, editorLoaded, name, value }) {
             'video'
           ]}
           bounds={'.app'}
-          placeholder='text here'
+          placeholder='Nhập văn bản'
         />
       ) : (
         <div>Editor loading</div>

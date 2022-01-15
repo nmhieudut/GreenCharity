@@ -5,8 +5,8 @@ function ignoreZeroBefore(number) {
   }
 }
 
-function VNDFormatter(amount) {
+function toVND(amount) {
   return n(amount).format('0,0');
 }
 
-export { ignoreZeroBefore, VNDFormatter };
+export { ignoreZeroBefore, toVND };

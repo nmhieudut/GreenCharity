@@ -42,9 +42,9 @@ import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import Slider from 'react-slick';
 import Button from 'src/components/common/Button';
-import { CampaignForm } from 'src/components/common/core/Campaign/CampaignForm';
-import CommentItem from 'src/components/common/core/Campaign/CommentItem';
-import DonatorItem from 'src/components/common/core/Card/DonatorItem';
+import { CampaignForm } from 'src/components/core/Campaign/CampaignForm';
+import CommentItem from 'src/components/core/Campaign/CommentItem';
+import DonatorItem from 'src/components/core/Card/DonatorItem';
 import DividerWithText from 'src/components/common/DividerWithText';
 import NeedLogin from 'src/components/common/NeedLogin';
 import ProgressBar from 'src/components/common/Progress/ProgressBar';
@@ -53,7 +53,7 @@ import { color } from 'src/constants/color';
 import { CampaignService } from 'src/services/campaign';
 import { CommentService } from 'src/services/comment';
 import { ModalActions } from 'src/store/modal/action';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
 import useCountdown from 'src/hooks/useCountdown';
 
@@ -155,7 +155,7 @@ export default function Detail({ campaign }) {
       });
       onOpen();
       toast({
-        title: `Đã quyên góp thành công số tiền ${VNDFormatter(
+        title: `Đã quyên góp thành công số tiền ${toVND(
           wished_amount
         )}. Cảm ơn tấm lòng đại bác của bạn!`,
         status: 'success',
@@ -324,7 +324,7 @@ export default function Detail({ campaign }) {
                   <Flex>
                     <b>Mục tiêu: </b>
                     <Text color={color.PRIMARY} ml={2} fontWeight={600}>
-                      {VNDFormatter(goal)}đ
+                      {toVND(goal)}đ
                     </Text>
                   </Flex>
                 </Stack>
@@ -337,7 +337,7 @@ export default function Detail({ campaign }) {
                   <Flex flexDir='column' alignItems='center' bg={bg}>
                     <Text fontSize={'md'}>Đã quyên góp</Text>
                     <Text color={'gray.500'} as={'b'}>
-                      {VNDFormatter(donated_amount)}đ
+                      {toVND(donated_amount)}đ
                     </Text>
                   </Flex>
                   <Flex flexDir='column' alignItems='center' bg={bg}>

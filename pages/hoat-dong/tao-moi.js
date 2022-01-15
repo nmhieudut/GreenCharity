@@ -1,7 +1,7 @@
 import { Heading, Text } from '@chakra-ui/react';
 import Head from 'next/head';
 import React from 'react';
-import { CampaignForm } from 'src/components/common/core/Campaign/CampaignForm';
+import { CampaignForm } from 'src/components/core/Campaign/CampaignForm';
 import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
 import withAuth from 'src/HOCs/withAuth';
@@ -22,7 +22,7 @@ function CreateCampaign() {
         >
           Tạo hoạt động từ thiện mới
         </Heading>
-        <Text my={8} textAlign={'center'} fontSize={'lg'} color={'gray.500'}>
+        <Text my={2} textAlign={'center'} fontSize={'lg'} color={'gray.500'}>
           Điền vào form dưới để tạo 1 hoạt động mới
         </Text>
         <CampaignForm />

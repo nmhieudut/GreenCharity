@@ -17,16 +17,19 @@ const Rest = {
   //news services
   news: '/news',
 
-  //charge
+  //charge services
   balance: '/balance',
 
-  //checkout
+  //checkout services
   checkout: '/checkout',
 
-  //auction
+  //auction services
   auction: '/auctions',
 
-  //admin
+  //province services
+  province: '/province',
+
+  //admin services
   admin: '/admin'
 };
 

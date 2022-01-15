@@ -2,7 +2,7 @@ import { Box, Flex, Tag, Text, useColorModeValue } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import React from 'react';
 import { FcDonate, FcMoneyTransfer } from 'react-icons/fc';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 
 export default function ChargeItem(props) {
   const { history, idx } = props;
@@ -26,11 +26,11 @@ export default function ChargeItem(props) {
       <Box ml='auto'>
         {history.action === 'charge' ? (
           <Tag colorScheme='green'>
-            <Text fontSize='sm'>+ {VNDFormatter(history.amount)} VND</Text>
+            <Text fontSize='sm'>+ {toVND(history.amount)} VND</Text>
           </Tag>
         ) : (
           <Tag colorScheme='red'>
-            <Text fontSize='sm'>- {VNDFormatter(history.amount)} VND</Text>
+            <Text fontSize='sm'>- {toVND(history.amount)} VND</Text>
           </Tag>
         )}
       </Box>

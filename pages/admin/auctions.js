@@ -1,5 +1,8 @@
 import React from 'react';
+import withAdmin from 'src/HOCs/withAdmin';
+import AdminLayout from 'src/layout/AdminLayout';
 
-export default function auctions() {
-  return <div></div>;
+function Auctions() {
+  return <AdminLayout></AdminLayout>;
 }
+export default withAdmin(Auctions);

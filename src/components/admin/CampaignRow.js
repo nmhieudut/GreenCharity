@@ -29,16 +29,14 @@ import { AiOutlineCheckCircle, AiOutlineDelete } from 'react-icons/ai';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiEdit } from 'react-icons/fi';
 import { GiFinishLine } from 'react-icons/gi';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
 import CustomAlertModal from '../common/Alert';
-import { CampaignForm } from '../common/core/Campaign/CampaignForm';
+import { CampaignForm } from '../core/Campaign/CampaignForm';
 import CustomDrawer from '../common/CustomDrawer';
 
 function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
   const bg = useColorModeValue('gray.100', 'gray.800');
-  const [campaignData, setCampaignData] = useState(campaign);
-  console.log('====', campaignData);
   const [image, setImage] = useState(null);
   const {
     _id,
@@ -51,11 +49,10 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
     status,
     finishedAt,
     createdAt
-  } = campaignData;
+  } = campaign;
 
   const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
 
-  console.log('----', campaignData);
   return (
     <Tr cursor='pointer' _hover={{ bg }}>
       <Td>{name}</Td>
@@ -70,9 +67,9 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
 
       <Td>{format(new Date(createdAt), 'dd/MM/yyyy')}</Td>
       <Td>{format(new Date(finishedAt), 'dd/MM/yyyy')}</Td>
-      <Td>{VNDFormatter(goal)}</Td>
+      <Td>{toVND(goal)}</Td>
       <Td>
-        {VNDFormatter(donated_amount)} ({percent})
+        {toVND(donated_amount)} ({percent})
       </Td>
       <Td>
         <Flex align='center' justify='space-between'>
@@ -108,7 +105,7 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
                     }
                     drawerHeader={name}
                     drawerBody={
-                      <CampaignForm isEdited initialValues={campaignData} />
+                      <CampaignForm isEdited initialValues={campaign} />
                     }
                   />
 

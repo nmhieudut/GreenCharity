@@ -1,6 +1,7 @@
 import {
   Avatar,
   Badge,
+  Box,
   Drawer,
   DrawerCloseButton,
   DrawerContent,
@@ -28,7 +29,6 @@ import {
   useToast
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
 import {
   AiOutlineCheckCircle,
@@ -39,19 +39,18 @@ import { BsPlus, BsThreeDotsVertical } from 'react-icons/bs';
 import { FiEdit } from 'react-icons/fi';
 import { useQuery } from 'react-query';
 import Button from 'src/components/common/Button';
-import UserForm from 'src/components/common/core/User/UserForm';
 import CustomDrawer from 'src/components/common/CustomDrawer';
+import UserForm from 'src/components/core/User/UserForm';
 import { color } from 'src/constants/color';
 import withAdmin from 'src/HOCs/withAdmin';
 import AdminLayout from 'src/layout/AdminLayout';
 import { AdminService } from 'src/services/admin';
-import { VNDFormatter } from 'src/utils/number';
+import { toVND } from 'src/utils/number';
 
 function UserItem({ user, onToggleActive, onDeleteUser }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef();
   const bg = useColorModeValue('gray.100', 'gray.800');
-  const [userData, setUserData] = useState(user);
 
   const {
     _id,
@@ -61,10 +60,9 @@ function UserItem({ user, onToggleActive, onDeleteUser }) {
     balance,
     phoneNumber,
     role,
-    dateOfBirth,
     isActive,
     createdAt
-  } = userData;
+  } = user;
 
   return (
     <Tr
@@ -74,23 +72,19 @@ function UserItem({ user, onToggleActive, onDeleteUser }) {
       }}
     >
       <Td>
-        <Stack direction='row' align='center'>
+        <Flex>
           <Avatar name={name} size='sm' src={picture} />
-          <Flex direction='column'>
-            <Heading as='h3' size='sm'>
-              {name}
-            </Heading>
-            <Text as='i' size='xs'>
-              {email}
-            </Text>
-          </Flex>
-        </Stack>
+          <Box ml='3'>
+            <Text fontWeight='bold'>{name}</Text>
+            <Text fontSize='sm'> {email}</Text>
+          </Box>
+        </Flex>
       </Td>
       <Td>
         <Badge>{role === 'user' ? 'Thành viên' : 'Khác'}</Badge>
       </Td>
       <Td>{format(new Date(createdAt), 'dd/MM/yyyy')}</Td>
-      <Td isNumeric>{VNDFormatter(balance)}</Td>
+      <Td isNumeric>{toVND(balance)}</Td>
       <Td>
         <Flex align='center' justify='space-between'>
           <Badge colorScheme={isActive ? 'green' : 'red'}>
@@ -133,7 +127,7 @@ function UserItem({ user, onToggleActive, onDeleteUser }) {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth='1px'>{name}</DrawerHeader>
-          <UserForm isEdited initialValue={userData} />
+          <UserForm isEdited initialValue={user} />
         </DrawerContent>
       </Drawer>
     </Tr>
@@ -141,7 +135,6 @@ function UserItem({ user, onToggleActive, onDeleteUser }) {
 }
 
 function Users() {
-  const router = useRouter();
   const toast = useToast();
   const bg = useColorModeValue('gray.100', 'gray.800');
   const { data, isLoading, isError, error } = useQuery(['users', refresh], () =>

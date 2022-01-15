@@ -2,21 +2,19 @@ export const members = {
   founders: [
     {
       picture: '/images/hieu3.jpg',
-      name: 'Hieu Nguyen',
-      as: 'Co-founder',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      name: 'Hiếu Hoa Hồng',
+      as: 'Chủ tịch',
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     },
     {
       picture: '/images/hieu3.jpg',
       name: 'Hieu Nguyen',
       as: 'Co-founder',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     }
   ],
   developers: [
@@ -24,37 +22,33 @@ export const members = {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     },
     {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     },
     {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     },
     {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     }
   ],
   designers: [
@@ -62,28 +56,25 @@ export const members = {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     },
     {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     },
     {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     }
   ],
   marketers: [
@@ -91,28 +82,25 @@ export const members = {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     },
     {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     },
     {
       picture: '/images/hieu3.jpg',
       name: 'Nam Nguyen',
       as: 'Developer',
-      github: '',
-      facebook: '',
-      instagram: '',
-      tiktok: ''
+      github: 'https://github.com/nmhieudut',
+      facebook: 'https://www.facebook.com/hieumaxnho/',
+      instagram: 'https://www.instagram.com/hillrose_1509/'
     }
   ]
 };

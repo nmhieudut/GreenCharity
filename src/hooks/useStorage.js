@@ -7,18 +7,15 @@ export const useStorage = (initFile, file, path) => {
   const [url, setUrl] = useState(initFile);
   const [uploadLoading, setUploadLoading] = useState(false);
 
-  // runs every time the file value changes
   useEffect(() => {
     if (file) {
       setUrl('');
-      // storage ref
       setUploadLoading(true);
       const storageRef = storage.ref(`${path}/${file.name}`);
 
       storageRef.put(file).on(
         'state_changed',
         snap => {
-          // track the upload progress
           let percentage = Math.round(
             (snap.bytesTransferred / snap.totalBytes) * 100
           );
@@ -26,18 +23,15 @@ export const useStorage = (initFile, file, path) => {
         },
         err => {
           setError(err);
-          setUploadLoading(true);
+          setUploadLoading(false);
         },
         async () => {
-          // get the public download img url
           const downloadUrl = await storage
             .ref(path)
             .child(file.name)
             .getDownloadURL();
-
-          // save the url to local state
           setUrl(downloadUrl);
-          setUploadLoading(true);
+          setUploadLoading(false);
         }
       );
     }
