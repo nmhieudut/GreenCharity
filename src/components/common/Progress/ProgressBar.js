@@ -13,11 +13,13 @@ export default function ProgressBar({ color, percent, ...rest }) {
           height: 0.5rem;
           background-color: #e8e8e8;
           overflow: hidden;
+          border-radius: 999px;
         }
         .bar-percent {
           height: 100%;
           background-color: ${color ? color : 'red'};
           border-radius: inherit;
+          border-radius: 999px;
         }
       `}</style>
     </div>

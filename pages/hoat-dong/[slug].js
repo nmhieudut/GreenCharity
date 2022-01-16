@@ -56,6 +56,7 @@ import { ModalActions } from 'src/store/modal/action';
 import { toVND } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
 import useCountdown from 'src/hooks/useCountdown';
+import { HiLocationMarker } from 'react-icons/hi';
 
 export async function getServerSideProps(ctx) {
   try {
@@ -122,8 +123,10 @@ export default function Detail({ campaign }) {
     name,
     images,
     content,
+    address,
     finishedAt,
     author,
+    moreInfo,
     createdAt
   } = campaign;
   const { wished_amount, message } = donatedInfo;
@@ -214,7 +217,11 @@ export default function Detail({ campaign }) {
               {convertStatusToString(status)}
             </Badge>
           </Box>
-          <FsLightbox toggler={lightboxController.toggler} sources={images} />
+          <FsLightbox
+            type='image'
+            toggler={lightboxController.toggler}
+            sources={images}
+          />
           <Flex flexDirection={['column', 'column', 'row']} spacing={8}>
             <Box
               w={['100%', '100%', '60%']}
@@ -272,15 +279,15 @@ export default function Detail({ campaign }) {
                 </Slider>
               </Box>
 
-              <Tabs isLazy>
+              <Tabs isLazy variant='enclosed' isFitted>
                 <TabList mb='1em'>
-                  <Tab _selected={{ borderColor: color.PRIMARY }}>
-                    Miếng trầu là đầu câu chuyện
+                  <Tab _selected={{ bg: color.PRIMARY, color: 'white' }}>
+                    Hoàn cảnh
                   </Tab>
-                  <Tab _selected={{ borderColor: color.PRIMARY }}>
+                  <Tab _selected={{ bg: color.PRIMARY, color: 'white' }}>
                     Các nhà hảo tâm
                   </Tab>
-                  <Tab _selected={{ borderColor: color.PRIMARY }}>
+                  <Tab _selected={{ bg: color.PRIMARY, color: 'white' }}>
                     Bình luận
                   </Tab>
                 </TabList>
@@ -375,22 +382,30 @@ export default function Detail({ campaign }) {
                     <Text color={'gray.500'} as={'b'}></Text>
                   </Flex>
                 </Flex>
-                <Box py={2}>
-                  <Text color={color.PRIMARY} fontSize='lg' fontWeight={600}>
-                    Thông tin đóng góp xin gửi về{' '}
+                <Flex direction={'column'} py={2}>
+                  <Box verticalAlign='middle' mb={2}>
+                    <span className='inline-block align-baseline'>
+                      <HiLocationMarker className='mt-1' />
+                    </span>
+                    <Text
+                      as='span'
+                      fontSize='sm'
+                      color='gray.500'
+                      display='inline'
+                    >
+                      &nbsp;{address}
+                    </Text>
+                  </Box>
+                  <Text
+                    color={color.PRIMARY}
+                    fontSize='lg'
+                    fontWeight={600}
+                    mb={2}
+                  >
+                    Thông tin thêm
                   </Text>
-                  <Flex direction={'column'} pt={2}>
-                    <Text py={2}>
-                      STK: <b>0909090909090</b>
-                    </Text>
-                    <Text py={2}>
-                      Tên CTK: <b>NGUYEN MINH HIEU</b>
-                    </Text>
-                    <Text py={2}>
-                      Chi nhánh: <b>Đà nẽn</b>
-                    </Text>
-                  </Flex>
-                </Box>
+                  <Text as={'i'}>{moreInfo ? moreInfo : 'Không có'}</Text>
+                </Flex>
                 <DividerWithText> Hoặc quyên góp ngay</DividerWithText>
                 {user ? (
                   <form

@@ -10,7 +10,7 @@ import {
   Text,
   useColorModeValue
 } from '@chakra-ui/react';
-import { BsClock } from 'react-icons/bs';
+import { HiLocationMarker } from 'react-icons/hi';
 import { color } from 'src/constants/color';
 import { DateUtils } from 'src/utils/date';
 import { toVND } from 'src/utils/number';
@@ -28,7 +28,8 @@ export default function CampaignCard(props) {
       content,
       donated_amount,
       goal,
-      finishedAt
+      finishedAt,
+      address
     }
   } = props;
   const percent = ((donated_amount / goal) * 100).toFixed(2);
@@ -53,7 +54,7 @@ export default function CampaignCard(props) {
             <Image src={images[0]} alt={name} objectFit='cover' />
           </AspectRatio>
 
-          <Box className='px-4 pt-4 h-auto md:h-40 lg:h-40'>
+          <Box className='px-4 pt-4 h-auto md:h-24 lg:h-32'>
             <Flex mb={2} alignItems='center' justify='space-between'>
               <Badge
                 variant='outline'
@@ -98,7 +99,23 @@ export default function CampaignCard(props) {
               </Box>
             </Stack>
           </Box>
-          <Box mt={'auto'} px={4} mb={4}>
+          <Box
+            mt={'auto'}
+            px={4}
+            pt={4}
+            mb={4}
+            position='relative'
+            _before={{
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 4,
+              width: '20%',
+              height: 1,
+              borderRadius: 999,
+              backgroundColor: `${color.PRIMARY}`
+            }}
+          >
             <Flex
               justifyContent='space-between'
               alignItems='center'
@@ -106,14 +123,23 @@ export default function CampaignCard(props) {
             >
               <Flex>
                 <b>{toVND(donated_amount)}đ</b>&nbsp;/&nbsp;
-                <Text color='gray.500'>{toVND(goal)}đ</Text>
+                <Text color='gray.500' ml='auto'>
+                  {toVND(goal)}đ
+                </Text>
               </Flex>
-              <Text as='b'>{percent > 100 ? 100 : percent}%</Text>
             </Flex>
 
             <Stack my={2} w={'full'}>
               <ProgressBar color={color.PRIMARY} percent={`${percent}%`} />
             </Stack>
+            <Box py={1} verticalAlign='middle'>
+              <span className='inline-block align-baseline'>
+                <HiLocationMarker className='mt-1' />
+              </span>
+              <Text as='span' fontSize='sm' color='gray.500' display='inline'>
+                &nbsp;{address}
+              </Text>
+            </Box>
           </Box>
         </Box>
       </Box>

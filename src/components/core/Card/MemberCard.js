@@ -35,7 +35,7 @@ export default function MemberCard({ data }) {
         my={8}
       >
         <div className='card__img'>
-          <Image src={picture} alt={name} />
+          <img src={picture} alt={name} />
         </div>
         <Heading
           mt={10}
@@ -77,15 +77,6 @@ export default function MemberCard({ data }) {
         </Button>
       </Box>
       <style jsx>{`
-        .card {
-          width: 300px;
-          height: 400px;
-          border-radius: 10px;
-          text-align: center;
-          overflow: hidden;
-          margin: 0 30px;
-        }
-
         .card__img {
           display: inline-block;
           padding: 8px;

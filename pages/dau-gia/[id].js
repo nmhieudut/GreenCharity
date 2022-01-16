@@ -182,6 +182,7 @@ export default function AuctionDetails({ data }) {
           >
             <Box>
               <FsLightbox
+                type='image'
                 toggler={lightboxController.toggler}
                 sources={images}
               />

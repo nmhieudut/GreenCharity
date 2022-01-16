@@ -19,5 +19,7 @@ export const AdminService = {
 
   getTransactions: () => _http.get(Rest.admin + '/transactions'),
 
-  getNews: () => _http.get(Rest.admin + '/news')
+  getNews: () => _http.get(Rest.admin + '/news'),
+
+  getDonations: () => _http.get(Rest.admin + '/donations')
 };

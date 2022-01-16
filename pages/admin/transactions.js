@@ -83,6 +83,7 @@ function Transactions() {
         shadow='xl'
         rounded='md'
         overflow='hidden'
+        size='sm'
       >
         <Thead bg={bg}>
           <Tr>
