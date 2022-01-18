@@ -18,6 +18,7 @@ import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
 import { AuctionService } from 'src/services/auction';
 import { subscribeToAuctionChanges } from 'src/services/io';
+import Head from 'next/head';
 
 export default function Auctions() {
   const router = useRouter();
@@ -58,6 +59,10 @@ export default function Auctions() {
   };
   return (
     <>
+      <Head>
+        <title>Các hoạt động</title>
+        <link rel='icon' href='/images/thumbnail.png' />
+      </Head>
       <Box
         background="url('/images/auction.jpg') no-repeat"
         backgroundSize='cover'

@@ -51,11 +51,6 @@ export const adminSideBar = [
     path: 'transactions'
   },
   {
-    title: 'Các quyên góp',
-    icon: BiDonateHeart,
-    path: 'donations'
-  },
-  {
     title: 'Tin tức',
     icon: BsNewspaper,
     path: 'news'

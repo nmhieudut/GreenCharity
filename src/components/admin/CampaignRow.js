@@ -1,7 +1,10 @@
 import {
   Avatar,
   Badge,
+  Box,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
   IconButton,
   Input,
@@ -16,24 +19,44 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  SkeletonCircle,
+  SkeletonText,
   Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Td,
   Text,
   Tr,
   useColorModeValue,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { useEffect, useRef, useState } from 'react';
-import { AiOutlineCheckCircle, AiOutlineDelete } from 'react-icons/ai';
+import {
+  AiOutlineCheckCircle,
+  AiOutlineComment,
+  AiOutlineDelete
+} from 'react-icons/ai';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiEdit } from 'react-icons/fi';
 import { GiFinishLine } from 'react-icons/gi';
 import { toVND } from 'src/utils/number';
 import { convertStatusToString } from 'src/utils/status';
 import CustomAlertModal from '../common/Alert';
-import { CampaignForm } from '../core/Campaign/CampaignForm';
+import { CampaignForm } from '../core/Form/CampaignForm';
 import CustomDrawer from '../common/CustomDrawer';
+import DonatorItem from '../core/Card/DonatorItem';
+import Button from '../common/Button';
+import NeedLogin from '../common/NeedLogin';
+import CommentItem from '../core/Campaign/CommentItem';
+import { useQuery } from 'react-query';
+import { CommentService } from 'src/services/comment';
+import { CampaignService } from 'src/services/campaign';
+import { color } from 'src/constants/color';
 
 function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
   const bg = useColorModeValue('gray.100', 'gray.800');
@@ -105,7 +128,24 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
                     }
                     drawerHeader={name}
                     drawerBody={
-                      <CampaignForm isEdited initialValues={campaign} />
+                      <Tabs>
+                        <TabList>
+                          <Tab>Chỉnh sửa</Tab>
+                          <Tab>Lượt quyên góp</Tab>
+                          <Tab>Bình luận</Tab>
+                        </TabList>
+                        <TabPanels>
+                          <TabPanel>
+                            <CampaignForm isEdited initialValues={campaign} />
+                          </TabPanel>
+                          <TabPanel>
+                            <Donator campaignId={_id} />
+                          </TabPanel>
+                          <TabPanel>
+                            <Comment campaignId={_id} />
+                          </TabPanel>
+                        </TabPanels>
+                      </Tabs>
                     }
                   />
 
@@ -186,5 +226,134 @@ function Renewal({ campaignId, onRenewal }) {
     >
       <MenuItem icon={<AiOutlineDelete />}>Gia hạn thêm</MenuItem>
     </CustomAlertModal>
+  );
+}
+
+function Donator({ campaignId }) {
+  const { data, isLoading, error, isError } = useQuery('donators', () =>
+    CampaignService.fetchDonations(campaignId)
+  );
+  const { donations } = data || [];
+  console.log(donations, isLoading, error);
+
+  return (
+    <Box>
+      {isLoading ? (
+        <Box padding='4' rounded={'xl'} bg='gray.50' my={4}>
+          <SkeletonCircle size='10' />
+          <SkeletonText mt='4' noOfLines={4} spacing='4' />
+        </Box>
+      ) : (
+        donations?.map(donation => (
+          <DonatorItem key={donation._id} donation={donation} />
+        ))
+      )}
+      {donations?.length === 0 && <div>Chưa có người quyên góp nào</div>}
+    </Box>
+  );
+}
+
+function Comment({ campaignId }) {
+  const toast = useToast();
+  const [value, setValue] = useState('');
+  const [refetch, setRefetch] = useState(0);
+  const { data, isLoading, isError, error } = useQuery(
+    ['comments', refetch],
+    () => CampaignService.fetchComments(campaignId)
+  );
+  const { comments } = data || [];
+  const bg = useColorModeValue('gray.100', 'gray.900');
+
+  async function handleComment(e) {
+    e.preventDefault();
+    try {
+      await CommentService.create(campaignId, value).then(res => {
+        setRefetch(r => r + 1);
+        setValue('');
+      });
+      toast({
+        title: 'Thành công',
+        description: 'Bình luận đã được gửi',
+        status: 'success',
+        duration: 5000,
+        isClosable: true
+      });
+    } catch (e) {
+      toast({
+        title: 'Thất bại',
+        description: e.response.data.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true
+      });
+    }
+  }
+
+  async function handleDeleteComment(id) {
+    try {
+      await CommentService.delete(id).then(res => {
+        setRefetch(r => r + 1);
+      });
+      toast({
+        title: 'Thành công',
+        description: 'Bình luận đã được xóa',
+        status: 'success',
+        duration: 5000,
+        isClosable: true
+      });
+    } catch (e) {
+      toast({
+        title: 'Thất bại',
+        description: e.response.data.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true
+      });
+    }
+  }
+
+  return (
+    <Box>
+      <form onSubmit={handleComment}>
+        <Box bg={bg} p={4} rounded='xl' mb={4}>
+          <FormControl isRequired>
+            <FormLabel htmlFor='name'>Viết bình luận</FormLabel>
+            <Input
+              onChange={e => setValue(e.target.value)}
+              value={value}
+              id='name'
+              placeholder='Cảm nghĩ của bạn'
+              focusBorderColor={color.PRIMARY}
+            />
+          </FormControl>
+          <Button
+            mt={4}
+            colorScheme='purple'
+            isLoading={isLoading}
+            type='submit'
+            rightIcon={<AiOutlineComment />}
+          >
+            Bình luận
+          </Button>
+        </Box>
+      </form>
+
+      {isLoading ? (
+        <Box padding='4' rounded={'xl'} bg='gray.50' my={4}>
+          <SkeletonCircle size='10' />
+          <SkeletonText mt='4' noOfLines={4} spacing='4' />
+        </Box>
+      ) : (
+        comments?.map(comment => (
+          <CommentItem
+            key={comment._id}
+            comment={comment}
+            hasPermission={true}
+            onDelete={handleDeleteComment}
+          />
+        ))
+      )}
+      {comments?.length === 0 && <div>Chưa có bình luận nào</div>}
+    </Box>
   );
 }

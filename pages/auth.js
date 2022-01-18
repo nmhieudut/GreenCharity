@@ -100,11 +100,11 @@ export default function Auth() {
       dispatch(AuthActions.loginSuccessAction(res.user));
       storage.setToken(res.token);
       return;
-    } catch (e) {
+    } catch (err) {
       toast({
         position: 'top-right',
         title: 'Thất bại.',
-        description: e.response.data.message,
+        description: err.response.data.message,
         status: 'error',
         duration: 9000,
         isClosable: true
@@ -127,11 +127,11 @@ export default function Auth() {
       );
       dispatch(AuthActions.signUpSuccessAction(res.user));
       storage.setToken(res.token);
-    } catch (e) {
+    } catch (err) {
       toast({
         position: 'top-right',
         title: 'Thất bại.',
-        description: e.response.data.message,
+        description: err.response.data.message,
         status: 'error',
         duration: 9000,
         isClosable: true

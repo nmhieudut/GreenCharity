@@ -20,6 +20,7 @@ import { AuthActions } from 'src/store/auth/action';
 import { storage } from 'src/utils/storage';
 import theme from 'src/utils/theme';
 import '../styles/globals.scss';
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 
 const hoverEffect =
   typeof window !== `undefined` ? require('hover-effect').default : null;
@@ -91,6 +92,11 @@ function MyApp({ Component, pageProps }) {
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <Global styles={GlobalStyles} />
+        <MessengerCustomerChat
+          pageId='109527714958989'
+          appId='1039627213546984'
+        />
+        ,
         <Layout>
           <Component {...pageProps} />
           {globalLoading && <GlobalSpinner />}

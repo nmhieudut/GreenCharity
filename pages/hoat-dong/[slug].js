@@ -42,7 +42,7 @@ import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import Slider from 'react-slick';
 import Button from 'src/components/common/Button';
-import { CampaignForm } from 'src/components/core/Campaign/CampaignForm';
+import { CampaignForm } from 'src/components/core/Form/CampaignForm';
 import CommentItem from 'src/components/core/Campaign/CommentItem';
 import DonatorItem from 'src/components/core/Card/DonatorItem';
 import DividerWithText from 'src/components/common/DividerWithText';
@@ -323,17 +323,13 @@ export default function Detail({ campaign }) {
 
               <Box bg={bg} px={6} py={2} fontSize='sm'>
                 <Stack my={4} w={'full'}>
-                  <Flex justify={'space-between'}>
-                    <Text fontWeight={600}>Đạt được:</Text>
-                    <Text>{percent}</Text>
-                  </Flex>
-                  <ProgressBar color={color.PRIMARY} percent={percent} />
                   <Flex>
                     <b>Mục tiêu: </b>
                     <Text color={color.PRIMARY} ml={2} fontWeight={600}>
                       {toVND(goal)}đ
                     </Text>
                   </Flex>
+                  <ProgressBar color={color.PRIMARY} percent={percent} />
                 </Stack>
                 <Flex
                   my={2}
@@ -348,9 +344,15 @@ export default function Detail({ campaign }) {
                     </Text>
                   </Flex>
                   <Flex flexDir='column' alignItems='center' bg={bg}>
+                    <Text fontSize={'md'}>Đạt được</Text>
+                    <Text color={'gray.500'} as={'b'}>
+                      {percent}
+                    </Text>
+                  </Flex>
+                  <Flex flexDir='column' alignItems='center' bg={bg}>
                     <Text fontSize={'md'}>Thời hạn còn</Text>
                     {status === 'active' ? (
-                      <Stack spacing={4} direction='row'>
+                      <Stack spacing={1} direction='row'>
                         {days > 0 && (
                           <Text color={'gray.500'} as={'b'}>
                             {days} ngày

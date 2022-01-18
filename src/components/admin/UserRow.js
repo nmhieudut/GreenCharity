@@ -29,7 +29,7 @@ import {
 } from 'react-icons/ai';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiEdit } from 'react-icons/fi';
-import UserForm from 'src/components/core/User/UserForm';
+import UserForm from 'src/components/core/Form/UserForm';
 import { toVND } from 'src/utils/number';
 
 export default function UserRow({ user, onToggleActive, onDeleteUser }) {

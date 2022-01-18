@@ -17,7 +17,7 @@ import { useQuery } from 'react-query';
 import UserRow from 'src/components/admin/UserRow';
 import Button from 'src/components/common/Button';
 import CustomDrawer from 'src/components/common/CustomDrawer';
-import UserForm from 'src/components/core/User/UserForm';
+import UserForm from 'src/components/core/Form/UserForm';
 import { color } from 'src/constants/color';
 import withAdmin from 'src/HOCs/withAdmin';
 import AdminLayout from 'src/layout/AdminLayout';

@@ -1,7 +1,7 @@
 import { Heading, Text } from '@chakra-ui/react';
 import Head from 'next/head';
 import React from 'react';
-import { CampaignForm } from 'src/components/core/Campaign/CampaignForm';
+import { CampaignForm } from 'src/components/core/Form/CampaignForm';
 import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
 import withAuth from 'src/HOCs/withAuth';

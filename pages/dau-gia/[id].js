@@ -154,7 +154,7 @@ export default function AuctionDetails({ data }) {
   return (
     <SectionContainer>
       <Head>
-        <title>{title}</title>
+        <title>Đấu giá {title}</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
       {auction && (

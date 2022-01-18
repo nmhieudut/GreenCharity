@@ -81,8 +81,8 @@ export default function Header() {
 
   const onLogout = async () => {
     try {
-      const res = await AuthService.logout();
-      removeCookie();
+      await AuthService.logout();
+      router.push('/auth');
       storage.removeToken();
       dispatch(AuthActions.setCurrentUserSuccessAction(null));
       await firebase
@@ -94,7 +94,6 @@ export default function Header() {
         .catch(error => {
           // An error happened.
         });
-      router.push('/');
     } catch (e) {}
   };
 

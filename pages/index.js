@@ -41,7 +41,7 @@ const SectionContainer = dynamic(() =>
   import('src/components/common/SectionContainer')
 );
 const CampaignCard = dynamic(() =>
-  import('src/components/core/Campaign/CampaignCard')
+  import('src/components/core/Card/CampaignCard')
 );
 
 export default function Home({

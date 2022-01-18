@@ -21,5 +21,10 @@ export const AdminService = {
 
   getNews: () => _http.get(Rest.admin + '/news'),
 
-  getDonations: () => _http.get(Rest.admin + '/donations')
+  getAuctions: () => _http.get(Rest.admin + '/auctions'),
+  createAuction: payload => _http.post(Rest.admin + '/auctions', payload),
+  updateAuction: (id, data) => _http.put(Rest.admin + '/auctions/' + id, data),
+  activeAuction: id => _http.put(Rest.admin + '/auctions/' + id + '/active'),
+  deleteAuction: id => _http.delete(Rest.admin + '/auctions/' + id),
+  endAuction: id => _http.put(Rest.admin + '/auctions/' + id + '/end')
 };

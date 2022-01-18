@@ -46,7 +46,7 @@ import { BsPlus, BsThreeDotsVertical } from 'react-icons/bs';
 import { FiEdit } from 'react-icons/fi';
 import { useQuery } from 'react-query';
 import Button from 'src/components/common/Button';
-import { CampaignForm } from 'src/components/core/Campaign/CampaignForm';
+import { CampaignForm } from 'src/components/core/Form/CampaignForm';
 import CustomDrawer from 'src/components/common/CustomDrawer';
 import { color } from 'src/constants/color';
 import withAdmin from 'src/HOCs/withAdmin';

@@ -1,5 +1,7 @@
 import {
   AspectRatio,
+  Avatar,
+  AvatarGroup,
   Badge,
   Box,
   color,
@@ -27,7 +29,8 @@ const AuctionCard = ({ auction }) => {
     startPrice,
     currentBid,
     finishedAt,
-    status
+    status,
+    bids
   } = auction;
 
   const { days, hours, minutes, seconds } = useCountdown(finishedAt);
@@ -130,10 +133,25 @@ const AuctionCard = ({ auction }) => {
                 <Text>{toVND(currentBid.amount)} đ</Text>
               </Flex>
             )}
-
-            <Button colorScheme='purple' mt={4}>
-              Tham gia ngay
-            </Button>
+            {bids && bids.length > 0 && (
+              <Flex align='center' my={2} justify='flex-end'>
+                <AvatarGroup size='sm' max={3} fontSize='xs'>
+                  {bids.map(bid => (
+                    <Avatar
+                      key={bid._id}
+                      name={bid.author.name}
+                      src={bid.author.picture}
+                    />
+                  ))}
+                </AvatarGroup>
+                <span className='ml-1'>đã tham gia</span>
+              </Flex>
+            )}
+            <Flex justify='flex-end'>
+              <Button colorScheme='purple' mt={2}>
+                Tham gia ngay
+              </Button>
+            </Flex>
           </Box>
         </Box>
       </Box>
