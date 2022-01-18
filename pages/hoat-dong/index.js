@@ -98,7 +98,8 @@ const CampaignsList = ({ query, status }) => {
   return (
     <div>
       {error && <div>Có gì đó không ổn, thử lại sau</div>}
-      {loading && Array.from({ length: 3 }, (_, i) => <CampaignItemSkeleton />)}
+      {loading &&
+        Array.from({ length: 3 }, (_, i) => <CampaignItemSkeleton key={i} />)}
       {campaigns && (
         <>
           <Text as={'h6'}>Hiển thị {campaigns.length} kết quả</Text>

@@ -4,6 +4,7 @@ import React from 'react';
 export default function Button({ noLinear, children, ...rest }) {
   return (
     <ChakraButton
+      color='white'
       size='sm'
       {...rest}
       bgGradient={

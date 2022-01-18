@@ -10,6 +10,7 @@ export default function AnimatedButton({
   const [isHover, setIsHover] = React.useState(false);
   return (
     <ChakraButton
+      color='white'
       size='sm'
       bgGradient={
         !noLinear && 'linear(to-r, purple.400, purple.500, purple.600)'

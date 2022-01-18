@@ -2,6 +2,7 @@ import {
   Badge,
   Heading,
   Image,
+  MenuItem,
   Spinner,
   Stack,
   Table,
@@ -9,64 +10,71 @@ import {
   Td,
   Th,
   Thead,
-  Tr
+  Tr,
+  useColorModeValue
 } from '@chakra-ui/react';
+import { format } from 'date-fns';
 import React from 'react';
+import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { useQuery } from 'react-query';
+import CustomAlertModal from 'src/components/common/Alert';
+import Button from 'src/components/common/Button';
+import { color } from 'src/constants/color';
 import withAdmin from 'src/HOCs/withAdmin';
 import AdminLayout from 'src/layout/AdminLayout';
 import { AdminService } from 'src/services/admin';
+import { newsService } from 'src/services/news';
 
 function NewRow({ newEntry }) {
-  const { thumbnail, title, shortContent, url, content } = newEntry;
-  console.log('=========', newEntry);
+  const { thumbnail, title, shortContent, createdAt, content } = newEntry;
   return (
     <Tr>
       <Td>
         <Badge variantColor='green'>{newEntry._id}</Badge>
       </Td>
       <Td>
-        <Image src={thumbnail} size='sm' />
+        <Image src={thumbnail} w={16} />
       </Td>
       <Td>
         <Heading as='h3' size='sm'>
           {title}
         </Heading>
-        <p>{shortContent}</p>
       </Td>
-      <Td>
-        <Stack isInline spacing={2}>
-          <a href={url} target='_blank' rel='noopener noreferrer'>
-            <Image src='/icons/link.svg' size='sm' />
-          </a>
-          <a href={`/admin/news/${newEntry._id}`}>
-            <Image src='/icons/edit.svg' size='sm' />
-          </a>
-        </Stack>
-      </Td>
-      <Td>
-        <Stack isInline spacing={2}>
-          <a href={`/admin/news/${newEntry._id}`}>
-            <Image src='/icons/edit.svg' size='sm' />
-          </a>
-          <a href={`/admin/news/${newEntry._id}`}>
-            <Image src='/icons/delete.svg' size='sm' />
-          </a>
-        </Stack>
-      </Td>
+      <Td>{shortContent}</Td>
+      <Td>{format(new Date(createdAt), 'dd/MM/yyyy')}</Td>
+
+      <CustomAlertModal
+        size='xl'
+        modalHeader={title}
+        modalBody={
+          <div
+            className='wrapper-main-content'
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
+        }
+      >
+        <Button icon={<AiOutlineCheckCircle />}>Xem</Button>{' '}
+      </CustomAlertModal>
     </Tr>
   );
 }
 
 function News() {
   const { data, isLoading, isError } = useQuery('news', () =>
-    AdminService.getNews()
+    newsService.fetchAll()
   );
   const { news } = data || {};
 
   const bg = useColorModeValue('gray.100', 'gray.800');
   return (
     <AdminLayout>
-      <Stack direction={['column', 'row']} spacing={4} align='center' mb={4}>
+      <Stack
+        direction={['column', 'row']}
+        spacing={4}
+        align='center'
+        mb={4}
+        py={2}
+      >
         <Heading
           fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
           lineHeight={'110%'}
@@ -84,13 +92,12 @@ function News() {
       >
         <Thead bg={bg}>
           <Tr>
-            <Th>Mã giao dịch</Th>
-            <Th>Tài khoản</Th>
-            <Th>Phương thức</Th>
-            <Th>Ngày giao dịch</Th>
-            <Th>Kiểu giao dịch</Th>
-            <Th>Số tiền</Th>
-            <Th>Trạng thái</Th>
+            <Th>Mã tin tức</Th>
+            <Th>Hình ảnh</Th>
+            <Th>Tiêu đề</Th>
+            <Th>Nội dung tóm tắt</Th>
+            <Th>Ngày tạo</Th>
+            <Th>Xem</Th>
           </Tr>
         </Thead>
         <Tbody>

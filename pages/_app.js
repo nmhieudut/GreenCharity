@@ -33,10 +33,6 @@ NProgress.configure({
   showSpinner: false
 });
 
-Router.events.on('routeChangeStart', () => NProgress.start());
-Router.events.on('routeChangeComplete', () => NProgress.done());
-Router.events.on('routeChangeError', () => NProgress.done());
-
 const GlobalStyles = css`
   .js-focus-visible :focus:not([data-focus-visible-added]) {
     outline: none;
@@ -62,6 +58,21 @@ function MyApp({ Component, pageProps }) {
       }
     }
   };
+
+  useEffect(() => {
+    const handleRouteStart = () => NProgress.start();
+    const handleRouteDone = () => NProgress.done();
+
+    Router.events.on('routeChangeStart', handleRouteStart);
+    Router.events.on('routeChangeComplete', handleRouteDone);
+    Router.events.on('routeChangeError', handleRouteDone);
+
+    return () => {
+      Router.events.off('routeChangeStart', handleRouteStart);
+      Router.events.off('routeChangeComplete', handleRouteDone);
+      Router.events.off('routeChangeError', handleRouteDone);
+    };
+  }, []);
 
   useEffect(() => {
     verifyUser();

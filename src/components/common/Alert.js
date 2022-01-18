@@ -16,7 +16,8 @@ export default function CustomAlertModal({
   modalHeader,
   modalBody,
   handleOk,
-  children
+  children,
+  ...rest
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
@@ -37,6 +38,8 @@ export default function CustomAlertModal({
         onClose={onClose}
         isOpen={isOpen}
         isCentered
+        {...rest}
+        scrollBehavior='inside'
       >
         <AlertDialogOverlay />
 
@@ -47,6 +50,7 @@ export default function CustomAlertModal({
           <AlertDialogFooter>
             <Button
               noLinear
+              colorScheme='blue'
               isDisabled={loading}
               isLoading={loading}
               ref={cancelRef}

@@ -106,6 +106,7 @@ export default function Home({
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
       <SectionContainer
+        p='0'
         noContainer
         height='100vh'
         pos='relative'

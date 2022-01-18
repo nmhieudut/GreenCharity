@@ -1,4 +1,5 @@
 import { Flex, Spinner, Text } from '@chakra-ui/react';
+import Head from 'next/head';
 import React from 'react';
 import { color } from 'src/constants/color';
 
@@ -11,6 +12,9 @@ export default function Loading() {
         <span></span>
         <span></span>
       </div>
+      <Head>
+        <title>Loading...</title>
+      </Head>
       <Text mt={4}>Loading...</Text>
       <style jsx>{`
         div {

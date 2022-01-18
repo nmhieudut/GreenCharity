@@ -28,7 +28,13 @@ function Transactions() {
 
   return (
     <AdminLayout>
-      <Stack direction={['column', 'row']} spacing={4} align='center' mb={4}>
+      <Stack
+        direction={['column', 'row']}
+        spacing={4}
+        align='center'
+        mb={4}
+        py={2}
+      >
         <Heading
           fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
           lineHeight={'110%'}

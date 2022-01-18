@@ -61,7 +61,7 @@ export default function AdminLayout({ children }) {
       overflowY='auto'
       bg={color.PRIMARY}
       borderRightWidth='1px'
-      minW='48'
+      minW='60'
       {...props}
     >
       <Flex
@@ -89,6 +89,7 @@ export default function AdminLayout({ children }) {
       as='section'
       bg={useColorModeValue('gray.50', 'gray.700')}
       minH='100vh'
+      py={0}
     >
       <Head>
         <title>Quản lí</title>

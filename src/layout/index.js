@@ -1,11 +1,12 @@
-import React from "react";
-import Footer from "./Footer";
-import Header from "./Header";
+import { Box } from '@chakra-ui/react';
+import React from 'react';
+import Footer from './Footer';
+import Header from './Header';
 export default function Layout({ children }) {
   return (
     <>
       <Header />
-      <div className="pt-16">{children}</div>
+      <Box pt={16}>{children}</Box>
       <Footer />
     </>
   );

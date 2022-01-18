@@ -99,23 +99,7 @@ export default function CampaignCard(props) {
               </Box>
             </Stack>
           </Box>
-          <Box
-            mt={'auto'}
-            px={4}
-            pt={4}
-            mb={4}
-            position='relative'
-            _before={{
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 4,
-              width: '20%',
-              height: 1,
-              borderRadius: 999,
-              backgroundColor: `${color.PRIMARY}`
-            }}
-          >
+          <Box mt={'auto'} px={4} mb={4}>
             <Flex
               justifyContent='space-between'
               alignItems='center'
@@ -132,12 +116,33 @@ export default function CampaignCard(props) {
             <Stack my={2} w={'full'}>
               <ProgressBar color={color.PRIMARY} percent={`${percent}%`} />
             </Stack>
-            <Box py={1} verticalAlign='middle'>
+            <Box
+              mt={4}
+              pt={2}
+              verticalAlign='middle'
+              position='relative'
+              _before={{
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: 0.2,
+                borderRadius: 999,
+                backgroundColor: 'gray.200'
+              }}
+            >
               <span className='inline-block align-baseline'>
                 <HiLocationMarker className='mt-1' />
               </span>
-              <Text as='span' fontSize='sm' color='gray.500' display='inline'>
-                &nbsp;{address}
+              <Text
+                as='span'
+                fontSize='sm'
+                color='gray.500'
+                ml={2}
+                display='inline'
+              >
+                {address}
               </Text>
             </Box>
           </Box>
