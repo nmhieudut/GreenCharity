@@ -33,7 +33,7 @@ function NewRow({ newEntry }) {
         <Badge variantColor='green'>{newEntry._id}</Badge>
       </Td>
       <Td>
-        <Image src={thumbnail} w={16} />
+        <Image src={thumbnail} w={16} alt={title} />
       </Td>
       <Td>
         <Heading as='h3' size='sm'>
