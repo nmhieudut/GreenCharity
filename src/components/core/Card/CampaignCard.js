@@ -44,17 +44,17 @@ export default function CampaignCard(props) {
       bg={useColorModeValue('white', 'gray.900')}
       w={['100%', '45%', '31%']}
       mx={2}
-      rounded={'lg'}
+      rounded='lg'
       overflow='hidden'
-      border={'.5px solid lightgray'}
+      border='.5px solid lightgray'
     >
       <Box className='w-full md:mb-0'>
-        <Box className='rounded-lg shadow' overflow='hidden'>
+        <Box className='rounded-lg' overflow='hidden'>
           <AspectRatio maxW='400px' ratio={16 / 9}>
             <Image src={images[0]} alt={name} objectFit='cover' />
           </AspectRatio>
 
-          <Box className='px-4 pt-4 h-auto md:h-24 lg:h-32'>
+          <Box className='px-4 pt-4 h-auto md:h-32 lg:h-40'>
             <Flex mb={2} alignItems='center' justify='space-between'>
               <Badge
                 variant='outline'

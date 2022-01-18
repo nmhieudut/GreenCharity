@@ -21,6 +21,7 @@ import { storage } from 'src/utils/storage';
 import theme from 'src/utils/theme';
 import '../styles/globals.scss';
 import MessengerCustomerChat from 'react-messenger-customer-chat';
+import { color } from 'src/constants/color';
 
 const hoverEffect =
   typeof window !== `undefined` ? require('hover-effect').default : null;
@@ -95,6 +96,8 @@ function MyApp({ Component, pageProps }) {
         <MessengerCustomerChat
           pageId='109527714958989'
           appId='1039627213546984'
+          themeColor={color.PRIMARY}
+          language='vi_VN'
         />
         ,
         <Layout>
