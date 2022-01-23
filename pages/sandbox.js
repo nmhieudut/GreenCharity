@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import MemberCard from 'src/components/core/Card/MemberCard';
-import CountDown from 'src/components/common/CountDown';
+import CountDown from 'src/components/common/CountDown/CountDown';
 
 export default function sandbox() {
   return (
@@ -12,7 +12,6 @@ export default function sandbox() {
 }
 
 export async function getStaticProps() {
-  // check if development mode redirect to localhost
   if (process.env.NODE_ENV === 'development') {
     return {
       props: {}

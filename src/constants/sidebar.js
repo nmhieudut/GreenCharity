@@ -58,6 +58,7 @@ export const adminSideBar = [
   {
     title: 'Tin nhắn hệ thống',
     icon: BsMessenger,
+    new: true,
     path: 'https://business.facebook.com/latest/inbox/messenger?selected_item_id=103319752257876&nav_ref=redirect_biz_inbox_messenger_notif%3Fnotif_m%3Dalerts_page&notif_id=1642500965954296&notif_t=page_message&ref=notif&asset_id=109527714958989'
   }
 ];

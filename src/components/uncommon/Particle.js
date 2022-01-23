@@ -1,17 +1,16 @@
-import Particles from "react-particles-js";
-import { color } from "src/constants/color";
+import Particles from 'react-particles-js';
+import { color } from 'src/constants/color';
 
 const Particle = () => {
   return (
     <>
       <Particles
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
           bottom: 0,
-          right: 0,
-          zIndex: -1
+          right: 0
         }}
         params={{
           particles: {
@@ -38,19 +37,19 @@ const Particle = () => {
             move: {
               random: true,
               speed: 1,
-              direction: "top",
-              out_mode: "out"
+              direction: 'top',
+              out_mode: 'out'
             }
           },
           interactivity: {
             events: {
               onhover: {
                 enable: true,
-                mode: "bubble"
+                mode: 'bubble'
               },
               onclick: {
                 enable: true,
-                mode: "repulse"
+                mode: 'repulse'
               }
             },
             modes: {

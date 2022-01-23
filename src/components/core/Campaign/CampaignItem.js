@@ -13,7 +13,7 @@ import { BsClock } from 'react-icons/bs';
 import { color } from 'src/constants/color';
 import { DateUtils } from 'src/utils/date';
 import { toVND } from 'src/utils/number';
-import { convertStatusToString } from 'src/utils/status';
+import { fromStatusToString } from 'src/utils/status';
 import ProgressBar from '../../common/Progress/ProgressBar';
 
 export default function CampaignItem({
@@ -61,7 +61,7 @@ export default function CampaignItem({
                   : 'red'
               }
             >
-              {convertStatusToString(status)}
+              {fromStatusToString(status)}
             </Badge>
             {status === 'active' && (
               <Flex color={'gray.500'} align='center' justify='end'>

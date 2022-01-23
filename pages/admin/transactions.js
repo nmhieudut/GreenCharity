@@ -33,7 +33,8 @@ function Transactions() {
         spacing={4}
         align='center'
         mb={4}
-        py={2}
+        p={8}
+        bg={bg}
       >
         <Heading
           fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}

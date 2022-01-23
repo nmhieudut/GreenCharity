@@ -3,55 +3,42 @@ import {
   AvatarBadge,
   Badge,
   Box,
-  chakra,
   Container,
   Flex,
   HStack,
-  Link as ChakraLink,
   Menu,
   MenuButton,
   MenuDivider,
   MenuGroup,
   MenuItem,
   MenuList,
-  Skeleton,
   SkeletonCircle,
   Stack,
   Switch,
   Text,
   useColorMode,
   useColorModeValue,
-  useOutsideClick,
-  VisuallyHidden
+  useOutsideClick
 } from '@chakra-ui/react';
 import Hamburger from 'hamburger-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { AiFillBell } from 'react-icons/ai';
 import { BsBrightnessHigh } from 'react-icons/bs';
-import {
-  FaCrown,
-  FaFacebook,
-  FaGithub,
-  FaInstagram,
-  FaMoon,
-  FaRegUserCircle
-} from 'react-icons/fa';
+import { FaCrown, FaMoon, FaRegUserCircle } from 'react-icons/fa';
 import { FcManager } from 'react-icons/fc';
 import { MdCampaign, MdEmail, MdOutlinePhoneInTalk } from 'react-icons/md';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import AnimatedButton from 'src/components/common/AnimatedButton';
-import SocialButton from 'src/components/common/SocialButton';
 import { color } from 'src/constants/color';
 import { navs } from 'src/constants/navbar';
 import firebase from 'src/libs/firebase';
+import { AuthService } from 'src/services/auth';
 import { AuthActions } from 'src/store/auth/action';
 import removeCookie from 'src/utils/cookie';
 import { toVND } from 'src/utils/number';
 import { storage } from 'src/utils/storage';
-import { AuthService } from 'src/services/auth';
 
 export default function Header() {
   const dispatch = useDispatch();

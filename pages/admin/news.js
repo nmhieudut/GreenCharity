@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import React from 'react';
-import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { AiOutlineCheckCircle, AiOutlineEye } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import CustomAlertModal from 'src/components/common/Alert';
 import Button from 'src/components/common/Button';
@@ -42,19 +42,27 @@ function NewRow({ newEntry }) {
       </Td>
       <Td>{shortContent}</Td>
       <Td>{format(new Date(createdAt), 'dd/MM/yyyy')}</Td>
-
-      <CustomAlertModal
-        size='xl'
-        modalHeader={title}
-        modalBody={
-          <div
-            className='wrapper-main-content'
-            dangerouslySetInnerHTML={{ __html: content }}
-          />
-        }
-      >
-        <Button icon={<AiOutlineCheckCircle />}>Xem</Button>{' '}
-      </CustomAlertModal>
+      <Td>
+        <CustomAlertModal
+          size='xl'
+          modalHeader={title}
+          modalBody={
+            <div
+              className='wrapper-main-content'
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          }
+        >
+          <Button
+            leftIcon={<AiOutlineEye />}
+            colorScheme='purple'
+            variant='solid'
+            noLinear
+          >
+            Xem
+          </Button>{' '}
+        </CustomAlertModal>
+      </Td>
     </Tr>
   );
 }
@@ -73,7 +81,8 @@ function News() {
         spacing={4}
         align='center'
         mb={4}
-        py={2}
+        p={8}
+        bg={bg}
       >
         <Heading
           fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}

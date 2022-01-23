@@ -40,7 +40,7 @@ import { color } from 'src/constants/color';
 import { AuctionService } from 'src/services/auction';
 import { subscribeToAuctionChanges } from 'src/services/io';
 import { toVND } from 'src/utils/number';
-import { convertStatusToString } from 'src/utils/status';
+import { fromStatusToString } from 'src/utils/status';
 
 const settings = {
   dots: true,
@@ -80,18 +80,6 @@ export default function AuctionDetails({ data }) {
   });
   const [auction, setAuction] = useState(data);
   const [loading, setLoading] = useState(false);
-  const {
-    _id,
-    title,
-    description,
-    campaign,
-    images,
-    startPrice,
-    currentBid,
-    finishedAt,
-    status,
-    author
-  } = auction || {};
   const [amount, setAmount] = useState(startPrice);
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
@@ -106,6 +94,21 @@ export default function AuctionDetails({ data }) {
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
   const input = getInputProps({ isReadOnly: false });
+  const bg = useColorModeValue('white', 'gray.700');
+  const top = useBreakpointValue({ base: '90%', md: '50%' });
+  const side = useBreakpointValue({ base: '30%', md: '10px' });
+  const {
+    _id,
+    title,
+    description,
+    campaign,
+    images,
+    startPrice,
+    currentBid,
+    finishedAt,
+    status,
+    author
+  } = auction || {};
 
   useEffect(() => {
     subscribeToAuctionChanges(event => {
@@ -115,9 +118,7 @@ export default function AuctionDetails({ data }) {
       }
     });
   }, []);
-  const bg = useColorModeValue('white', 'gray.700');
-  const top = useBreakpointValue({ base: '90%', md: '50%' });
-  const side = useBreakpointValue({ base: '30%', md: '10px' });
+
   function openLightboxOnSource(sourceIndex) {
     setLightboxController({
       toggler: !lightboxController.toggler,
@@ -172,7 +173,7 @@ export default function AuctionDetails({ data }) {
                 : 'red'
             }
           >
-            {convertStatusToString(status)}
+            {fromStatusToString(status)}
           </Badge>
           <SimpleGrid
             columns={{ base: 1, md: 2 }}

@@ -73,7 +73,11 @@ export default function AdminLayout({ children }) {
         {adminSideBar.map(item => (
           <NavItem
             key={item.title}
-            onClick={() => router.push(`${item.path}`)}
+            onClick={() =>
+              item.new
+                ? window.open(`${item.path}`, '_blank')
+                : router.push(item.path)
+            }
             icon={item.icon}
             path={item.path}
           >
@@ -114,10 +118,8 @@ export default function AdminLayout({ children }) {
       </Drawer>
       <Flex>
         <SidebarContent display={{ base: 'none', md: 'unset' }} />
-        <Box transition='.3s ease' w='full'>
-          <Box as='main' p='4'>
-            {children}
-          </Box>
+        <Box transition='.3s ease' mt={2} w='full'>
+          <Box as='main'>{children}</Box>
         </Box>
       </Flex>
     </Box>

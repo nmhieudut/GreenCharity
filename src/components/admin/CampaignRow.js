@@ -45,7 +45,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FiEdit } from 'react-icons/fi';
 import { GiFinishLine } from 'react-icons/gi';
 import { toVND } from 'src/utils/number';
-import { convertStatusToString } from 'src/utils/status';
+import { fromStatusToString } from 'src/utils/status';
 import CustomAlertModal from '../common/Alert';
 import { CampaignForm } from '../core/Form/CampaignForm';
 import CustomDrawer from '../common/CustomDrawer';
@@ -105,7 +105,7 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
                 : 'red'
             }
           >
-            {convertStatusToString(status)}
+            {fromStatusToString(status)}
           </Badge>
           <Menu ml='auto'>
             <MenuButton as={IconButton} icon={<BsThreeDotsVertical />} />

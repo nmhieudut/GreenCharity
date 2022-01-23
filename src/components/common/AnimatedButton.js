@@ -1,4 +1,4 @@
-import { Box, Button as ChakraButton } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import React from 'react';
 
 export default function AnimatedButton({
@@ -9,8 +9,7 @@ export default function AnimatedButton({
 }) {
   const [isHover, setIsHover] = React.useState(false);
   return (
-    <ChakraButton
-      color='white'
+    <Button
       size='sm'
       bgGradient={
         !noLinear && 'linear(to-r, purple.400, purple.500, purple.600)'
@@ -32,6 +31,6 @@ export default function AnimatedButton({
       >
         {children}
       </Box>
-    </ChakraButton>
+    </Button>
   );
 }

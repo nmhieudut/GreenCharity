@@ -49,7 +49,7 @@ import { CampaignService } from 'src/services/campaign';
 import { UserService } from 'src/services/user';
 import { DateUtils } from 'src/utils/date';
 import { toVND } from 'src/utils/number';
-import { convertStatusToString } from 'src/utils/status';
+import { fromStatusToString } from 'src/utils/status';
 
 function AccountPage(props) {
   const { user } = props;
@@ -507,7 +507,7 @@ function CampaignTab(props) {
                           : 'red'
                       }
                     >
-                      {convertStatusToString(campaign.status)}
+                      {fromStatusToString(campaign.status)}
                     </Tag>
                   </Td>
                   <Td>

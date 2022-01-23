@@ -17,7 +17,7 @@ import { BsClock } from 'react-icons/bs';
 import useCountdown from 'src/hooks/useCountdown';
 import { DateUtils } from 'src/utils/date';
 import { toVND } from 'src/utils/number';
-import { convertStatusToString } from 'src/utils/status';
+import { fromStatusToString } from 'src/utils/status';
 import Button from '../../common/Button';
 
 const AuctionCard = ({ auction }) => {
@@ -42,7 +42,6 @@ const AuctionCard = ({ auction }) => {
       className='transition duration-300 md:mx-2 mb-8 rounded-lg'
       _hover={{ boxShadow: 'lg' }}
       bg={useColorModeValue('white', 'gray.900')}
-      w={['100%', '45%', '30%']}
       mx={2}
     >
       {/* sold overlay */}
@@ -100,7 +99,7 @@ const AuctionCard = ({ auction }) => {
                     : 'red'
                 }
               >
-                {convertStatusToString(status)}
+                {fromStatusToString(status)}
               </Badge>
             </Flex>
 

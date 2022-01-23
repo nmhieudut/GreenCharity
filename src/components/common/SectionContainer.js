@@ -13,7 +13,13 @@ export default function SectionContainer({
   const bg = useColorModeValue('gray.100', 'gray.700');
   const bg2 = useColorModeValue('gray.50', 'gray.800');
   return (
-    <Box as={'section'} bg={hasBg ? bg : bg2} {...rest} w='full'>
+    <Box
+      as={'section'}
+      bg={hasBg ? bg : bg2}
+      {...rest}
+      w='full'
+      position='relative'
+    >
       {hasParticle && <Particle />}
       {!noContainer ? (
         <Container

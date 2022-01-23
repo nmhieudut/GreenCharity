@@ -1,7 +1,7 @@
 {
   "extends": ["next/core-web-vitals", "next", "prettier"],
   "rules": {
-    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/rules-of-hooks": "off",
     "react-hooks/exhaustive-deps": "off",
     "@next/next/no-img-element": "off",
     "react/display-name": "off"

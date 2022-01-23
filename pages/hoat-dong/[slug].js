@@ -54,7 +54,7 @@ import { CampaignService } from 'src/services/campaign';
 import { CommentService } from 'src/services/comment';
 import { ModalActions } from 'src/store/modal/action';
 import { toVND } from 'src/utils/number';
-import { convertStatusToString } from 'src/utils/status';
+import { fromStatusToString } from 'src/utils/status';
 import useCountdown from 'src/hooks/useCountdown';
 import { HiLocationMarker } from 'react-icons/hi';
 
@@ -214,7 +214,7 @@ export default function Detail({ campaign }) {
                   : 'red'
               }
             >
-              {convertStatusToString(status)}
+              {fromStatusToString(status)}
             </Badge>
           </Box>
           <FsLightbox

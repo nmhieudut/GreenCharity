@@ -12,7 +12,6 @@ export default function CardSkeleton() {
       m={2}
       bg={useColorModeValue('white', 'gray.900')}
       className='rounded-lg shadow-sm hover:shadow-lg duration-500 overflow-hidden'
-      w={['100%', '45%', '30%']}
     >
       <div className='flex flex-col w-full'>
         <div className='h-48'>

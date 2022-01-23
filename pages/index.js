@@ -36,6 +36,8 @@ import { color } from 'src/constants/color';
 import { qa } from 'src/constants/qa';
 import { CampaignService } from 'src/services/campaign';
 import { newsService } from 'src/services/news';
+import TitleLines from 'src/components/common/TitleLines';
+import { RiAuctionFill } from 'react-icons/ri';
 
 const SectionContainer = dynamic(() =>
   import('src/components/common/SectionContainer')
@@ -119,14 +121,17 @@ export default function Home({
           background="url('/images/tuthienhero.jpg') no-repeat"
           bgPos='center'
           bgSize='cover'
-        >
+        />
+      </SectionContainer>
+      <SectionContainer hasParticle>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={0}>
           <Flex
-            px={4}
-            align='center'
-            pos='relative'
-            justify='center'
-            boxSize='full'
-            bg='blackAlpha.700'
+            direction='column'
+            alignItems='start'
+            justifyContent='center'
+            px={{ base: 4, md: 8, lg: 20 }}
+            py={24}
+            zIndex={3}
           >
             <Stack textAlign='center' alignItems='center' spacing={6}>
               <Box
@@ -160,7 +165,6 @@ export default function Home({
                   fontSize={{ sm: 'lg', md: 'xl' }}
                   maxW={{ sm: 'xl' }}
                   mx={{ sm: 'auto', lg: 0 }}
-                  color='gray.100'
                 >
                   Là nền tảng giúp bạn dễ dàng chung tay quyên góp tiền cùng
                   hàng triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả
@@ -175,13 +179,13 @@ export default function Home({
                     <Box color={color.PRIMARY} fontWeight={600}>
                       <CountUp end={total_campaigns} duration={3} />
                     </Box>
-                    <Text color={'white'}>Hoạt động</Text>
+                    <Text>Hoạt động</Text>
                   </Box>
                   <Box>
                     <Box color={color.PRIMARY} fontWeight={600}>
                       <CountUp separator=',' end={total_donors} duration={3} />
                     </Box>
-                    <Text color={'white'}>Lượt quyên góp</Text>
+                    <Text>Lượt quyên góp</Text>
                   </Box>
                   <Box>
                     <Box color={color.PRIMARY} fontWeight={600}>
@@ -191,7 +195,7 @@ export default function Home({
                         duration={3}
                       />
                     </Box>
-                    <Text color={'white'}>Đồng được quyên góp</Text>
+                    <Text>Đồng được quyên góp</Text>
                   </Box>
                 </Flex>
                 <Stack
@@ -228,49 +232,7 @@ export default function Home({
                 </Stack>
               </Box>
             </Stack>
-          </Flex>
-        </Box>
-      </SectionContainer>
-      <SectionContainer>
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={0}>
-          <Flex>
-            <Image
-              src='http://imgs.vietnamnet.vn/Images/2016/06/08/11/20160608105845-tuthien1.jpg'
-              alt=''
-              fit='cover'
-              w='full'
-              h={{ base: 64, md: 'full' }}
-              loading='lazy'
-            />
-          </Flex>
-          <Flex
-            direction='column'
-            alignItems='start'
-            justifyContent='center'
-            px={{ base: 4, md: 8, lg: 20 }}
-            py={24}
-            zIndex={3}
-          >
-            <chakra.h1
-              mb={4}
-              fontSize={{ base: '4xl', md: '4xl', lg: '5xl' }}
-              fontWeight='bold'
-              color={useColorModeValue('brand.600', 'gray.300')}
-              lineHeight='shorter'
-              textShadow='2px 0 currentcolor'
-            >
-              Chúng tôi ở đây để giúp đỡ
-            </chakra.h1>
-            <chakra.p
-              pr={{ base: 0, lg: 16 }}
-              mb={4}
-              fontSize='lg'
-              color={useColorModeValue('brand.600', 'gray.400')}
-              letterSpacing='wider'
-            >
-              Là nền tảng #1 giúp bạn dễ dàng chung tay quyên góp tiền cùng hàng
-              triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả nước.
-            </chakra.p>
+
             {!user && (
               <Button
                 mt={10}
@@ -283,6 +245,14 @@ export default function Home({
               </Button>
             )}
           </Flex>
+          <Image
+            src='http://imgs.vietnamnet.vn/Images/2016/06/08/11/20160608105845-tuthien1.jpg'
+            alt=''
+            fit='cover'
+            w='full'
+            h={{ base: 64, md: 'full' }}
+            loading='lazy'
+          />
         </SimpleGrid>
       </SectionContainer>
       <SectionContainer id='get-started' hasBg>
@@ -295,14 +265,14 @@ export default function Home({
           Tích đức không khó, làm việc tốt thì càng dễ hơn
         </Heading>
 
+        <TitleLines />
         <Grid
           my={12}
           mx='auto'
-          maxW={'3xl'}
           templateColumns={[
             'repeat(1, 1fr)',
-            'repeat(1, 1fr)',
-            'repeat(2, 1fr)'
+            'repeat(2, 1fr)',
+            'repeat(3, 1fr)'
           ]}
         >
           <Flex
@@ -375,6 +345,42 @@ export default function Home({
               </Button>
             </Box>
           </Flex>
+          <Flex
+            direction='column'
+            className='border-2'
+            bg={bg}
+            boxShadow={'2xl'}
+            rounded={'md'}
+            overflow={'hidden'}
+            m={4}
+          >
+            <Box
+              p={6}
+              flex={1}
+              color={useColorModeValue('gray.800', 'white')}
+              align={'center'}
+            >
+              <RiAuctionFill size='3rem' color='orange' />
+              <Text pt={4} fontWeight={600} fontSize={'md'}>
+                TÔI MUỐN MỞ PHIÊN ĐẤU GIÁ
+              </Text>
+            </Box>
+            <Box px={6} pb={6} mt='auto'>
+              <Text fontSize={'sm'}>
+                Nếu bạn đang sở hữu 1 món đồ hay 1 thứ gì đó và đang cần một nơi
+                để đấu giá món đồ đó cho hoạt động bạn đang kêu gọi, bạn có thể
+                tạo một phiên đấu giá ngay tại đây.
+              </Text>
+              <Button
+                mt={10}
+                w={'full'}
+                colorScheme={'purple'}
+                onClick={() => router.push('/dau-gia/tao-moi')}
+              >
+                Mở ngay
+              </Button>
+            </Box>
+          </Flex>
         </Grid>
       </SectionContainer>
       <SectionContainer id='current-campaigns'>
@@ -386,13 +392,22 @@ export default function Home({
         >
           Các hoạt động đang diễn ra 🔥
         </Heading>
-        <Box className='flex flex-wrap mt-14 mb-10'>
+        <TitleLines />
+        <Grid
+          templateColumns={[
+            'repeat(1, 1fr)',
+            'repeat(2, 1fr)',
+            'repeat(3, 1fr)'
+          ]}
+          gap={2}
+          className='mt-14 mb-10'
+        >
           {isLoading &&
             Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
           {campaigns?.map((campaign, index) => (
             <CampaignCard key={index} campaign={campaign} />
           ))}
-        </Box>
+        </Grid>
         <Flex justify='center'>
           <Button
             noLinear='true'
@@ -408,21 +423,34 @@ export default function Home({
       </SectionContainer>
       <SectionContainer hasBg>
         <Flex w='auto' justifyContent='center' alignItems='center'>
-          <Box px={8} py={20} mx='auto'>
+          <Box px={8} mx='auto'>
             <Heading
               textAlign='center'
               fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
               lineHeight={'110%'}
               color={color.PRIMARY}
-              mb={14}
             >
-              Vì sao nên chọn Green Charity?
+              Vì sao nên chọn{' '}
+              <chakra.span
+                display={{ base: 'block', md: 'inline' }}
+                color={'green.400'}
+              >
+                Green{' '}
+              </chakra.span>
+              <chakra.span
+                display={{ base: 'block', md: 'inline' }}
+                color={color.PRIMARY}
+              >
+                Charity
+              </chakra.span>
+              ?
             </Heading>
+            <TitleLines />
             <SimpleGrid
               columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
               spacingX={{ base: 12, lg: 20 }}
               spacingY={20}
-              mt={6}
+              mt={14}
             >
               <Feature
                 color='yellow'
@@ -474,6 +502,7 @@ export default function Home({
         >
           Người người làm từ thiện, nhà nhà làm từ thiện
         </Heading>
+        <TitleLines />
         <Flex
           mt={14}
           overflow={'hidden'}
@@ -525,6 +554,7 @@ export default function Home({
         >
           Tin tức mới nhất 📰
         </Heading>
+        <TitleLines />
         <Grid
           templateColumns={[
             'repeat(1, 1fr)',
@@ -563,6 +593,7 @@ export default function Home({
         >
           Một số câu hỏi thường gặp 🤔
         </Heading>
+        <TitleLines />
         <Flex mt={14} w='full'>
           <Accordion allowToggle w='full' colorScheme='purple'>
             {qa.map((item, index) => (
@@ -593,6 +624,45 @@ export default function Home({
               </AccordionItem>
             ))}
           </Accordion>
+        </Flex>
+      </SectionContainer>
+      <SectionContainer hasBg>
+        <Heading
+          textAlign='center'
+          fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
+          lineHeight={'110%'}
+          color={color.PRIMARY}
+        >
+          Các đối tác khác 🤝
+        </Heading>
+        <TitleLines />
+        <Grid
+          templateColumns={[
+            'repeat(1, 1fr)',
+            'repeat(2, 1fr)',
+            'repeat(3, 1fr)',
+            'repeat(4, 1fr)'
+          ]}
+          gap={4}
+          className='mt-14 mb-10'
+        >
+          {isLoading &&
+            Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)}
+          {news?.map((item, index) => (
+            <NewsCard key={index} item={item} />
+          ))}
+        </Grid>
+        <Flex justify='center'>
+          <Button
+            noLinear='true'
+            size='md'
+            px={4}
+            variant='outline'
+            colorScheme={'purple'}
+            onClick={() => router.push('/tin-tuc')}
+          >
+            Xem thêm
+          </Button>
         </Flex>
       </SectionContainer>
     </>

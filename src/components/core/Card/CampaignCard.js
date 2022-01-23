@@ -10,11 +10,11 @@ import {
   Text,
   useColorModeValue
 } from '@chakra-ui/react';
-import { HiLocationMarker } from 'react-icons/hi';
+import { FaMapMarkedAlt } from 'react-icons/fa';
 import { color } from 'src/constants/color';
 import { DateUtils } from 'src/utils/date';
 import { toVND } from 'src/utils/number';
-import { convertStatusToString } from 'src/utils/status';
+import { fromStatusToString } from 'src/utils/status';
 import ProgressBar from '../../common/Progress/ProgressBar';
 
 export default function CampaignCard(props) {
@@ -42,7 +42,6 @@ export default function CampaignCard(props) {
       className='transition duration-300 md:mx-2 mb-8'
       _hover={{ boxShadow: 'lg' }}
       bg={useColorModeValue('white', 'gray.900')}
-      w={['100%', '45%', '31%']}
       mx={2}
       rounded='lg'
       overflow='hidden'
@@ -67,7 +66,7 @@ export default function CampaignCard(props) {
                 }
               >
                 <Text p={1} fontSize='xs'>
-                  {convertStatusToString(status)}
+                  {fromStatusToString(status)}
                 </Text>
               </Badge>
               <Badge colorScheme={'purple'} rounded='full'>
@@ -99,12 +98,8 @@ export default function CampaignCard(props) {
               </Box>
             </Stack>
           </Box>
-          <Box mt={'auto'} px={4} mb={4}>
-            <Flex
-              justifyContent='space-between'
-              alignItems='center'
-              fontSize='sm'
-            >
+          <Box mt={'auto'} px={4} pt={4} mb={4}>
+            <Flex justifyContent='flex-end' alignItems='center' fontSize='sm'>
               <Flex>
                 <b>{toVND(donated_amount)}đ</b>&nbsp;/&nbsp;
                 <Text color='gray.500' ml='auto'>
@@ -133,7 +128,7 @@ export default function CampaignCard(props) {
               }}
             >
               <span className='inline-block align-baseline'>
-                <HiLocationMarker className='mt-1' />
+                <FaMapMarkedAlt className='mt-1' />
               </span>
               <Text
                 as='span'

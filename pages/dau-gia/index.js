@@ -3,6 +3,7 @@ import {
   Center,
   Divider,
   Flex,
+  Grid,
   Heading,
   Image,
   Text
@@ -116,7 +117,15 @@ export default function Auctions() {
             Mở phiên đấu giá ngay
           </Button>
         </Flex>
-        <Flex className='flex-wrap mt-14 mb-10' width='100%'>
+        <Grid
+          templateColumns={[
+            'repeat(1, 1fr)',
+            'repeat(2, 1fr)',
+            'repeat(3, 1fr)'
+          ]}
+          gap={4}
+          className='mt-14 mb-10'
+        >
           {auctions.length === 0 && !loading && (
             <div>
               <Text>Hiện tại chưa có phiên đấu giá nào đang diễn ra.</Text>
@@ -128,7 +137,7 @@ export default function Auctions() {
             auctions?.map(auction => (
               <AuctionCard key={auction.id} auction={auction} />
             ))}
-        </Flex>
+        </Grid>
       </SectionContainer>
     </>
   );
