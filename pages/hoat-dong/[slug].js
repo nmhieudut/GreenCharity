@@ -37,7 +37,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { AiOutlineComment, AiOutlineLeft } from 'react-icons/ai';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
-import { RiEditLine } from 'react-icons/ri';
+import { RiEditLine, RiFileExcel2Fill } from 'react-icons/ri';
 import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import Slider from 'react-slick';
@@ -57,6 +57,7 @@ import { toVND } from 'src/utils/number';
 import { fromStatusToString } from 'src/utils/status';
 import useCountdown from 'src/hooks/useCountdown';
 import { HiLocationMarker } from 'react-icons/hi';
+import { url } from 'src/libs/axios';
 
 export async function getServerSideProps(ctx) {
   try {
@@ -170,10 +171,26 @@ export default function Detail({ campaign }) {
         status: 'error',
         isClosable: true
       });
+    } finally {
+      onClose();
+      setLoading(false);
+      dispatch(ModalActions.setModalOff());
     }
-    onClose();
-    setLoading(false);
-    dispatch(ModalActions.setModalOff());
+  };
+
+  const handleExportToCsv = async () => {
+    try {
+      dispatch(ModalActions.setModalOn());
+      window.open(`${url}/api/v1/campaigns/${_id}/csv_export`, '_blank');
+    } catch (e) {
+      toast({
+        title: `${e.response.data.message}`,
+        status: 'error',
+        isClosable: true
+      });
+    } finally {
+      dispatch(ModalActions.setModalOff());
+    }
   };
 
   return (
@@ -444,7 +461,14 @@ export default function Detail({ campaign }) {
                     <NeedLogin />
                   </Box>
                 )}
-
+                <Button
+                  mt={4}
+                  colorScheme={'pink'}
+                  leftIcon={<RiFileExcel2Fill />}
+                  onClick={handleExportToCsv}
+                >
+                  Xuất sao kê sang file excel
+                </Button>
                 <Modal
                   isOpen={isOpen}
                   onClose={() => {

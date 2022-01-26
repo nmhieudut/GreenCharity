@@ -28,7 +28,6 @@ export default function News() {
       return setNews(news);
     } catch (e) {
       console.log(e);
-      setError(true);
     } finally {
       setLoading(false);
     }
@@ -45,7 +44,6 @@ export default function News() {
       return setNews([...news].concat(data.news));
     } catch (e) {
       console.log(e);
-      setError(true);
     } finally {
       setLoading(false);
     }
