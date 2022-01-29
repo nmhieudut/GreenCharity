@@ -15,10 +15,7 @@ export default function News() {
   const [news, setNews] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  // const { data, isLoading, isError, error } = useQuery('news', () =>
-  //   newsService.fetchAll()
-  // );
-  // const { news } = data || [];
+
   async function fetchNews() {
     setNews([]);
     setLoading(true);

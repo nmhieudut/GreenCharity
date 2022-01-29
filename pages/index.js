@@ -669,7 +669,7 @@ export default function Home({
   );
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   try {
     const { total_campaigns, total_amount_donations, total_donors } =
       await CampaignService.fetchSummary();
