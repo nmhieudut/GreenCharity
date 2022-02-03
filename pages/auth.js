@@ -142,19 +142,7 @@ export default function Auth() {
   };
 
   const loginWithGoogle = () => {
-    firebaseService
-      .socialMediaAuth(googleProvider)
-      .then(userCred => {})
-      .catch(e => {
-        toast({
-          position: 'top-right',
-          title: 'Thất bại.',
-          description: e.response.data.message,
-          status: 'error',
-          duration: 9000,
-          isClosable: true
-        });
-      });
+    firebaseService.socialMediaAuth(googleProvider).then(userCred => {});
   };
   if (typeof window !== 'undefined' && user) {
     router.push('/');

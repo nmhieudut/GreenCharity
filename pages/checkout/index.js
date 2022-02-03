@@ -12,6 +12,7 @@ import {
   Text,
   useColorModeValue
 } from '@chakra-ui/react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FaCcStripe } from 'react-icons/fa';
@@ -38,6 +39,10 @@ function CheckoutDetail(props) {
 
   return (
     <>
+      <Head>
+        <title>Nạp tiền</title>
+        <link rel='icon' href='/images/thumbnail.png' />
+      </Head>
       <Box
         background="url('/images/checkout.jpg') no-repeat"
         backgroundSize='cover'
@@ -134,25 +139,8 @@ function CheckoutDetail(props) {
                     </Button>
                   </Box>
                 </form>
-
-                <DividerWithText>Hoặc</DividerWithText>
-                <Text fontWeight={600} fontSize='xl'>
-                  Quốc tế
-                </Text>
-                <Button
-                  my={2}
-                  size='sm'
-                  w={'full'}
-                  colorScheme={'purple'}
-                  leftIcon={<FaCcStripe size='1.5rem' />}
-                >
-                  <Center>
-                    <Text>Stripe</Text>
-                  </Center>
-                </Button>
               </Box>
             </Box>
-            <Box></Box>
           </Box>
           <Box ml={8} flex={2}>
             Order Summary
