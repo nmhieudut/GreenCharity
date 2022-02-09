@@ -79,6 +79,18 @@ export default function AuctionDetails({ data }) {
     sourceIndex: 0
   });
   const [auction, setAuction] = useState(data);
+  const {
+    _id,
+    title,
+    description,
+    campaign,
+    images,
+    startPrice,
+    currentBid,
+    finishedAt,
+    status,
+    author
+  } = auction || {};
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(startPrice);
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -97,18 +109,6 @@ export default function AuctionDetails({ data }) {
   const bg = useColorModeValue('white', 'gray.700');
   const top = useBreakpointValue({ base: '90%', md: '50%' });
   const side = useBreakpointValue({ base: '30%', md: '10px' });
-  const {
-    _id,
-    title,
-    description,
-    campaign,
-    images,
-    startPrice,
-    currentBid,
-    finishedAt,
-    status,
-    author
-  } = auction || {};
 
   useEffect(() => {
     subscribeToAuctionChanges(event => {
@@ -230,7 +230,7 @@ export default function AuctionDetails({ data }) {
                       backgroundPosition='center'
                       backgroundRepeat='no-repeat'
                       backgroundSize='cover'
-                      backgroundImage={`url(${image})`}
+                      backgroundImage={`url('${image}')`}
                       alt={`campaign-${_id}-${idx}`}
                     />
                   ))}

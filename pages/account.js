@@ -115,13 +115,7 @@ function AccountPage(props) {
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
       <Box w={'full'} mx={'auto'} bg={bg} border='1px solid #d9d9d9'>
-        <Tabs
-          isFitted
-          isLazy
-          colorScheme='purple'
-          orientation='vertical'
-          minH={'100vh'}
-        >
+        <Tabs isLazy colorScheme='purple' orientation='vertical'>
           <TabList w='240px' borderRight='1px solid #d9d9d9'>
             {meSideBar.map((item, index) => (
               <Tab

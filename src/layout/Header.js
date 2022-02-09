@@ -255,7 +255,9 @@ export default function Header() {
                     <MenuDivider />
                     <MenuGroup title='Trợ giúp'>
                       <MenuItem>Tài liệu</MenuItem>
-                      <MenuItem>Hỏi đáp</MenuItem>
+                      <MenuItem>
+                        <a href='/#qanda'>Hỏi đáp</a>
+                      </MenuItem>
                     </MenuGroup>
                     <MenuDivider />
                     <MenuItem onClick={onLogout}>

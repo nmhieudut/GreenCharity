@@ -15,19 +15,16 @@ import {
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { FaCcStripe } from 'react-icons/fa';
 import { ImArrowRight2 } from 'react-icons/im';
 import Button from 'src/components/common/Button';
-import DividerWithText from 'src/components/common/DividerWithText';
 import SectionContainer from 'src/components/common/SectionContainer';
 import withAuth from 'src/HOCs/withAuth';
 import { CheckoutService } from 'src/services/checkout';
-import { toVND } from 'src/utils/number';
 
 function CheckoutDetail(props) {
   const bg = useColorModeValue('gray.50', 'gray.700');
   const router = useRouter();
-  const [method, setMethod] = React.useState('');
+  const [method, setMethod] = React.useState('momo');
   const [amount, setAmount] = React.useState(0);
   const onCheckout = async e => {
     e.preventDefault();
@@ -70,9 +67,6 @@ function CheckoutDetail(props) {
                 Chọn phương thức nạp tiền:
               </Text>
               <Box my={4}>
-                <Text fontWeight={600} fontSize='xl'>
-                  Nội địa
-                </Text>
                 <form className='mt-4' onSubmit={onCheckout}>
                   <FormControl my={2} isRequired>
                     <FormLabel mb={2}>
@@ -96,11 +90,7 @@ function CheckoutDetail(props) {
                             size='sm'
                             my={2}
                             leftIcon={
-                              <Image
-                                src='/images/momo.png'
-                                alt='momo'
-                                size='40px'
-                              />
+                              <Image src='/icons/momo.svg' alt='momo' />
                             }
                           >
                             Momo

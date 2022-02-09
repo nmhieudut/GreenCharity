@@ -371,23 +371,15 @@ export default function Detail({ campaign }) {
                     {status === 'active' ? (
                       <Stack spacing={1} direction='row'>
                         {days > 0 && (
-                          <Text color={'gray.500'} as={'b'}>
-                            {days} ngày
-                          </Text>
+                          <Text color={'gray.500'}>{days} ngày</Text>
                         )}
                         {hours > 0 && (
-                          <Text color={'gray.500'} as={'b'}>
-                            {hours} giờ
-                          </Text>
+                          <Text color={'gray.500'}>{hours} giờ</Text>
                         )}
                         {minutes > 0 && (
-                          <Text color={'gray.500'} as={'b'}>
-                            {minutes} phút
-                          </Text>
+                          <Text color={'gray.500'}>{minutes} phút</Text>
                         )}
-                        <Text color={'gray.500'} as={'b'}>
-                          {seconds} giây
-                        </Text>
+                        <Text color={'gray.500'}>{seconds} giây</Text>
                       </Stack>
                     ) : status === 'pending' ? (
                       <Text color={'blue.500'} as={'b'}>
@@ -398,7 +390,6 @@ export default function Detail({ campaign }) {
                         Hết hạn
                       </Text>
                     )}
-                    <Text color={'gray.500'} as={'b'}></Text>
                   </Flex>
                 </Flex>
                 <Flex direction={'column'} py={2}>

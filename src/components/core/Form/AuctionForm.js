@@ -22,7 +22,6 @@ import {
   useToast,
   VisuallyHidden
 } from '@chakra-ui/react';
-import Head from 'next/head';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Flatpickr from 'react-flatpickr';
@@ -31,10 +30,8 @@ import { BsClock } from 'react-icons/bs';
 import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
-import SectionContainer from 'src/components/common/SectionContainer';
 import Loading from 'src/components/common/Spinner/Loading';
 import { color } from 'src/constants/color';
-import withAuth from 'src/HOCs/withAuth';
 import { storage } from 'src/libs/firebase';
 import { AuctionService } from 'src/services/auction';
 import { CampaignService } from 'src/services/campaign';
@@ -46,7 +43,7 @@ export default function AuctionForm({ isEdited, initialValue }) {
   const dispatch = useDispatch();
   const toast = useToast();
   const user = useSelector(state => state.auth.currentUser);
-  const { data, isLoading, error } = useQuery('own campaigns', () =>
+  const { data, isLoading, error } = useQuery(['own campaigns', user], () =>
     CampaignService.getByAuthor(user?.id)
   );
   const { campaigns } = data || [];
@@ -62,7 +59,6 @@ export default function AuctionForm({ isEdited, initialValue }) {
     finishedAt: null
   });
   const { title, description, startPrice, images, finishedAt } = auctionPayload;
-  console.log('jdjasdijasdfjoiasdjio', auctionPayload);
 
   useEffect(() => {
     if (imageFiles.length > 0) {
