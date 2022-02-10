@@ -6,6 +6,7 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Heading,
   IconButton,
   Input,
   InputGroup,
@@ -30,34 +31,35 @@ import {
   useDisclosure,
   useToast
 } from '@chakra-ui/react';
-import { format } from 'date-fns';
 import FsLightbox from 'fslightbox-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { AiOutlineComment, AiOutlineLeft } from 'react-icons/ai';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
-import { RiEditLine, RiFileExcel2Fill } from 'react-icons/ri';
+import { BsBoxArrowInDownLeft, BsFilePdfFill } from 'react-icons/bs';
+import { HiLocationMarker } from 'react-icons/hi';
+import { RiEditLine } from 'react-icons/ri';
 import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import Slider from 'react-slick';
+import Pdf from 'react-to-pdf';
 import Button from 'src/components/common/Button';
-import { CampaignForm } from 'src/components/core/Form/CampaignForm';
-import CommentItem from 'src/components/core/Campaign/CommentItem';
-import DonatorItem from 'src/components/core/Card/DonatorItem';
 import DividerWithText from 'src/components/common/DividerWithText';
 import NeedLogin from 'src/components/common/NeedLogin';
 import ProgressBar from 'src/components/common/Progress/ProgressBar';
 import SectionContainer from 'src/components/common/SectionContainer';
+import CommentItem from 'src/components/core/Campaign/CommentItem';
+import DonatorItem from 'src/components/core/Card/DonatorItem';
+import { CampaignForm } from 'src/components/core/Form/CampaignForm';
 import { color } from 'src/constants/color';
+import useCountdown from 'src/hooks/useCountdown';
 import { CampaignService } from 'src/services/campaign';
 import { CommentService } from 'src/services/comment';
 import { ModalActions } from 'src/store/modal/action';
+import { DateUtils } from 'src/utils/date';
 import { toVND } from 'src/utils/number';
 import { fromStatusToString } from 'src/utils/status';
-import useCountdown from 'src/hooks/useCountdown';
-import { HiLocationMarker } from 'react-icons/hi';
-import { url } from 'src/libs/axios';
 
 export async function getServerSideProps(ctx) {
   try {
@@ -88,14 +90,18 @@ const settings = {
 };
 
 export default function Detail({ campaign }) {
+  const { data, isLoading } = useQuery(['disbursements'], () =>
+    CampaignService.fetchRE(campaign._id)
+  );
+  const { disbursements } = data || [];
   const user = useSelector(state => state.auth.currentUser);
   const toast = useToast();
   const router = useRouter();
   const dispatch = useDispatch();
   const bg = useColorModeValue('white', 'gray.900');
+  const ref = useRef();
   const [slider, setSlider] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
-  const [res, setRes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [donatedInfo, setDonatedInfo] = useState({
     wished_amount: 0,
@@ -135,10 +141,6 @@ export default function Detail({ campaign }) {
   const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
   const { days, hours, minutes, seconds } = useCountdown(finishedAt);
 
-  const refreshData = () => {
-    router.replace(router.asPath);
-  };
-
   const handleChange = e => {
     setDonatedInfo({
       ...donatedInfo,
@@ -153,7 +155,7 @@ export default function Detail({ campaign }) {
     dispatch(ModalActions.setModalOn());
     setLoading(true);
     try {
-      const res = await CampaignService.donate(campaign._id, {
+      await CampaignService.donate(campaign._id, {
         amount: parseInt(wished_amount),
         message
       });
@@ -161,10 +163,11 @@ export default function Detail({ campaign }) {
       toast({
         title: `Đã quyên góp thành công số tiền ${toVND(
           wished_amount
-        )}. Cảm ơn tấm lòng đại bác của bạn!`,
+        )} đ. Cảm ơn tấm lòng đại bác của bạn!`,
         status: 'success',
         isClosable: true
       });
+      router.replace(router.asPath);
     } catch (e) {
       toast({
         title: `${e.response.data.message}`,
@@ -178,23 +181,8 @@ export default function Detail({ campaign }) {
     }
   };
 
-  const handleExportToCsv = async () => {
-    try {
-      dispatch(ModalActions.setModalOn());
-      window.open(`${url}/api/v1/campaigns/${_id}/csv_export`, '_blank');
-    } catch (e) {
-      toast({
-        title: `${e.response.data.message}`,
-        status: 'error',
-        isClosable: true
-      });
-    } finally {
-      dispatch(ModalActions.setModalOff());
-    }
-  };
-
   return (
-    <SectionContainer>
+    <SectionContainer position='relative'>
       <Head>
         <title>{name}</title>
         <link rel='icon' href='/images/thumbnail.png' />
@@ -218,7 +206,7 @@ export default function Detail({ campaign }) {
           </Flex>
 
           <Text as={'p'} fontSize='sm'>
-            {format(new Date(createdAt), 'dd/MM/yyyy')}
+            {DateUtils.toDate(createdAt)}
           </Text>
           <Box mt={4}>
             <Badge
@@ -289,7 +277,7 @@ export default function Detail({ campaign }) {
                       backgroundPosition='center'
                       backgroundRepeat='no-repeat'
                       backgroundSize='cover'
-                      backgroundImage={`url(${image})`}
+                      backgroundImage={`url('${image}')`}
                       alt={`campaign-${_id}-${idx}`}
                     />
                   ))}
@@ -452,21 +440,105 @@ export default function Detail({ campaign }) {
                     <NeedLogin />
                   </Box>
                 )}
-                <Button
-                  mt={4}
-                  colorScheme={'pink'}
-                  leftIcon={<RiFileExcel2Fill />}
-                  onClick={handleExportToCsv}
+                <Pdf targetRef={ref} filename='sao-ke.pdf'>
+                  {({ toPdf }) => (
+                    <Button
+                      mt={4}
+                      colorScheme={'pink'}
+                      leftIcon={<BsFilePdfFill />}
+                      onClick={toPdf}
+                    >
+                      Xuất sao kê sang file PDF
+                    </Button>
+                  )}
+                </Pdf>
+                <Box
+                  ref={ref}
+                  position='fixed'
+                  zIndex={-1}
+                  width='100%'
+                  height='90%'
+                  top={0}
+                  left={0}
                 >
-                  Xuất sao kê sang file excel
-                </Button>
-                <Modal
-                  isOpen={isOpen}
-                  onClose={() => {
-                    onClose();
-                    res === 'success' && refreshData();
-                  }}
-                >
+                  <Heading my={12} color={color.PRIMARY} fontSize='1.2rem'>
+                    Quỹ ủng hộ
+                  </Heading>
+                  <style jsx>{`
+                    table,
+                    th,
+                    td {
+                      border: 1px solid black;
+                      padding: 0.5rem 1rem;
+                    }
+                  `}</style>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Ngày</th>
+                        <th>Diễn giải</th>
+                        <th isNumeric>Thu</th>
+                        <th isNumeric>Chi</th>
+                        <th isNumeric>Tồn</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {disbursements?.map(
+                        ({
+                          createdAt,
+                          message,
+                          amount,
+                          action,
+                          lastBalance,
+                          _id
+                        }) => (
+                          <tr key={_id} bg={action === 'chi' && 'lightgray'}>
+                            <td>{DateUtils.toDate(createdAt)}</td>
+                            <td>{message}</td>
+                            <td isNumeric>
+                              {action === 'thu' && toVND(amount)}
+                            </td>
+                            <td isNumeric>
+                              {action === 'chi' && toVND(amount)}
+                            </td>
+                            <td isNumeric>{toVND(lastBalance)}</td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th>Tổng</th>
+                        <th></th>
+                        <th isNumeric>
+                          <b>
+                            {toVND(
+                              disbursements
+                                ?.filter(({ action }) => action === 'thu')
+                                .reduce(
+                                  (sum, item) => sum + parseInt(item.amount),
+                                  0
+                                )
+                            )}
+                          </b>
+                        </th>
+                        <th isNumeric>
+                          <b>
+                            {toVND(
+                              disbursements
+                                ?.filter(({ action }) => action === 'chi')
+                                .reduce(
+                                  (sum, item) => sum + parseInt(item.amount),
+                                  0
+                                )
+                            )}
+                          </b>
+                        </th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </Box>
+                <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
                   <ModalContent py={4}>
                     <ModalHeader>Xác nhận quyên góp</ModalHeader>

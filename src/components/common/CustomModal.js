@@ -1,12 +1,15 @@
 import {
+  Box,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay
+  ModalOverlay,
+  useDisclosure
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import Button from './Button';
 
 const CustomModal = ({
@@ -27,9 +30,7 @@ const CustomModal = ({
 
   return (
     <>
-      <Button colorScheme='red' size='xs' onClick={onOpen}>
-        {showModalButtonText}
-      </Button>
+      <Box onClick={onOpen}>{showModalButtonText}</Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

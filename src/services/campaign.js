@@ -25,6 +25,11 @@ export const CampaignService = {
 
   fetchDonations: id => _http.get(`${Rest.campaigns}/${id}/donations`),
 
+  fetchRE: id => _http.get(`${Rest.campaigns}/${id}/receipts_expenditures`),
+
+  addRE: (id, payload) =>
+    _http.post(`${Rest.campaigns}/${id}/receipts_expenditures`, payload),
+
   donate: (id, payload) =>
     _http.post(`${Rest.campaigns}/${id}/donate`, payload),
 

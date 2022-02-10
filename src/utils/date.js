@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 export const DateUtils = {
   getDaysBetweenDates(startDate, endDate) {
     const begin = new Date(startDate);
@@ -11,6 +13,9 @@ export const DateUtils = {
     const point = new Date(date);
     const diff = point.getTime() - now.getTime();
     return Math.floor(diff / (1000 * 60 * 60 * 24));
+  },
+  toDate(date) {
+    return format(new Date(date), 'dd/MM/yyyy');
   },
   // check if expired
   isExpired(date) {

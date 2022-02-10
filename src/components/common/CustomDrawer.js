@@ -9,7 +9,7 @@ import {
   DrawerOverlay,
   useDisclosure
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import Button from './Button';
 
 export default function CustomDrawer({
@@ -20,7 +20,7 @@ export default function CustomDrawer({
   ...rest
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const [loading, setLoading] = useState(false);
   const onOk = async () => {
     setLoading(true);
     await onClose();
@@ -42,7 +42,7 @@ export default function CustomDrawer({
               Cancel
             </Button>
             {handleOk && (
-              <Button colorScheme='purple' onClick={onOk}>
+              <Button colorScheme='purple' onClick={onOk} isLoading={loading}>
                 Chấp nhận
               </Button>
             )}

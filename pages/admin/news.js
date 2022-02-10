@@ -24,6 +24,7 @@ import withAdmin from 'src/HOCs/withAdmin';
 import AdminLayout from 'src/layout/AdminLayout';
 import { AdminService } from 'src/services/admin';
 import { newsService } from 'src/services/news';
+import { DateUtils } from 'src/utils/date';
 
 function NewRow({ newEntry }) {
   const { thumbnail, title, shortContent, createdAt, content } = newEntry;
@@ -41,7 +42,7 @@ function NewRow({ newEntry }) {
         </Heading>
       </Td>
       <Td>{shortContent}</Td>
-      <Td>{format(new Date(createdAt), 'dd/MM/yyyy')}</Td>
+      <Td>{DateUtils(createdAt)}</Td>
       <Td>
         <CustomAlertModal
           size='xl'
