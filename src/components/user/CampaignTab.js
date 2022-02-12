@@ -132,15 +132,7 @@ function ERDrawer({ campaignId }) {
         drawerHeader={'Thu chi hoạt động'}
         drawerBody={
           <Box>
-            <CustomModal
-              showModalButtonText={
-                <Button my={4} leftIcon={<AddIcon />} colorScheme='pink'>
-                  Thêm khoản chi
-                </Button>
-              }
-              modalHeader={'Thêm khoản chi'}
-              modalBody={<ERModal campaignId={campaignId} />}
-            />
+            <ERModal campaignId={campaignId} />
             <ERTable disbursements={disbursements} />
           </Box>
         }
@@ -241,40 +233,39 @@ const ERModal = ({ campaignId }) => {
   };
 
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        onAddRE();
-      }}
-    >
-      <FormControl my={2} id='amount' isRequired>
-        <InputGroup>
-          <Input
-            onChange={handleChange}
-            type='number'
-            placeholder='Nhập số tiền đã chi tiêu tại đây'
-            focusBorderColor={color.PRIMARY}
-          />
-          <InputRightAddon>VND</InputRightAddon>
-        </InputGroup>
-      </FormControl>
-      <FormControl my={2} id='message' isRequired>
-        <Input
-          onChange={handleChange}
-          type='text'
-          placeholder='Mô tả'
-          focusBorderColor={color.PRIMARY}
-        />
-      </FormControl>
-      <Button
-        isLoading={loading}
-        w='full'
-        mt={4}
-        colorScheme={'pink'}
-        type='submit'
-      >
-        Thêm
-      </Button>
-    </form>
+    <Box>
+      <CustomModal
+        showModalButtonText={
+          <Button my={4} leftIcon={<AddIcon />} colorScheme='pink'>
+            Thêm khoản chi
+          </Button>
+        }
+        modalHeader={'Thêm khoản chi'}
+        modalBody={
+          <>
+            <FormControl my={2} id='amount' isRequired>
+              <InputGroup>
+                <Input
+                  onChange={handleChange}
+                  type='number'
+                  placeholder='Nhập số tiền đã chi tiêu tại đây'
+                  focusBorderColor={color.PRIMARY}
+                />
+                <InputRightAddon>VND</InputRightAddon>
+              </InputGroup>
+            </FormControl>
+            <FormControl my={2} id='message' isRequired>
+              <Input
+                onChange={handleChange}
+                type='text'
+                placeholder='Mô tả'
+                focusBorderColor={color.PRIMARY}
+              />
+            </FormControl>
+          </>
+        }
+        handleOk={onAddRE}
+      />
+    </Box>
   );
 };

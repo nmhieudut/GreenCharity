@@ -22,10 +22,15 @@ export default function CustomDrawer({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
   const onOk = async () => {
-    setLoading(true);
-    await onClose();
-    handleOk();
-    setLoading(false);
+    try {
+      setLoading(true);
+      await handleOk();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+      onClose();
+    }
   };
 
   return (

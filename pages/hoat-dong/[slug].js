@@ -469,7 +469,7 @@ export default function Detail({ campaign }) {
                     th,
                     td {
                       border: 1px solid black;
-                      padding: 0.5rem 1rem;
+                      padding: 0.5rem;
                     }
                   `}</style>
                   <table>
