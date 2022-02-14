@@ -9,7 +9,7 @@ import Loading from 'src/components/common/Spinner/Loading';
 
 export default function MoMoReturn() {
   const router = useRouter();
-  const [status, setStatus] = React.useState();
+  const [status, setStatus] = React.useState('none');
   const [checking, setChecking] = React.useState(false);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function MoMoReturn() {
   }, [router]);
   return (
     <Flex w='full' h={'100vh'} justify='center' align='center'>
-      {checking && !status ? (
+      {checking && status === 'none' ? (
         <Loading />
       ) : (
         <Box textAlign='center' py={10} px={6}>

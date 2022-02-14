@@ -69,7 +69,7 @@ export default function Header() {
   const onLogout = async () => {
     try {
       await AuthService.logout();
-      router.push('/auth');
+      window.open('/auth', '_self');
       storage.removeToken();
       dispatch(AuthActions.setCurrentUserSuccessAction(null));
       await firebase

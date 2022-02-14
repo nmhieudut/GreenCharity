@@ -26,7 +26,9 @@ import {
   TabPanels,
   Tabs,
   Text,
+  Tooltip,
   useBreakpointValue,
+  useClipboard,
   useColorModeValue,
   useDisclosure,
   useToast
@@ -34,10 +36,10 @@ import {
 import FsLightbox from 'fslightbox-react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
-import { AiOutlineComment, AiOutlineLeft } from 'react-icons/ai';
+import React, { useEffect, useRef, useState } from 'react';
+import { AiFillCopy, AiOutlineComment, AiOutlineLeft } from 'react-icons/ai';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
-import { BsBoxArrowInDownLeft, BsFilePdfFill } from 'react-icons/bs';
+import { BsFilePdfFill } from 'react-icons/bs';
 import { HiLocationMarker } from 'react-icons/hi';
 import { RiEditLine } from 'react-icons/ri';
 import { useQuery } from 'react-query';
@@ -90,6 +92,20 @@ const settings = {
 };
 
 export default function Detail({ campaign }) {
+  const {
+    status,
+    goal,
+    donated_amount,
+    _id,
+    name,
+    images,
+    content,
+    address,
+    finishedAt,
+    author,
+    moreInfo,
+    createdAt
+  } = campaign;
   const { data, isLoading } = useQuery(['disbursements'], () =>
     CampaignService.fetchRE(campaign._id)
   );
@@ -99,6 +115,7 @@ export default function Detail({ campaign }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const bg = useColorModeValue('white', 'gray.900');
+  const { hasCopied, onCopy } = useClipboard(_id);
   const ref = useRef();
   const [slider, setSlider] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
@@ -122,24 +139,22 @@ export default function Detail({ campaign }) {
     });
   }
 
-  const {
-    status,
-    goal,
-    donated_amount,
-    _id,
-    name,
-    images,
-    content,
-    address,
-    finishedAt,
-    author,
-    moreInfo,
-    createdAt
-  } = campaign;
   const { wished_amount, message } = donatedInfo;
   const isOwner = user?.id === author._id;
   const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
   const { days, hours, minutes, seconds } = useCountdown(finishedAt);
+
+  useEffect(() => {
+    if (hasCopied) {
+      toast({
+        position: 'bottom-left',
+        title: 'Đã sao chép mã hoạt động',
+        status: 'success',
+        duration: 4000,
+        isClosable: true
+      });
+    }
+  }, [hasCopied]);
 
   const handleChange = e => {
     setDonatedInfo({
@@ -208,7 +223,8 @@ export default function Detail({ campaign }) {
           <Text as={'p'} fontSize='sm'>
             {DateUtils.toDate(createdAt)}
           </Text>
-          <Box mt={4}>
+
+          <Box mt={2}>
             <Badge
               variant='outline'
               colorScheme={
@@ -327,6 +343,25 @@ export default function Detail({ campaign }) {
               </Stack>
 
               <Box bg={bg} px={6} py={2} fontSize='sm'>
+                <Flex>
+                  <b>Mã hoạt động: </b>
+                  <Tooltip label='Nhấn để sao chép mã' aria-label='A tooltip'>
+                    <Flex
+                      onClick={onCopy}
+                      align='center'
+                      ml={2}
+                      _hover={{
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Text as={'p'} color={color.PRIMARY} fontSize='sm'>
+                        {_id}
+                      </Text>
+                      <AiFillCopy className='ml-1' />
+                    </Flex>
+                  </Tooltip>
+                </Flex>
+
                 <Stack my={4} w={'full'}>
                   <Flex>
                     <b>Mục tiêu: </b>
@@ -448,7 +483,7 @@ export default function Detail({ campaign }) {
                       leftIcon={<BsFilePdfFill />}
                       onClick={toPdf}
                     >
-                      Xuất sao kê sang file PDF
+                      Báo cáo tài chính
                     </Button>
                   )}
                 </Pdf>
@@ -616,11 +651,18 @@ function Comment({ campaignId }) {
   const { comments } = data || [];
   const bg = useColorModeValue('gray.100', 'gray.900');
   const user = useSelector(state => state.auth.currentUser);
+
   async function handleComment(e) {
     e.preventDefault();
     await CommentService.create(campaignId, value).then(res => {
       setRefetch(r => r + 1);
       setValue('');
+    });
+  }
+
+  async function handleDelete(id) {
+    await CommentService.delete(id).then(res => {
+      setRefetch(r => r + 1);
     });
   }
 
@@ -660,7 +702,12 @@ function Comment({ campaignId }) {
         </Box>
       ) : (
         comments?.map(comment => (
-          <CommentItem key={comment._id} comment={comment} />
+          <CommentItem
+            hasPermission={user?.id === comment.author._id}
+            key={comment._id}
+            comment={comment}
+            onDelete={handleDelete}
+          />
         ))
       )}
       {comments?.length === 0 && <div>Chưa có bình luận nào</div>}

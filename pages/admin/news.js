@@ -2,7 +2,6 @@ import {
   Badge,
   Heading,
   Image,
-  MenuItem,
   Spinner,
   Stack,
   Table,
@@ -13,16 +12,14 @@ import {
   Tr,
   useColorModeValue
 } from '@chakra-ui/react';
-import { format } from 'date-fns';
 import React from 'react';
-import { AiOutlineCheckCircle, AiOutlineEye } from 'react-icons/ai';
+import { AiOutlineEye } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import CustomAlertModal from 'src/components/common/Alert';
 import Button from 'src/components/common/Button';
 import { color } from 'src/constants/color';
 import withAdmin from 'src/HOCs/withAdmin';
 import AdminLayout from 'src/layout/AdminLayout';
-import { AdminService } from 'src/services/admin';
 import { newsService } from 'src/services/news';
 import { DateUtils } from 'src/utils/date';
 
@@ -42,7 +39,7 @@ function NewRow({ newEntry }) {
         </Heading>
       </Td>
       <Td>{shortContent}</Td>
-      <Td>{DateUtils(createdAt)}</Td>
+      <Td>{DateUtils.toDate(createdAt)}</Td>
       <Td>
         <CustomAlertModal
           size='xl'

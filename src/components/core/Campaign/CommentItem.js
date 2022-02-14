@@ -17,7 +17,7 @@ export default function CommentItem({ comment, hasPermission, onDelete }) {
 
   const handleDelete = () => {
     if (hasPermission) {
-      return onDelete(_id);
+      if (onDelete) return onDelete(_id);
     }
     return;
   };
@@ -43,7 +43,7 @@ export default function CommentItem({ comment, hasPermission, onDelete }) {
           </Stack>
         </Stack>
 
-        <CloseButton onClick={handleDelete} ml='auto' />
+        {hasPermission && <CloseButton onClick={handleDelete} ml='auto' />}
       </Stack>
       <Box mt={4}>
         <Text fontSize='md'>{text}</Text>
