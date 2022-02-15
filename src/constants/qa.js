@@ -22,6 +22,12 @@ export const qa = [
     answer:
       'Trong vòng 1 đến 2 tuần khi dự án thành công, tiền sẽ được chuyển đến chủ dự án. Nếu ở trường hợp khẩn cấp, khi được liên hệ, chúng tôi sẽ chuyển sớm hơn.'
   },
+  ,
+  {
+    question: 'Vậy còn tiền ở các hoạt động đấu giá thì sao?',
+    answer:
+      'Khi 1 hoạt động đấu giá thành công. Tiền đấu giá sẽ tự động được chuyển đến hoạt động được tài trợ và được coi là 1 quyên góp của người dùng. Nếu không thành công, tiền sẽ được chuyển về cho người dùng.'
+  },
   {
     question:
       'Nếu dự án kết thúc mà số tiền quyên góp không đủ với chỉ tiêu đưa ra thì sao?',

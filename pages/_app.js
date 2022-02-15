@@ -98,13 +98,13 @@ function MyApp({ Component, pageProps }) {
       displacementImage: 'https://picsum.photos/id/237/200/300',
       imagesRatio: 0.6
     });
-  });
+  }, []);
 
   return (
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <Global styles={GlobalStyles} />
-        {(!currentUser || currentUser?.role !== 'admin') && (
+        {currentUser?.role !== 'admin' && (
           <MessengerCustomerChat
             pageId='109527714958989'
             appId='1039627213546984'
