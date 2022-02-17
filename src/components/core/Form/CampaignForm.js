@@ -52,14 +52,16 @@ const schema = Yup.object().shape({
   goal: Yup.number()
     .required('Nhập số tiền mong muốn')
     .min(10000000, 'Số tiền không được dưới 10.000.000 VND'),
-  province: Yup.string().required('Vui lòng chọn tỉnh/thành phố'),
-  district: Yup.string().required('Vui lòng chọn quận/huyện'),
-  ward: Yup.string().required('Vui lòng chọn xã/phủ')
+  province: Yup.object().required('Vui lòng chọn tỉnh/thành phố'),
+  district: Yup.object().required('Vui lòng chọn quận/huyện'),
+  ward: Yup.object().required('Vui lòng chọn xã/phủ')
 });
 
 export function CampaignForm({ isEdited, initialValues, returnUrl }) {
   const toast = useToast();
   const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const formikRef = useRef();
   const [submitting, setSubmitting] = useState(false);
   const [images, setImages] = useState([]);
   const [imgUrls, setImgUrls] = useState(isEdited ? initialValues.images : []);
@@ -68,16 +70,7 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
-
-  const [address, setAddress] = useState({
-    province: '',
-    district: '',
-    ward: ''
-  });
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const formikRef = useRef();
-
+  console.log('====', wards);
   function resetWard() {
     setWards([]);
   }
@@ -113,17 +106,10 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
   useEffect(() => {
     fetchProvince();
     if (initialValues) {
-      fetchDistrict(initialValues.province);
-      fetchWard(initialValues.district);
+      fetchDistrict(initialValues.province.province_id);
+      fetchWard(initialValues.district.district_id);
     }
   }, []);
-
-  useEffect(() => {
-    formikRef.current.setFieldValue(
-      'address',
-      address.province + ', ' + address.district + ', ' + address.ward
-    );
-  }, [address]);
 
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length > 0) {
@@ -182,7 +168,6 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
   }, [imgUrls]);
 
   const handleSubmit = async values => {
-    // return console.log('=++++++', values);
     setSubmitting(true);
     try {
       if (!isEdited) {
@@ -229,10 +214,9 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
           ? format(new Date(initialValues.finishedAt), 'yyyy/MM/dd')
           : add(new Date(), { days: 1 }),
         goal: isEdited ? initialValues.goal : 10000000,
-        province: isEdited ? initialValues.province : '',
-        district: isEdited ? initialValues.district : '',
-        ward: isEdited ? initialValues.ward : '',
-        address: isEdited ? initialValues.address : '',
+        province: isEdited ? initialValues.province : {},
+        district: isEdited ? initialValues.district : {},
+        ward: isEdited ? initialValues.ward : {},
         moreInfo: isEdited ? initialValues.moreInfo : ''
       }}
       validationSchema={schema}
@@ -381,24 +365,25 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
                   <FormLabel>Tỉnh / Thành phố</FormLabel>
                   <Select
                     placeholder='Chọn tỉnh / thành phố'
-                    value={values.province}
+                    value={values.province.province_id}
                     onChange={e => {
-                      setFieldValue('province', e.target.value);
-                      fetchDistrict(e.target.value);
-                      setAddress({
-                        ...address,
-                        province:
-                          e.target[e.target.selectedIndex].getAttribute('name')
+                      const foundProvince = provinces.find(
+                        item => item.province_id === e.target.value
+                      );
+                      setFieldValue('province', {
+                        province_id: foundProvince.province_id,
+                        province_name: foundProvince.province_name
                       });
+                      fetchDistrict(values.province.province_id);
                     }}
                   >
-                    {provinces?.map(province => (
+                    {provinces?.map(pro => (
                       <option
-                        key={province.province_id}
-                        value={province.province_id}
-                        name={province.province_name}
+                        key={pro.province_id}
+                        value={pro.province_id}
+                        name={pro.province_name}
                       >
-                        {province.province_name}
+                        {pro.province_name}
                       </option>
                     ))}
                   </Select>
@@ -408,24 +393,25 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
                   <FormLabel>Quận / huyện</FormLabel>
                   <Select
                     placeholder='Chọn quận / huyện'
-                    value={values.district}
+                    value={values.district.district_id}
                     onChange={e => {
-                      setFieldValue('district', e.target.value);
-                      fetchWard(e.target.value);
-                      setAddress({
-                        ...address,
-                        district:
-                          e.target[e.target.selectedIndex].getAttribute('name')
+                      const foundDistrict = districts.find(
+                        item => item.district_id === e.target.value
+                      );
+                      setFieldValue('district', {
+                        district_id: foundDistrict.district_id,
+                        district_name: foundDistrict.district_name
                       });
+                      fetchWard(values.district.district_id);
                     }}
                   >
-                    {districts?.map(district => (
+                    {districts?.map(dis => (
                       <option
-                        key={district.district_id}
-                        value={district.district_id}
-                        name={district.district_name}
+                        key={dis.district_id}
+                        value={dis.district_id}
+                        name={dis.district_name}
                       >
-                        {district.district_name}
+                        {dis.district_name}
                       </option>
                     ))}
                   </Select>
@@ -435,24 +421,25 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
                   <FormLabel>Xã</FormLabel>
                   <Select
                     placeholder='Chọn xã'
-                    value={values.ward}
+                    value={values.ward.ward_id}
                     onChange={e => {
-                      setFieldValue('ward', e.target.value);
-                      setAddress({
-                        ...address,
-                        ward: e.target[e.target.selectedIndex].getAttribute(
-                          'name'
-                        )
+                      const foundWar = wards.find(
+                        item => item.ward_id === e.target.value
+                      );
+                      console.log('===found', foundWar);
+                      setFieldValue('ward', {
+                        ward_id: foundWar.ward_id,
+                        ward_name: foundWar.ward_name
                       });
                     }}
                   >
-                    {wards?.map(ward => (
+                    {wards?.map(w => (
                       <option
-                        key={ward.ward_id}
-                        value={ward.ward_id}
-                        name={ward.ward_name}
+                        key={w.ward_id}
+                        value={w.ward_id}
+                        name={w.ward_name}
                       >
-                        {ward.ward_name}
+                        {w.ward_name}
                       </option>
                     ))}
                   </Select>

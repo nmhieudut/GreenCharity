@@ -72,8 +72,8 @@ function AccountPage(props) {
 
   const onUpdateInfo = async e => {
     e.preventDefault();
-    setLoading(true);
     try {
+      setLoading(true);
       await UserService.update(user.id, Object.assign(info, { picture: url }));
       toast({
         position: 'top-right',
@@ -83,6 +83,7 @@ function AccountPage(props) {
         duration: 9000,
         isClosable: true
       });
+      setTimeout(() => window.location.reload(), 2000);
     } catch (e) {
       toast({
         position: 'top-right',
@@ -285,11 +286,13 @@ function AccountPage(props) {
                 </FormControl>
                 <div className='mt-4'></div>
                 <div className='mt-8' isDisable={loading}></div>
+                <button aria-hidden={true} type='submit'></button>
                 <Box textAlign='right'>
                   <Button
                     colorScheme={'purple'}
-                    type='submit'
+                    type='button'
                     isLoading={loading}
+                    onClick={onUpdateInfo}
                   >
                     Cập nhật
                   </Button>

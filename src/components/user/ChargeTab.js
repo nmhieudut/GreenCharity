@@ -9,7 +9,6 @@ import { UserService } from 'src/services/user';
 
 export default function ChargeTab(props) {
   const { user } = props;
-  const router = useRouter();
   const { data, isLoading, isError, error } = useQuery('transactions', () =>
     UserService.getTransactions(user.id)
   );

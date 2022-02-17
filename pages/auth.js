@@ -22,7 +22,6 @@ import 'firebase/compat/auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { FaFacebook } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { ImEye } from 'react-icons/im';
 import { RiEyeCloseLine } from 'react-icons/ri';
@@ -31,10 +30,7 @@ import Button from 'src/components/common/Button';
 import DividerWithText from 'src/components/common/DividerWithText';
 import SectionContainer from 'src/components/common/SectionContainer';
 import { color } from 'src/constants/color';
-import {
-  facebookProvider,
-  googleProvider
-} from 'src/constants/firebase-providers';
+import { googleProvider } from 'src/constants/firebase-providers';
 import { AuthService } from 'src/services/auth';
 import { firebaseService } from 'src/services/firebase';
 import { AuthActions } from 'src/store/auth/action';

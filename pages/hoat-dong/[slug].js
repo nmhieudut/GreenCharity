@@ -100,10 +100,12 @@ export default function Detail({ campaign }) {
     name,
     images,
     content,
-    address,
     finishedAt,
     author,
     moreInfo,
+    province,
+    district,
+    ward,
     createdAt
   } = campaign;
   const { data, isLoading } = useQuery(['disbursements'], () =>
@@ -143,7 +145,10 @@ export default function Detail({ campaign }) {
   const isOwner = user?.id === author._id;
   const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
   const { days, hours, minutes, seconds } = useCountdown(finishedAt);
-
+  const provinceString = province.province_name;
+  const districtString = district && `, ${district.district_name}, `;
+  const wardString = ward && `${ward.ward_name}.`;
+  const addressString = `${provinceString}${districtString}${wardString}`;
   useEffect(() => {
     if (hasCopied) {
       toast({
@@ -426,7 +431,7 @@ export default function Detail({ campaign }) {
                       color='gray.500'
                       display='inline'
                     >
-                      &nbsp;{address}
+                      &nbsp;{addressString}
                     </Text>
                   </Box>
                   <Text
@@ -527,14 +532,17 @@ export default function Detail({ campaign }) {
                           lastBalance,
                           _id
                         }) => (
-                          <tr key={_id} bg={action === 'chi' && 'lightgray'}>
+                          <tr
+                            key={_id}
+                            bg={action === 'expenditures' && 'lightgray'}
+                          >
                             <td>{DateUtils.toDate(createdAt)}</td>
                             <td>{message}</td>
                             <td isNumeric>
-                              {action === 'thu' && toVND(amount)}
+                              {action === 'receipts' && toVND(amount)}
                             </td>
                             <td isNumeric>
-                              {action === 'chi' && toVND(amount)}
+                              {action === 'expenditures' && toVND(amount)}
                             </td>
                             <td isNumeric>{toVND(lastBalance)}</td>
                           </tr>
@@ -549,7 +557,7 @@ export default function Detail({ campaign }) {
                           <b>
                             {toVND(
                               disbursements
-                                ?.filter(({ action }) => action === 'thu')
+                                ?.filter(({ action }) => action === 'receipts')
                                 .reduce(
                                   (sum, item) => sum + parseInt(item.amount),
                                   0
@@ -561,7 +569,9 @@ export default function Detail({ campaign }) {
                           <b>
                             {toVND(
                               disbursements
-                                ?.filter(({ action }) => action === 'chi')
+                                ?.filter(
+                                  ({ action }) => action === 'expenditures'
+                                )
                                 .reduce(
                                   (sum, item) => sum + parseInt(item.amount),
                                   0

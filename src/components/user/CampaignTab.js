@@ -21,6 +21,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { AiOutlineEye } from 'react-icons/ai';
+import { FiEdit } from 'react-icons/fi';
 import { MdCalendarViewMonth } from 'react-icons/md';
 import { useQuery } from 'react-query';
 import Button from 'src/components/common/Button';
@@ -32,6 +33,7 @@ import { toVND } from 'src/utils/number';
 import { fromStatusToString } from 'src/utils/status';
 import CustomDrawer from '../common/CustomDrawer';
 import CustomModal from '../common/CustomModal';
+import { CampaignForm } from '../core/Form/CampaignForm';
 
 export default function CampaignTab(props) {
   const { user } = props;
@@ -100,6 +102,22 @@ export default function CampaignTab(props) {
                       >
                         Xem
                       </Button>
+                      <CustomDrawer
+                        size='lg'
+                        showModalButtonText={
+                          <Button
+                            leftIcon={<FiEdit />}
+                            colorScheme='red'
+                            variant='solid'
+                          >
+                            Sửa
+                          </Button>
+                        }
+                        drawerHeader={campaign.name}
+                        drawerBody={
+                          <CampaignForm isEdited initialValues={campaign} />
+                        }
+                      />
                       <ERDrawer campaignId={campaign._id} />
                     </Stack>
                   </Td>
@@ -157,11 +175,11 @@ const ERTable = ({ disbursements }) => {
       <Tbody>
         {disbursements?.map(
           ({ createdAt, message, amount, action, lastBalance, _id }) => (
-            <Tr key={_id} bg={action === 'chi' && 'lightgray'}>
+            <Tr key={_id} bg={action === 'expenditures' && 'lightgray'}>
               <Td>{DateUtils.toDate(createdAt)}</Td>
               <Td>{message}</Td>
-              <Td isNumeric>{action === 'thu' && toVND(amount)}</Td>
-              <Td isNumeric>{action === 'chi' && toVND(amount)}</Td>
+              <Td isNumeric>{action === 'receipts' && toVND(amount)}</Td>
+              <Td isNumeric>{action === 'expenditures' && toVND(amount)}</Td>
               <Td isNumeric>{toVND(lastBalance)}</Td>
             </Tr>
           )
@@ -174,14 +192,14 @@ const ERTable = ({ disbursements }) => {
           <Th isNumeric>
             {toVND(
               disbursements
-                ?.filter(({ action }) => action === 'thu')
+                ?.filter(({ action }) => action === 'receipts')
                 .reduce((sum, item) => sum + parseInt(item.amount), 0)
             )}
           </Th>
           <Th isNumeric>
             {toVND(
               disbursements
-                ?.filter(({ action }) => action === 'chi')
+                ?.filter(({ action }) => action === 'expenditures')
                 .reduce((sum, item) => sum + parseInt(item.amount), 0)
             )}
           </Th>

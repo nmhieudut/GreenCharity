@@ -6,7 +6,8 @@ export const UserService = {
 
   getUser: id => _http.get(Rest.admin + '/user/' + id),
 
-  update: (userId, payload) => _http.put(`${Rest.user}/${userId}`, payload),
+  update: (userId, payload) =>
+    _http.put(`${Rest.user}/${userId}/update-profile`, payload),
 
   resetPassword: (userId, payload) =>
     _http.put(`${Rest.user}/${userId}/reset-password`, payload),

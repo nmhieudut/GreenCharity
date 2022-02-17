@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { BsClock } from 'react-icons/bs';
+import { HiLocationMarker } from 'react-icons/hi';
 import { color } from 'src/constants/color';
 import { DateUtils } from 'src/utils/date';
 import { toVND } from 'src/utils/number';
@@ -27,10 +28,17 @@ export default function CampaignItem({
     finishedAt,
     images,
     name,
-    status
+    status,
+    province,
+    district,
+    ward
   }
 }) {
   const percent = `${((donated_amount / goal) * 100).toFixed(2)}%`;
+  const provinceString = province.province_name;
+  const districtString = district && `, ${district.district_name}, `;
+  const wardString = ward && `${ward.ward_name}.`;
+  const addressString = `${provinceString}${districtString}${wardString}`;
   return (
     <Link
       href={`/hoat-dong/${slug}`}
@@ -40,10 +48,10 @@ export default function CampaignItem({
       flexDir={'column'}
       _hover={{ boxShadow: 'lg' }}
     >
-      <div className='grid grid-cols-1 sm:grid-cols-12 my-8'>
+      <div className='grid grid-cols-1 sm:grid-cols-12 my-4 border-2 p-1'>
         <div className='col-span-0 sm:col-span-3 flex items-center justify-center'>
           <Image
-            className='w-full object-cover object-center h-40'
+            className='w-full object-cover object-center h-full'
             src={images[0]}
             alt={name}
             layout='fill'
@@ -84,7 +92,15 @@ export default function CampaignItem({
               }}
             />
           </div>
-          <Text my={2} fontSize={'md'} fontWeight='bold'>
+          <Box verticalAlign='middle' my={2}>
+            <span className='inline-block align-baseline'>
+              <HiLocationMarker />
+            </span>
+            <Text as='span' fontSize='sm' color='gray.500' display='inline'>
+              &nbsp;{addressString}
+            </Text>
+          </Box>
+          <Text my={2} fontSize={'md'} fontWeight='bold' textAlign={'right'}>
             {percent}
           </Text>
           <Stack my={2} w={'full'}>

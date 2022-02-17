@@ -22,4 +22,15 @@ const fromResultToString = result => {
   }
 };
 
-export { fromStatusToString, fromResultToString };
+const fromActionToString = action => {
+  switch (action) {
+    case 'donation':
+      return 'Đóng góp';
+    case 'charge':
+      return 'Nạp tiền';
+    default:
+      return 'Chưa rõ';
+  }
+};
+
+export { fromStatusToString, fromResultToString, fromActionToString };
