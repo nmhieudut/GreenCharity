@@ -9,13 +9,13 @@ import Loading from 'src/components/common/Spinner/Loading';
 
 export default function MoMoReturn() {
   const router = useRouter();
-  const [status, setStatus] = React.useState('none');
+  const [status, setStatus] = React.useState();
   const [checking, setChecking] = React.useState(false);
 
   useEffect(() => {
     async function check() {
-      setChecking(true);
       try {
+        setChecking(true);
         const res = await CheckoutService.returnUrl('momo', router.query);
         if (res?.code === '00') {
           await UserService.charge(res.userId, {
@@ -37,9 +37,8 @@ export default function MoMoReturn() {
   }, [router]);
   return (
     <Flex w='full' h={'100vh'} justify='center' align='center'>
-      {checking && status === 'none' ? (
-        <Loading />
-      ) : (
+      {checking && <Loading />}
+      {!checking && status && (
         <Box textAlign='center' py={10} px={6}>
           <Head>
             <title>Kết quả thanh toán</title>

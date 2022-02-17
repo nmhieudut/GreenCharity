@@ -6,11 +6,13 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { useEffect } from 'react';
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import GlobalSpinner from 'src/components/common/Spinner/GlobalSpinner';
+import { color } from 'src/constants/color';
 import Layout from 'src/layout';
 import 'src/libs/firebase';
 import { AuthService } from 'src/services/auth';
@@ -20,8 +22,6 @@ import { AuthActions } from 'src/store/auth/action';
 import { storage } from 'src/utils/storage';
 import theme from 'src/utils/theme';
 import '../styles/globals.scss';
-import MessengerCustomerChat from 'react-messenger-customer-chat';
-import { color } from 'src/constants/color';
 
 const hoverEffect =
   typeof window !== `undefined` ? require('hover-effect').default : null;
