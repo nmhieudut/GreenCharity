@@ -57,27 +57,29 @@ export default function Auth() {
   const [idToken, setIdToken] = useState();
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(userCred => {
-      userCred?.getIdToken().then(token => {
-        setIdToken(token);
-        AuthService.loginWithGoogle(token)
-          .then(res => {
+    const checkUserStage = async () => {
+      try {
+        firebase.auth().onAuthStateChanged(userCred => {
+          userCred?.getIdToken().then(async token => {
+            setIdToken(token);
+            const res = await AuthService.loginWithGoogle(token);
             storage.setToken(res.token);
             dispatch(AuthActions.setCurrentUserSuccessAction(res.user));
-          })
-          .catch(e => {
-            console.log(e);
-            toast({
-              position: 'top-right',
-              title: 'Thất bại.',
-              description: e.response.data.message,
-              status: 'error',
-              duration: 9000,
-              isClosable: true
-            });
           });
-      });
-    });
+        });
+      } catch (e) {
+        console.log(e);
+        toast({
+          position: 'top-right',
+          title: 'Thất bại.',
+          description: e.response.data.message,
+          status: 'error',
+          duration: 9000,
+          isClosable: true
+        });
+      }
+    };
+    checkUserStage();
   }, [idToken]);
 
   const handleChange = e => {
@@ -115,12 +117,7 @@ export default function Auth() {
     setLoading(true);
     try {
       dispatch(AuthActions.signUpAction());
-      const res = await AuthService.register(
-        name,
-        email,
-        password,
-        phoneNumber
-      );
+      const res = await AuthService.register(name, email, password, phoneNumber);
       dispatch(AuthActions.signUpSuccessAction(res.user));
       storage.setToken(res.token);
     } catch (err) {
@@ -149,15 +146,8 @@ export default function Auth() {
         <title>Đăng nhập</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      <Box
-        background="url('/images/tuthienlogin.jpeg') no-repeat"
-        backgroundSize='cover'
-      >
-        <Center
-          mx='auto'
-          py={48}
-          style={{ background: 'rgba(128,90,213,0.5)' }}
-        >
+      <Box background="url('/images/tuthienlogin.jpeg') no-repeat" backgroundSize='cover'>
+        <Center mx='auto' py={48} style={{ background: 'rgba(128,90,213,0.5)' }}>
           <Text
             textAlign='center'
             fontSize={{ base: '2xl', md: '4xl', lg: '5xl' }}
@@ -172,12 +162,8 @@ export default function Auth() {
         <Box className='flex-1 flex flex-col pb-12' bg={formBg}>
           <Tabs isLazy isFitted variant='enclosed'>
             <TabList>
-              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>
-                Đăng nhập
-              </Tab>
-              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>
-                Đăng ký
-              </Tab>
+              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>Đăng nhập</Tab>
+              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>Đăng ký</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -210,10 +196,7 @@ export default function Auth() {
                           placeholder='Mật khẩu'
                         />
                         <InputRightElement className='my-2'>
-                          <span
-                            className='cursor-pointer'
-                            onClick={() => setShow(!show)}
-                          >
+                          <span className='cursor-pointer' onClick={() => setShow(!show)}>
                             {show ? (
                               <RiEyeCloseLine color={color.PRIMARY} />
                             ) : (
@@ -250,11 +233,7 @@ export default function Auth() {
                         />
                       </FormControl>
                       <div className='m-2'></div>
-                      <FormControl
-                        className='flex-1'
-                        id='phoneNumber'
-                        isRequired
-                      >
+                      <FormControl className='flex-1' id='phoneNumber' isRequired>
                         <FormLabel>Số điện thoại</FormLabel>
                         <Input
                           onChange={handleChange}
