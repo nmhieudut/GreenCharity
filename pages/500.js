@@ -1,5 +1,6 @@
 import { Flex, Heading, Text } from '@chakra-ui/react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React from 'react';
 import Button from 'src/components/common/Button';
 import SectionContainer from 'src/components/common/SectionContainer';
