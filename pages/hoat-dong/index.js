@@ -94,7 +94,6 @@ const CampaignsList = ({ query, status }) => {
     fetchMore();
   }, [page]);
 
-  console.log('res', campaigns);
   return (
     <div>
       {error && <div>Có gì đó không ổn, thử lại sau</div>}

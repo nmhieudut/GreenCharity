@@ -33,6 +33,12 @@ function Campaigns() {
   const { campaigns } = data || [];
   const [refresh, setRefresh] = useState(0);
 
+  const handleExportEROfACampaign = async id => {
+    try {
+      await AdminService.getDonationsByCampaign(id);
+    } catch (e) {}
+  };
+
   const handleRenewal = async (id, days) => {
     try {
       await AdminService.renewalCampaign(id, { addedDays: days });
@@ -155,7 +161,14 @@ function Campaigns() {
         ></CustomDrawer>
       </Stack>
 
-      <Table shadow='xl' rounded='md' overflow='hidden'>
+      <Table
+        shadow='xl'
+        rounded='md'
+        overflow='hidden'
+        size='sm'
+        variant='striped'
+        colorScheme='purple'
+      >
         <Thead bg={bg}>
           <Tr>
             <Th>Tên hoạt động</Th>
@@ -165,6 +178,7 @@ function Campaigns() {
             <Th>Mục tiêu (VND)</Th>
             <Th>Đạt được (VND)</Th>
             <Th>Trạng thái</Th>
+            <Th>Hành động</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -183,6 +197,7 @@ function Campaigns() {
               onActive={handleActive}
               onEnd={handleEnd}
               onDelete={handleDelete}
+              onExportER={handleExportEROfACampaign}
             />
           ))}
         </Tbody>

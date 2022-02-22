@@ -2,12 +2,14 @@ import { Badge, Image, Td, Tr } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import React from 'react';
 import { toVND } from 'src/utils/number';
+import { fromActionToString } from 'src/utils/status';
 
 export default function TransactionRow({ transaction }) {
-  const { orderId, method, amount, action, createdAt, author } = transaction;
+  const { orderId, method, amount, action, createdAt, author, _id } =
+    transaction;
   return (
     <Tr>
-      <Td>{orderId}</Td>
+      <Td>{_id}</Td>
       <Td>{author.email}</Td>
       <Td>
         <Image
@@ -22,7 +24,9 @@ export default function TransactionRow({ transaction }) {
       </Td>
       <Td>{format(new Date(createdAt), 'dd/MM/yyyy')}</Td>
       <Td>
-        <Badge colorScheme='green'>{action}</Badge>
+        <Badge colorScheme={action === 'donate' ? 'green' : 'blue'}>
+          {fromActionToString(action)}
+        </Badge>
       </Td>
       <Td>{toVND(amount)}</Td>
       <Td>

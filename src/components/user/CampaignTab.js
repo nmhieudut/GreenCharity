@@ -34,6 +34,7 @@ import { fromStatusToString } from 'src/utils/status';
 import CustomDrawer from '../common/CustomDrawer';
 import CustomModal from '../common/CustomModal';
 import { CampaignForm } from '../core/Form/CampaignForm';
+import ERTable from '../uncommon/ERTable';
 
 export default function CampaignTab(props) {
   const { user } = props;
@@ -68,8 +69,8 @@ export default function CampaignTab(props) {
               {campaigns?.map(campaign => (
                 <Tr key={campaign._id}>
                   <Td>{campaign.name}</Td>
-                  <Td isNumeric>{toVND(campaign.goal)}</Td>
-                  <Td isNumeric>{toVND(campaign.donated_amount)}</Td>
+                  <Td>{toVND(campaign.goal)}</Td>
+                  <Td>{toVND(campaign.donated_amount)}</Td>
                   <Td>{DateUtils.toDate(campaign.finishedAt)}</Td>
                   <Td>
                     {campaign.status === 'active'
@@ -159,63 +160,12 @@ function ERDrawer({ campaignId }) {
   );
 }
 
-const ERTable = ({ disbursements }) => {
-  return (
-    <Table variant='simple' size='small'>
-      <TableCaption>Quỹ tiền tài trợ</TableCaption>
-      <Thead>
-        <Tr>
-          <Th>Ngày</Th>
-          <Th>Diễn giải</Th>
-          <Th isNumeric>Thu</Th>
-          <Th isNumeric>Chi</Th>
-          <Th isNumeric>Tồn</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {disbursements?.map(
-          ({ createdAt, message, amount, action, lastBalance, _id }) => (
-            <Tr key={_id} bg={action === 'expenditures' && 'lightgray'}>
-              <Td>{DateUtils.toDate(createdAt)}</Td>
-              <Td>{message}</Td>
-              <Td isNumeric>{action === 'receipts' && toVND(amount)}</Td>
-              <Td isNumeric>{action === 'expenditures' && toVND(amount)}</Td>
-              <Td isNumeric>{toVND(lastBalance)}</Td>
-            </Tr>
-          )
-        )}
-      </Tbody>
-      <Tfoot>
-        <Tr>
-          <Th>Tổng</Th>
-          <Th></Th>
-          <Th isNumeric>
-            {toVND(
-              disbursements
-                ?.filter(({ action }) => action === 'receipts')
-                .reduce((sum, item) => sum + parseInt(item.amount), 0)
-            )}
-          </Th>
-          <Th isNumeric>
-            {toVND(
-              disbursements
-                ?.filter(({ action }) => action === 'expenditures')
-                .reduce((sum, item) => sum + parseInt(item.amount), 0)
-            )}
-          </Th>
-        </Tr>
-      </Tfoot>
-    </Table>
-  );
-};
-
 const ERModal = ({ campaignId }) => {
   const toast = useToast();
   const [payload, setPayload] = useState({
     message: '',
     amount: 0
   });
-  const [loading, setLoading] = useState(false);
 
   const handleChange = e => {
     setPayload({
@@ -226,7 +176,6 @@ const ERModal = ({ campaignId }) => {
 
   const onAddRE = async () => {
     try {
-      setLoading(true);
       await CampaignService.addRE(campaignId, payload);
       toast({
         position: 'top-right',
@@ -245,8 +194,6 @@ const ERModal = ({ campaignId }) => {
         duration: 5000,
         isClosable: true
       });
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -517,9 +517,9 @@ export default function Detail({ campaign }) {
                       <tr>
                         <th>Ngày</th>
                         <th>Diễn giải</th>
-                        <th isNumeric>Thu</th>
-                        <th isNumeric>Chi</th>
-                        <th isNumeric>Tồn</th>
+                        <th>Thu</th>
+                        <th>Chi</th>
+                        <th>Tồn</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -538,13 +538,11 @@ export default function Detail({ campaign }) {
                           >
                             <td>{DateUtils.toDate(createdAt)}</td>
                             <td>{message}</td>
-                            <td isNumeric>
-                              {action === 'receipts' && toVND(amount)}
-                            </td>
-                            <td isNumeric>
+                            <td>{action === 'receipts' && toVND(amount)}</td>
+                            <td>
                               {action === 'expenditures' && toVND(amount)}
                             </td>
-                            <td isNumeric>{toVND(lastBalance)}</td>
+                            <td>{toVND(lastBalance)}</td>
                           </tr>
                         )
                       )}
@@ -553,7 +551,7 @@ export default function Detail({ campaign }) {
                       <tr>
                         <th>Tổng</th>
                         <th></th>
-                        <th isNumeric>
+                        <th>
                           <b>
                             {toVND(
                               disbursements
@@ -565,7 +563,7 @@ export default function Detail({ campaign }) {
                             )}
                           </b>
                         </th>
-                        <th isNumeric>
+                        <th>
                           <b>
                             {toVND(
                               disbursements

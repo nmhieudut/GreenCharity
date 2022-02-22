@@ -60,7 +60,7 @@ export default function UserRow({ user, onToggleActive, onDeleteUser }) {
         <Badge>{role === 'user' ? 'Thành viên' : 'Khác'}</Badge>
       </Td>
       <Td>{format(new Date(createdAt), 'dd/MM/yyyy')}</Td>
-      <Td isNumeric>{toVND(balance)}</Td>
+      <Td>{toVND(balance)}</Td>
       <Td>
         <Flex align='center' justify='space-between'>
           <Badge colorScheme={isActive ? 'green' : 'red'}>

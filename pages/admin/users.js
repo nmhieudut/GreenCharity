@@ -121,7 +121,7 @@ function Users() {
             <Th>Tên / Email</Th>
             <Th>Tư cách</Th>
             <Th>Tham gia vào</Th>
-            <Th isNumeric>Số dư (VND)</Th>
+            <Th>Số dư (VND)</Th>
             <Th>Tình trạng</Th>
           </Tr>
         </Thead>

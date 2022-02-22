@@ -1,5 +1,4 @@
 import {
-  Box,
   Link,
   SimpleGrid,
   Stack,
@@ -29,15 +28,13 @@ const ListHeader = ({ children }) => {
 
 export default function Footer() {
   return (
-    <SectionContainer hasBg position='relative' marginTop={'auto'} zIndex='50'>
+    <SectionContainer position='relative' marginTop={'auto'} zIndex='50'>
       <SimpleGrid
         templateColumns={{ sm: '1fr 1fr', md: '1fr 1fr 1fr' }}
         spacing={8}
       >
         <Stack spacing={6}>
-          <Box>
-            <Logo color={useColorModeValue('gray.700', 'white')} />
-          </Box>
+          <Logo color={useColorModeValue('gray.700', 'white')} />
           <Text>© 2021 Green Charity. All rights reserved</Text>
           <Stack direction={'row'} spacing={6}>
             <SocialButton label={'Twitter'} href={'#'}>
@@ -53,9 +50,8 @@ export default function Footer() {
         </Stack>
         <Stack align={'flex-start'}>
           <ListHeader>Company</ListHeader>
-          <Link href={'#'}>Về chúng tôi</Link>
-          <Link href={'#'}>Tin tức</Link>
-          <Link href={'#'}>Chính sách</Link>
+          <Link href={'/ve-chung-toi'}>Về chúng tôi</Link>
+          <Link href={'/tin-tuc'}>Tin tức</Link>
         </Stack>
         <Stack align={'flex-start'}>
           <ListHeader>Chăm sóc khách hàng</ListHeader>
@@ -75,7 +71,6 @@ export default function Footer() {
               Hiếu Hoa Hồng
             </Link>
           </Text>
-          <Text></Text>
         </Stack>
       </SimpleGrid>
     </SectionContainer>

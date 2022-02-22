@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { addMonths, format } from 'date-fns';
 
 export const DateUtils = {
   getDaysBetweenDates(startDate, endDate) {
@@ -23,5 +23,15 @@ export const DateUtils = {
     const point = new Date(date);
     const diff = point.getTime() - now.getTime();
     return diff < 0;
+  },
+  getDateRange(startDate, endDate) {
+    let start = new Date(startDate);
+    let end = new Date(endDate);
+    let dates = [];
+    while (start < end || format(start, 'MM') === format(end, 'MM')) {
+      dates.push(format(start, 'yyyy-MM-dd'));
+      start = addMonths(start, 1);
+    }
+    return dates;
   }
 };

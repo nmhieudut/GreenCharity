@@ -1,6 +1,4 @@
 import {
-  Alert,
-  AlertIcon,
   Box,
   Divider,
   Flex,
@@ -70,7 +68,7 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
-  console.log('====', wards);
+
   function resetWard() {
     setWards([]);
   }
@@ -179,7 +177,7 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
           duration: 3000,
           isClosable: true
         });
-        returnUrl && router.push(returnUrl);
+        // returnUrl && router.push(returnUrl);
         return;
       }
       await CampaignService.update(initialValues._id, values);
@@ -189,7 +187,7 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
         duration: 3000,
         isClosable: true
       });
-      returnUrl && router.push(returnUrl);
+      // returnUrl && router.push(returnUrl);
       return;
     } catch (e) {
       return toast({
@@ -374,7 +372,7 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
                         province_id: foundProvince.province_id,
                         province_name: foundProvince.province_name
                       });
-                      fetchDistrict(values.province.province_id);
+                      fetchDistrict(e.target.value);
                     }}
                   >
                     {provinces?.map(pro => (
@@ -402,7 +400,7 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
                         district_id: foundDistrict.district_id,
                         district_name: foundDistrict.district_name
                       });
-                      fetchWard(values.district.district_id);
+                      fetchWard(e.target.value);
                     }}
                   >
                     {districts?.map(dis => (
@@ -426,7 +424,6 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
                       const foundWar = wards.find(
                         item => item.ward_id === e.target.value
                       );
-                      console.log('===found', foundWar);
                       setFieldValue('ward', {
                         ward_id: foundWar.ward_id,
                         ward_name: foundWar.ward_name
@@ -500,7 +497,11 @@ export function CampaignForm({ isEdited, initialValues, returnUrl }) {
                 />
               </FormControl>
               <Divider my={4} />
-              <Button colorScheme='purple' type='submit' isLoading={submitting}>
+              <Button
+                colorScheme='purple'
+                onClick={values => handleSubmit(values)}
+                isLoading={submitting}
+              >
                 {isEdited ? 'Cập nhật hoạt động' : 'Yêu cầu vận động'}
               </Button>
             </Box>

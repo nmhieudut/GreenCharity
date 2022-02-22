@@ -117,7 +117,12 @@ export default function Auth() {
     setLoading(true);
     try {
       dispatch(AuthActions.signUpAction());
-      const res = await AuthService.register(name, email, password, phoneNumber);
+      const res = await AuthService.register(
+        name,
+        email,
+        password,
+        phoneNumber
+      );
       dispatch(AuthActions.signUpSuccessAction(res.user));
       storage.setToken(res.token);
     } catch (err) {
@@ -137,17 +142,26 @@ export default function Auth() {
   const loginWithGoogle = () => {
     firebaseService.socialMediaAuth(googleProvider).then(userCred => {});
   };
+
   if (typeof window !== 'undefined' && user) {
     router.push('/');
   }
+
   return (
     <>
       <Head>
         <title>Đăng nhập</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      <Box background="url('/images/tuthienlogin.jpeg') no-repeat" backgroundSize='cover'>
-        <Center mx='auto' py={48} style={{ background: 'rgba(128,90,213,0.5)' }}>
+      <Box
+        background="url('/images/tuthienlogin.jpeg') no-repeat"
+        backgroundSize='cover'
+      >
+        <Center
+          mx='auto'
+          py={48}
+          style={{ background: 'rgba(128,90,213,0.5)' }}
+        >
           <Text
             textAlign='center'
             fontSize={{ base: '2xl', md: '4xl', lg: '5xl' }}
@@ -162,8 +176,12 @@ export default function Auth() {
         <Box className='flex-1 flex flex-col pb-12' bg={formBg}>
           <Tabs isLazy isFitted variant='enclosed'>
             <TabList>
-              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>Đăng nhập</Tab>
-              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>Đăng ký</Tab>
+              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>
+                Đăng nhập
+              </Tab>
+              <Tab _selected={{ color: 'white', bg: color.PRIMARY }}>
+                Đăng ký
+              </Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -196,7 +214,10 @@ export default function Auth() {
                           placeholder='Mật khẩu'
                         />
                         <InputRightElement className='my-2'>
-                          <span className='cursor-pointer' onClick={() => setShow(!show)}>
+                          <span
+                            className='cursor-pointer'
+                            onClick={() => setShow(!show)}
+                          >
                             {show ? (
                               <RiEyeCloseLine color={color.PRIMARY} />
                             ) : (
@@ -233,7 +254,11 @@ export default function Auth() {
                         />
                       </FormControl>
                       <div className='m-2'></div>
-                      <FormControl className='flex-1' id='phoneNumber' isRequired>
+                      <FormControl
+                        className='flex-1'
+                        id='phoneNumber'
+                        isRequired
+                      >
                         <FormLabel>Số điện thoại</FormLabel>
                         <Input
                           onChange={handleChange}

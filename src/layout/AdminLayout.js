@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Drawer,
   DrawerContent,
@@ -6,12 +7,14 @@ import {
   Flex,
   Icon,
   IconButton,
+  Text,
   useColorModeValue,
   useDisclosure
 } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FiMenu } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
 import { color } from 'src/constants/color';
 import { adminSideBar } from 'src/constants/sidebar';
 
@@ -19,15 +22,14 @@ export default function AdminLayout({ children }) {
   const router = useRouter();
   const sidebar = useDisclosure();
   const { pathname } = router;
-
+  const user = useSelector(state => state.auth.currentUser);
   const NavItem = props => {
     const { icon, children, path, ...rest } = props;
 
     return (
       <Flex
         align='center'
-        px='4'
-        pl='4'
+        px='2'
         py='3'
         cursor='pointer'
         bg={
@@ -57,13 +59,22 @@ export default function AdminLayout({ children }) {
     <Box
       as='nav'
       minH='100vh'
-      py='10'
+      py={8}
       overflowY='auto'
       bg={color.PRIMARY}
       borderRightWidth='1px'
-      minW='60'
+      minW='40'
       {...props}
     >
+      <Flex flexDirection='column' align='center' py={4}>
+        <Avatar src={user.picture} name={user.name} size='lg' />
+        <Text mt={2} color='white'>
+          {user.name}
+        </Text>
+        <Text fontSize='sm' color='white'>
+          Admin
+        </Text>
+      </Flex>
       <Flex
         direction='column'
         as='nav'
@@ -81,7 +92,7 @@ export default function AdminLayout({ children }) {
             icon={item.icon}
             path={item.path}
           >
-            {item.title}
+            <Text fontSize='xs'>{item.title}</Text>
           </NavItem>
         ))}
       </Flex>
@@ -118,7 +129,7 @@ export default function AdminLayout({ children }) {
       </Drawer>
       <Flex>
         <SidebarContent display={{ base: 'none', md: 'unset' }} />
-        <Box transition='.3s ease' mt={2} w='full'>
+        <Box transition='.3s ease' mt={8} w='full'>
           <Box as='main'>{children}</Box>
         </Box>
       </Flex>

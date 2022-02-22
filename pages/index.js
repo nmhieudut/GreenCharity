@@ -4,6 +4,7 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Avatar,
   Box,
   chakra,
   Flex,
@@ -38,6 +39,7 @@ import { CampaignService } from 'src/services/campaign';
 import { newsService } from 'src/services/news';
 import TitleLines from 'src/components/common/TitleLines';
 import { RiAuctionFill } from 'react-icons/ri';
+import { partners } from 'src/constants/partner';
 
 const SectionContainer = dynamic(() =>
   import('src/components/common/SectionContainer')
@@ -126,6 +128,7 @@ export default function Home({
       <SectionContainer hasParticle>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={0}>
           <Flex
+            data-aos='fade-right'
             direction='column'
             alignItems='start'
             justifyContent='center'
@@ -246,6 +249,7 @@ export default function Home({
             )}
           </Flex>
           <Image
+            data-aos='fade-left'
             src='http://imgs.vietnamnet.vn/Images/2016/06/08/11/20160608105845-tuthien1.jpg'
             alt=''
             fit='cover'
@@ -415,7 +419,7 @@ export default function Home({
             px={4}
             variant='outline'
             colorScheme={'purple'}
-            onClick={() => router.push('/campaigns')}
+            onClick={() => router.push('/hoat-dong')}
           >
             Xem thêm
           </Button>
@@ -603,22 +607,17 @@ export default function Home({
                 borderBottom='.5px solid lightgray'
                 borderTop='none'
               >
-                <h2>
-                  <AccordionButton>
-                    <Box flex='1' textAlign='left'>
-                      <Text
-                        fontSize='xl'
-                        color={color.PRIMARY}
-                        fontWeight={600}
-                      >
-                        {item.question}
-                      </Text>
-                    </Box>
+                <AccordionButton>
+                  <Box flex='1' textAlign='left'>
+                    <Text fontSize='lg' color={color.PRIMARY} fontWeight={600}>
+                      {item.question}
+                    </Text>
+                  </Box>
 
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4} fontSize='lg'>
+                  <AccordionIcon />
+                </AccordionButton>
+
+                <AccordionPanel pb={4} fontSize='md'>
                   Trả lời: {item.answer}
                 </AccordionPanel>
               </AccordionItem>
@@ -637,33 +636,25 @@ export default function Home({
         </Heading>
         <TitleLines />
         <Grid
-          templateColumns={[
-            'repeat(1, 1fr)',
-            'repeat(2, 1fr)',
-            'repeat(3, 1fr)',
-            'repeat(4, 1fr)'
-          ]}
+          templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)']}
           gap={4}
           className='mt-14 mb-10'
         >
-          {isLoading &&
-            Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)}
-          {news?.map((item, index) => (
-            <NewsCard key={index} item={item} />
+          {partners.map(p => (
+            <Flex
+              key={p.id}
+              bg={useColorModeValue('white', 'gray.800')}
+              className='relative border border-gray-200 px-3 py-3 rounded-md'
+              align='center'
+            >
+              <Image className='w-12 h-12' src={p.logo} alt={p.name} />
+              <Box ml='3'>
+                <Text fontWeight='bold'>{p.name}</Text>
+                <Text fontSize='sm'> {p.description}</Text>
+              </Box>
+            </Flex>
           ))}
         </Grid>
-        <Flex justify='center'>
-          <Button
-            noLinear='true'
-            size='md'
-            px={4}
-            variant='outline'
-            colorScheme={'purple'}
-            onClick={() => router.push('/tin-tuc')}
-          >
-            Xem thêm
-          </Button>
-        </Flex>
       </SectionContainer>
     </>
   );

@@ -28,7 +28,7 @@ import { BsBrightnessHigh } from 'react-icons/bs';
 import { FaCrown, FaMoon, FaRegUserCircle } from 'react-icons/fa';
 import { FcManager } from 'react-icons/fc';
 import { MdCampaign, MdEmail, MdOutlinePhoneInTalk } from 'react-icons/md';
-import { RiLogoutBoxRLine } from 'react-icons/ri';
+import { RiAuctionFill, RiLogoutBoxRLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import AnimatedButton from 'src/components/common/AnimatedButton';
 import { color } from 'src/constants/color';
@@ -84,9 +84,16 @@ export default function Header() {
     } catch (e) {}
   };
 
-  const onCreate = () => {
+  const onCreateCampaign = () => {
     if (user) {
       router.push('/hoat-dong/tao-moi');
+    } else {
+      router.push('/auth');
+    }
+  };
+  const onCreateAuction = () => {
+    if (user) {
+      router.push('/dau-gia/tao-moi');
     } else {
       router.push('/auth');
     }
@@ -307,9 +314,20 @@ export default function Header() {
               colorScheme='purple'
               mr={2}
               leftIcon={<MdCampaign size='1rem' />}
-              onClick={onCreate}
+              onClick={onCreateCampaign}
             >
               Vận động
+            </AnimatedButton>
+            <AnimatedButton
+              ml='auto'
+              variant={'solid'}
+              size={'sm'}
+              colorScheme='purple'
+              mr={2}
+              leftIcon={<RiAuctionFill size='1rem' />}
+              onClick={onCreateAuction}
+            >
+              Đấu giá
             </AnimatedButton>
           </Stack>
         </Flex>

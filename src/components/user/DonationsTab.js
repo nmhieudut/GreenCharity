@@ -42,7 +42,7 @@ export default function DonateTab(props) {
             <Thead>
               <Tr>
                 <Th>Tên hoạt động</Th>
-                <Th isNumeric>Số tiền đã quyên góp (VND)</Th>
+                <Th>Số tiền đã quyên góp (VND)</Th>
                 <Th>Ngày quyên góp</Th>
                 <Th>Lời nhắn </Th>
                 <Th>Hành động</Th>
@@ -52,7 +52,7 @@ export default function DonateTab(props) {
               {donations?.map(donation => (
                 <Tr key={donation._id}>
                   <Td>{donation.campaignInfo.name}</Td>
-                  <Td isNumeric>{toVND(donation.amount)}</Td>
+                  <Td>{toVND(donation.amount)}</Td>
                   <Td>{DateUtils.toDate(donation.createdAt)}</Td>
                   <Td>{donation.message}</Td>
                   <Td>
@@ -77,7 +77,7 @@ export default function DonateTab(props) {
             <Tfoot>
               <Tr>
                 <Th>Tổng sô tiền</Th>
-                <Th isNumeric>
+                <Th>
                   {toVND(
                     donations?.reduce(
                       (total, currentVal) => total + currentVal.amount,

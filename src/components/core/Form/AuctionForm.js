@@ -55,6 +55,7 @@ export default function AuctionForm({ isEdited, initialValue }) {
     description: '',
     startPrice: 0,
     images: [],
+    quantity: 1,
     campaign: '',
     finishedAt: null
   });
@@ -190,13 +191,9 @@ export default function AuctionForm({ isEdited, initialValue }) {
                   <Flex mb={2} alignItems='center' justify='space-between'>
                     <Flex color={'gray.500'} align='center' justify='end'>
                       <BsClock className='mr-2' size='.75rem' />
-                      {!DateUtils.isExpired(finishedAt) ? (
+                      {!DateUtils.isExpired(finishedAt) && (
                         <Text color={'gray.500'} as={'b'}>
                           {DateUtils.calculateDaysFromNow(finishedAt)} ngày
-                        </Text>
-                      ) : (
-                        <Text color={'red.500'} as={'b'}>
-                          Hết hạn
                         </Text>
                       )}
                     </Flex>
@@ -472,6 +469,7 @@ export default function AuctionForm({ isEdited, initialValue }) {
                 >
                   Bắt đầu
                 </Button>
+                g
               </Box>
             </chakra.form>
           </GridItem>

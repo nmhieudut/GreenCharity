@@ -2,7 +2,6 @@ import {
   Avatar,
   Badge,
   Box,
-  Flex,
   FormControl,
   FormLabel,
   Heading,
@@ -19,6 +18,8 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Select,
+  Skeleton,
   SkeletonCircle,
   SkeletonText,
   Stack,
@@ -31,36 +32,38 @@ import {
   Text,
   Tr,
   useColorModeValue,
-  useDisclosure,
   useToast
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   AiOutlineCheckCircle,
   AiOutlineComment,
   AiOutlineDelete
 } from 'react-icons/ai';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import { BsFilePdfFill, BsThreeDotsVertical } from 'react-icons/bs';
+import { FaFileExport } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 import { GiFinishLine } from 'react-icons/gi';
+import { MdOutlineAutorenew } from 'react-icons/md';
+import { useQuery } from 'react-query';
+import { color } from 'src/constants/color';
+import { AdminService } from 'src/services/admin';
+import { CampaignService } from 'src/services/campaign';
+import { CommentService } from 'src/services/comment';
+import { DateUtils } from 'src/utils/date';
 import { toVND } from 'src/utils/number';
 import { fromStatusToString } from 'src/utils/status';
 import CustomAlertModal from '../common/Alert';
-import { CampaignForm } from '../core/Form/CampaignForm';
-import CustomDrawer from '../common/CustomDrawer';
-import DonatorItem from '../core/Card/DonatorItem';
 import Button from '../common/Button';
-import NeedLogin from '../common/NeedLogin';
+import CustomDrawer from '../common/CustomDrawer';
 import CommentItem from '../core/Campaign/CommentItem';
-import { useQuery } from 'react-query';
-import { CommentService } from 'src/services/comment';
-import { CampaignService } from 'src/services/campaign';
-import { color } from 'src/constants/color';
+import DonatorItem from '../core/Card/DonatorItem';
+import { CampaignForm } from '../core/Form/CampaignForm';
+import ERTable from '../uncommon/ERTable';
 
 function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
   const bg = useColorModeValue('gray.100', 'gray.800');
-  const [image, setImage] = useState(null);
   const {
     _id,
     author,
@@ -95,82 +98,92 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
         {toVND(donated_amount)} ({percent})
       </Td>
       <Td>
-        <Flex align='center' justify='space-between'>
-          <Badge
-            colorScheme={
-              status === 'pending'
-                ? 'purple'
-                : status === 'active'
-                ? 'green'
-                : 'red'
-            }
-          >
-            {fromStatusToString(status)}
-          </Badge>
-          <Menu ml='auto'>
-            <MenuButton as={IconButton} icon={<BsThreeDotsVertical />} />
-            <MenuList>
-              {status === 'pending' && (
-                <CustomAlertModal
-                  modalHeader={'Phê duyệt'}
-                  modalBody='Bạn chắc chắn muốn duyệt hoạt động này?'
-                  handleOk={() => onActive(_id)}
-                >
-                  <MenuItem icon={<AiOutlineCheckCircle />}>Phê duyệt</MenuItem>
-                </CustomAlertModal>
-              )}
-              {status === 'active' && (
-                <>
-                  <CustomDrawer
-                    size='lg'
-                    showModalButtonText={
-                      <MenuItem icon={<FiEdit />}>Sửa</MenuItem>
-                    }
-                    drawerHeader={name}
-                    drawerBody={
-                      <Tabs>
-                        <TabList>
-                          <Tab>Chỉnh sửa</Tab>
-                          <Tab>Lượt quyên góp</Tab>
-                          <Tab>Bình luận</Tab>
-                        </TabList>
-                        <TabPanels>
-                          <TabPanel>
-                            <CampaignForm isEdited initialValues={campaign} />
-                          </TabPanel>
-                          <TabPanel>
-                            <Donator campaignId={_id} />
-                          </TabPanel>
-                          <TabPanel>
-                            <Comment campaignId={_id} />
-                          </TabPanel>
-                        </TabPanels>
-                      </Tabs>
-                    }
-                  />
-
-                  <CustomAlertModal
-                    modalHeader={'Kết thúc'}
-                    modalBody='Bạn chắc chắn muốn kết thúc hoạt động này?'
-                    handleOk={() => onEnd(_id)}
-                  >
-                    <MenuItem icon={<GiFinishLine />}>Kết thúc</MenuItem>
-                  </CustomAlertModal>
-                </>
-              )}
-              {status === 'ended' && (
-                <Renewal campaignId={_id} onRenewal={onRenewal} />
-              )}
+        <Badge
+          colorScheme={
+            status === 'pending'
+              ? 'purple'
+              : status === 'active'
+              ? 'green'
+              : 'red'
+          }
+        >
+          {fromStatusToString(status)}
+        </Badge>
+      </Td>
+      <Td>
+        <Menu ml='auto'>
+          <MenuButton as={IconButton} icon={<BsThreeDotsVertical />} />
+          <MenuList>
+            {status !== 'pending' && (
+              <CustomDrawer
+                size='lg'
+                showModalButtonText={
+                  <MenuItem icon={<FaFileExport />}>Xuất sao kê</MenuItem>
+                }
+                drawerHeader={'Báo cáo tài chính'}
+                drawerBody={<ER campaign={campaign} />}
+              />
+            )}
+            {status === 'pending' && (
               <CustomAlertModal
-                modalHeader={'Kết thúc'}
-                modalBody='Bạn chắc chắn muốn kết thúc hoạt động này?'
-                handleOk={() => onDelete(_id)}
+                modalHeader={'Phê duyệt'}
+                modalBody='Bạn chắc chắn muốn duyệt hoạt động này?'
+                handleOk={() => onActive(_id)}
               >
-                <MenuItem icon={<AiOutlineDelete />}>Xóa</MenuItem>
+                <MenuItem icon={<AiOutlineCheckCircle />}>Phê duyệt</MenuItem>
               </CustomAlertModal>
-            </MenuList>
-          </Menu>
-        </Flex>
+            )}
+            {status === 'active' && (
+              <>
+                <CustomDrawer
+                  size='lg'
+                  showModalButtonText={
+                    <MenuItem icon={<FiEdit />}>Sửa</MenuItem>
+                  }
+                  drawerHeader={name}
+                  drawerBody={
+                    <Tabs>
+                      <TabList>
+                        <Tab>Chỉnh sửa</Tab>
+                        <Tab>Lượt quyên góp</Tab>
+                        <Tab>Bình luận</Tab>
+                      </TabList>
+                      <TabPanels>
+                        <TabPanel>
+                          <CampaignForm isEdited initialValues={campaign} />
+                        </TabPanel>
+                        <TabPanel>
+                          <Donator campaignId={_id} />
+                        </TabPanel>
+                        <TabPanel>
+                          <Comment campaignId={_id} />
+                        </TabPanel>
+                      </TabPanels>
+                    </Tabs>
+                  }
+                />
+
+                <CustomAlertModal
+                  modalHeader={'Kết thúc'}
+                  modalBody='Bạn chắc chắn muốn kết thúc hoạt động này?'
+                  handleOk={() => onEnd(_id)}
+                >
+                  <MenuItem icon={<GiFinishLine />}>Kết thúc</MenuItem>
+                </CustomAlertModal>
+              </>
+            )}
+            {status === 'ended' && (
+              <Renewal campaignId={_id} onRenewal={onRenewal} />
+            )}
+            <CustomAlertModal
+              modalHeader={'Kết thúc'}
+              modalBody='Bạn chắc chắn muốn kết thúc hoạt động này?'
+              handleOk={() => onDelete(_id)}
+            >
+              <MenuItem icon={<AiOutlineDelete />}>Xóa</MenuItem>
+            </CustomAlertModal>
+          </MenuList>
+        </Menu>
       </Td>
     </Tr>
   );
@@ -224,7 +237,7 @@ function Renewal({ campaignId, onRenewal }) {
       }
       handleOk={() => onRenewal(campaignId, days)}
     >
-      <MenuItem icon={<AiOutlineDelete />}>Gia hạn thêm</MenuItem>
+      <MenuItem icon={<MdOutlineAutorenew />}>Gia hạn thêm</MenuItem>
     </CustomAlertModal>
   );
 }
@@ -355,5 +368,64 @@ function Comment({ campaignId }) {
       )}
       {comments?.length === 0 && <div>Chưa có bình luận nào</div>}
     </Box>
+  );
+}
+
+function ER({ campaign }) {
+  const dateRangeList = DateUtils.getDateRange(
+    campaign.createdAt,
+    campaign.finishedAt ? campaign.finishedAt : new Date()
+  );
+  const [dateRange, setDateRange] = useState('all-all');
+  const { data, isLoading } = useQuery(['disbursements', dateRange], () =>
+    AdminService.getDonationsByCampaign(campaign._id, dateRange)
+  );
+  const { donations } = data || [];
+
+  console.log('========', dateRangeList, dateRange);
+  const handleChange = e => {
+    setDateRange(e.target.value);
+  };
+
+  return (
+    <>
+      <Select
+        defaultValue={'all-all'}
+        onChange={handleChange}
+        variant='filled'
+        focusBorderColor={color.PRIMARY}
+      >
+        <option value={'all-all'}>Tất cả</option>
+        {dateRangeList
+          .slice(0)
+          .reverse()
+          .map((dateRange, i) => {
+            const spreadDateRange = dateRange.split('-');
+            return (
+              <option key={i} value={dateRange}>
+                Tháng {spreadDateRange[1]} / {spreadDateRange[0]}
+              </option>
+            );
+          })}
+      </Select>
+      <Button
+        mt={4}
+        colorScheme={'pink'}
+        leftIcon={<BsFilePdfFill />}
+        // onClick={toPdf}
+      >
+        Sao kê
+      </Button>
+      <Box mt={4}>
+        {isLoading && (
+          <Stack>
+            <Skeleton height='20px' />
+            <Skeleton height='20px' />
+            <Skeleton height='20px' />
+          </Stack>
+        )}
+        {donations && <ERTable disbursements={donations} />}
+      </Box>
+    </>
   );
 }

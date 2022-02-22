@@ -24,7 +24,7 @@ const fromResultToString = result => {
 
 const fromActionToString = action => {
   switch (action) {
-    case 'donation':
+    case 'donate':
       return 'Đóng góp';
     case 'charge':
       return 'Nạp tiền';

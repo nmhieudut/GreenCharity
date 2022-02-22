@@ -63,17 +63,18 @@ const AuctionCard = ({ auction }) => {
               <Image src={images[0]} alt={title} objectFit='cover' />
             </AspectRatio>
             <Flex
-              color={'gray.500'}
               align='center'
               justify='end'
               position='absolute'
-              bottom={0}
-              right={0}
-              p={2}
-              bg={useColorModeValue('gray.200', 'gray.700')}
+              top={1}
+              right={1}
+              px={2}
+              py={1}
+              borderRadius='full'
+              bg={'green.300'}
             >
               {!DateUtils.isExpired(finishedAt) ? (
-                <Text as={'b'} className='tracking-wide'>
+                <Text fontSize='sm' className='tracking-wide'>
                   {days > 0 && days + 'd:'}
                   {hours > 0 && hours + 'h:'}
                   {minutes > 0 && minutes + 'm:'}

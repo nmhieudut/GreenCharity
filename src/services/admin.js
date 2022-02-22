@@ -17,6 +17,21 @@ export const AdminService = {
   deleteCampaign: id => _http.delete(Rest.admin + '/campaigns/' + id),
   endCampaign: id => _http.put(Rest.admin + '/campaigns/' + id + '/end'),
 
+  getDonationsByCampaign: (id, range) => {
+    const dateRange = range.split('-');
+    const params = {
+      month: dateRange[1],
+      year: dateRange[0]
+    };
+    return _http.get(Rest.admin + '/campaigns/' + id + '/donations', {
+      params
+    });
+  },
+
+  getDonations: () => _http.get(Rest.admin + '/donations'),
+  getDonationsByAuthor: userId =>
+    _http.get(Rest.admin + '/donations/' + userId),
+
   getTransactions: () => _http.get(Rest.admin + '/transactions'),
 
   getNews: () => _http.get(Rest.admin + '/news'),
@@ -24,7 +39,6 @@ export const AdminService = {
   getAuctions: () => _http.get(Rest.admin + '/auctions'),
   createAuction: payload => _http.post(Rest.admin + '/auctions', payload),
   updateAuction: (id, data) => _http.put(Rest.admin + '/auctions/' + id, data),
-  activeAuction: id => _http.put(Rest.admin + '/auctions/' + id + '/active'),
   deleteAuction: id => _http.delete(Rest.admin + '/auctions/' + id),
   endAuction: id => _http.put(Rest.admin + '/auctions/' + id + '/end')
 };
