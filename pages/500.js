@@ -2,6 +2,7 @@ import { Flex, Heading, Text } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { color } from 'src/constants/color';
 import Button from 'src/components/common/Button';
 import SectionContainer from 'src/components/common/SectionContainer';
 
@@ -13,7 +14,14 @@ export default function ServerSideError() {
         <title>Không tìm thấy trang</title>
         <link rel='icon' href='/images/thumbnail.png' />
       </Head>
-      <Flex flexDir='column' h='100vh' align='center' justify='center' py={10} px={6}>
+      <Flex
+        flexDir='column'
+        h='100vh'
+        align='center'
+        justify='center'
+        py={10}
+        px={6}
+      >
         <Heading
           display='inline-block'
           as='h2'
