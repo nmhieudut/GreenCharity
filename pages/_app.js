@@ -2,6 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { css, Global } from '@emotion/react';
 import 'flatpickr/dist/themes/material_green.css';
 import 'focus-visible/dist/focus-visible';
+import AOS from 'aos';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
@@ -60,6 +61,23 @@ function MyApp({ Component, pageProps }) {
   };
 
   useEffect(() => {
+    AOS.init({
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 50
+    });
+    const el = document.querySelector('.animate__item');
+    new hoverEffect({
+      parent: el,
+      intensity: 0.3,
+      image1: '/images/damvinhhung.jpg',
+      image2: '/images/thuytien.png',
+      displacementImage: 'https://picsum.photos/id/237/200/300',
+      imagesRatio: 0.6
+    });
+  }, []);
+
+  useEffect(() => {
     const handleRouteStart = () => NProgress.start();
     const handleRouteDone = () => NProgress.done();
 
@@ -85,18 +103,6 @@ function MyApp({ Component, pageProps }) {
           );
         }
       }
-    });
-  }, []);
-
-  useEffect(() => {
-    const el = document.querySelector('.animate__item');
-    new hoverEffect({
-      parent: el,
-      intensity: 0.3,
-      image1: '/images/damvinhhung.jpg',
-      image2: '/images/thuytien.png',
-      displacementImage: 'https://picsum.photos/id/237/200/300',
-      imagesRatio: 0.6
     });
   }, []);
 

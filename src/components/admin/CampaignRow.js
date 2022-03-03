@@ -2,10 +2,12 @@ import {
   Avatar,
   Badge,
   Box,
+  Flex,
   FormControl,
   FormLabel,
   Heading,
   IconButton,
+  Image,
   Input,
   InputGroup,
   InputRightAddon,
@@ -35,7 +37,7 @@ import {
   useToast
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   AiOutlineCheckCircle,
   AiOutlineComment,
@@ -45,8 +47,10 @@ import { BsFilePdfFill, BsThreeDotsVertical } from 'react-icons/bs';
 import { FaFileExport } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 import { GiFinishLine } from 'react-icons/gi';
+import { GrView } from 'react-icons/gr';
 import { MdOutlineAutorenew } from 'react-icons/md';
 import { useQuery } from 'react-query';
+import Pdf from 'react-to-pdf';
 import { color } from 'src/constants/color';
 import { AdminService } from 'src/services/admin';
 import { CampaignService } from 'src/services/campaign';
@@ -60,7 +64,6 @@ import CustomDrawer from '../common/CustomDrawer';
 import CommentItem from '../core/Campaign/CommentItem';
 import DonatorItem from '../core/Card/DonatorItem';
 import { CampaignForm } from '../core/Form/CampaignForm';
-import ERTable from '../uncommon/ERTable';
 
 function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
   const bg = useColorModeValue('gray.100', 'gray.800');
@@ -70,6 +73,7 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
     content,
     name,
     images,
+    slug,
     donated_amount,
     goal,
     status,
@@ -114,9 +118,15 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
         <Menu ml='auto'>
           <MenuButton as={IconButton} icon={<BsThreeDotsVertical />} />
           <MenuList>
+            <MenuItem
+              icon={<GrView />}
+              onClick={() => window.open(`/hoat-dong/${slug}`, '_blank')}
+            >
+              Xem
+            </MenuItem>
             {status !== 'pending' && (
               <CustomDrawer
-                size='lg'
+                size='sm'
                 showModalButtonText={
                   <MenuItem icon={<FaFileExport />}>Xuất sao kê</MenuItem>
                 }
@@ -247,7 +257,6 @@ function Donator({ campaignId }) {
     CampaignService.fetchDonations(campaignId)
   );
   const { donations } = data || [];
-  console.log(donations, isLoading, error);
 
   return (
     <Box>
@@ -372,17 +381,22 @@ function Comment({ campaignId }) {
 }
 
 function ER({ campaign }) {
+  const provinceString = campaign.province.province_name;
+  const districtString =
+    campaign.district && `, ${campaign.district.district_name}, `;
+  const wardString = campaign.ward && `${campaign.ward.ward_name}.`;
+  const addressString = `${provinceString}${districtString}${wardString}`;
   const dateRangeList = DateUtils.getDateRange(
     campaign.createdAt,
     campaign.finishedAt ? campaign.finishedAt : new Date()
   );
   const [dateRange, setDateRange] = useState('all-all');
+  const ref = useRef();
   const { data, isLoading } = useQuery(['disbursements', dateRange], () =>
     AdminService.getDonationsByCampaign(campaign._id, dateRange)
   );
   const { donations } = data || [];
 
-  console.log('========', dateRangeList, dateRange);
   const handleChange = e => {
     setDateRange(e.target.value);
   };
@@ -408,14 +422,7 @@ function ER({ campaign }) {
             );
           })}
       </Select>
-      <Button
-        mt={4}
-        colorScheme={'pink'}
-        leftIcon={<BsFilePdfFill />}
-        // onClick={toPdf}
-      >
-        Sao kê
-      </Button>
+
       <Box mt={4}>
         {isLoading && (
           <Stack>
@@ -424,8 +431,133 @@ function ER({ campaign }) {
             <Skeleton height='20px' />
           </Stack>
         )}
-        {donations && <ERTable disbursements={donations} />}
       </Box>
+      <Pdf targetRef={ref} filename='sao-ke.pdf'>
+        {({ toPdf }) => (
+          <Button
+            mt={4}
+            colorScheme={'pink'}
+            leftIcon={<BsFilePdfFill />}
+            onClick={toPdf}
+          >
+            Sao kê
+          </Button>
+        )}
+      </Pdf>
+      <Box
+        ref={ref}
+        position='absolute'
+        zIndex={100}
+        width='100%'
+        height='100%'
+        bottom={'-100%'}
+        backgroundColor='white'
+        left={0}
+        border='1px solid black'
+        py={12}
+        px={4}
+      >
+        <Box textAlign='center'>
+          <Heading fontSize='1.2rem'>
+            Cộng hòa xã hội chủ nghĩa Việt Nam
+          </Heading>
+          <Heading fontSize='1.2rem' textDecoration='underline'>
+            Độc lập - Tự do - Hạnh phúc
+          </Heading>
+        </Box>
+
+        <Box textAlign='center' py={4}>
+          <Heading fontSize='1.2rem'>Báo cáo tài chính</Heading>
+        </Box>
+        <Text fontSize='sm' mb={2}>
+          Tên dự án: {campaign.name}
+        </Text>
+        <Text fontSize='sm' mb={2}>
+          Chủ dự án: {campaign.author.name}
+        </Text>
+        <Text fontSize='sm' mb={2}>
+          SĐT: {campaign.author.phoneNumber}
+        </Text>
+        <Text fontSize='sm' mb={2}>
+          Địa chỉ: {addressString}
+        </Text>
+        <Text fontSize='sm' mb={2}>
+          Ngày tạo: {DateUtils.toDate(new Date(campaign.createdAt))}{' '}
+        </Text>
+        <div className='pb-4' />
+        <table>
+          <thead>
+            <tr>
+              <th>Ngày</th>
+              <th>Diễn giải</th>
+              <th>Thu</th>
+              <th>Chi</th>
+              <th>Tồn</th>
+            </tr>
+          </thead>
+          <tbody>
+            {donations?.map(
+              ({ createdAt, message, amount, action, lastBalance, _id }) => (
+                <tr key={_id} bg={action === 'expenditures' && 'lightgray'}>
+                  <td>{DateUtils.toDate(createdAt)}</td>
+                  <td>{message}</td>
+                  <td>{action === 'receipts' ? toVND(amount) : 0}</td>
+                  <td>{action === 'expenditures' ? toVND(amount) : 0}</td>
+                  <td>{toVND(lastBalance)}</td>
+                </tr>
+              )
+            )}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Tổng</th>
+              <th></th>
+              <th>
+                <b>
+                  {toVND(
+                    donations
+                      ?.filter(({ action }) => action === 'receipts')
+                      .reduce((sum, item) => sum + parseInt(item.amount), 0)
+                  )}
+                </b>
+              </th>
+              <th>
+                <b>
+                  {toVND(
+                    donations
+                      ?.filter(({ action }) => action === 'expenditures')
+                      .reduce((sum, item) => sum + parseInt(item.amount), 0)
+                  )}
+                </b>
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+        <Flex flexDir='column' align='flex-end' my={4}>
+          <Box mr={16}>
+            <Heading fontSize='1.2rem'>
+              Đà Nẵng, {DateUtils.toDate(new Date())}
+            </Heading>
+            <Heading my={2} fontSize='1rem' textAlign='center'>
+              Chủ tịch
+            </Heading>
+          </Box>
+          <Image src='/images/signature.png' alt='signature' w='60' />
+          <Text mr={20}>Nguyễn Minh Hiếu</Text>
+        </Flex>
+      </Box>
+      <style jsx>{`
+        table,
+        th,
+        td {
+          border: 1px solid black;
+          padding: 0.5rem;
+          text-align: center;
+        }
+        table {
+          width: 100%;
+        }
+      `}</style>
     </>
   );
 }

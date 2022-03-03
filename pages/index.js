@@ -4,7 +4,6 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  Avatar,
   Box,
   chakra,
   Flex,
@@ -16,6 +15,7 @@ import {
   Text,
   useColorModeValue
 } from '@chakra-ui/react';
+import 'aos/dist/aos.css';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -26,20 +26,18 @@ import { FaDonate } from 'react-icons/fa';
 import { FcConferenceCall, FcDonate, FcOnlineSupport } from 'react-icons/fc';
 import { FiExternalLink } from 'react-icons/fi';
 import { GiClick } from 'react-icons/gi';
+import { RiAuctionFill } from 'react-icons/ri';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import Button from 'src/components/common/Button';
+import TitleLines from 'src/components/common/TitleLines';
 import CardSkeleton from 'src/components/core/Card/CardSkeleton';
 import NewsCard from 'src/components/core/Card/NewsCard';
-import NewsItem from 'src/components/core/Card/NewsItem';
-import Loading from 'src/components/common/Spinner/Loading';
 import { color } from 'src/constants/color';
+import { partners } from 'src/constants/partner';
 import { qa } from 'src/constants/qa';
 import { CampaignService } from 'src/services/campaign';
 import { newsService } from 'src/services/news';
-import TitleLines from 'src/components/common/TitleLines';
-import { RiAuctionFill } from 'react-icons/ri';
-import { partners } from 'src/constants/partner';
 
 const SectionContainer = dynamic(() =>
   import('src/components/common/SectionContainer')
@@ -280,6 +278,8 @@ export default function Home({
           ]}
         >
           <Flex
+            data-aos='fade-up'
+            data-aos-delay='200'
             direction='column'
             className='border-2'
             bg={bg}
@@ -315,6 +315,8 @@ export default function Home({
             </Box>
           </Flex>
           <Flex
+            data-aos='fade-up'
+            data-aos-delay='300'
             direction='column'
             className='border-2'
             bg={bg}
@@ -350,6 +352,8 @@ export default function Home({
             </Box>
           </Flex>
           <Flex
+            data-aos='fade-up'
+            data-aos-delay='400'
             direction='column'
             className='border-2'
             bg={bg}
@@ -409,7 +413,12 @@ export default function Home({
           {isLoading &&
             Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
           {campaigns?.map((campaign, index) => (
-            <CampaignCard key={index} campaign={campaign} />
+            <CampaignCard
+              data-aos='zoom-in'
+              data-aos-delay={100 * index}
+              key={index}
+              campaign={campaign}
+            />
           ))}
         </Grid>
         <Flex justify='center'>

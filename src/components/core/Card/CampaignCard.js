@@ -21,7 +21,6 @@ export default function CampaignCard(props) {
   const {
     campaign: {
       slug,
-      _id,
       images,
       status,
       name,
@@ -29,13 +28,20 @@ export default function CampaignCard(props) {
       donated_amount,
       goal,
       finishedAt,
-      address
-    }
+      province,
+      district,
+      ward
+    },
+    ...rest
   } = props;
   const percent = ((donated_amount / goal) * 100).toFixed(2);
-
+  const provinceString = province.province_name;
+  const districtString = district && `, ${district.district_name}, `;
+  const wardString = ward && `${ward.ward_name}.`;
+  const addressString = `${provinceString}${districtString}${wardString}`;
   return (
     <Link
+      {...rest}
       href={`/hoat-dong/${slug}`}
       cursor={'pointer'}
       flexDir={'column'}
@@ -137,7 +143,7 @@ export default function CampaignCard(props) {
                 ml={2}
                 display='inline'
               >
-                {address}
+                {addressString}
               </Text>
             </Box>
           </Box>

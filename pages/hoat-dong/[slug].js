@@ -8,6 +8,7 @@ import {
   FormLabel,
   Heading,
   IconButton,
+  Image,
   Input,
   InputGroup,
   InputRightAddon,
@@ -152,7 +153,7 @@ export default function Detail({ campaign }) {
   useEffect(() => {
     if (hasCopied) {
       toast({
-        position: 'bottom-left',
+        position: 'top-right',
         title: 'Đã sao chép mã hoạt động',
         status: 'success',
         duration: 4000,
@@ -226,7 +227,7 @@ export default function Detail({ campaign }) {
           </Flex>
 
           <Text as={'p'} fontSize='sm'>
-            {DateUtils.toDate(createdAt)}
+            Được tạo vào: {DateUtils.toDate(createdAt)}
           </Text>
 
           <Box mt={2}>
@@ -495,23 +496,42 @@ export default function Detail({ campaign }) {
                 <Box
                   ref={ref}
                   position='fixed'
-                  zIndex={-1}
-                  width='100%'
-                  height='90%'
-                  top={0}
+                  width='50%'
+                  height='100%'
+                  bottom={'-100%'}
+                  backgroundColor='white'
                   left={0}
+                  py={12}
+                  px={4}
                 >
-                  <Heading my={12} color={color.PRIMARY} fontSize='1.2rem'>
-                    Quỹ ủng hộ
-                  </Heading>
-                  <style jsx>{`
-                    table,
-                    th,
-                    td {
-                      border: 1px solid black;
-                      padding: 0.5rem;
-                    }
-                  `}</style>
+                  <Box textAlign='center'>
+                    <Heading fontSize='1.2rem'>
+                      Cộng hòa xã hội chủ nghĩa Việt Nam
+                    </Heading>
+                    <Heading fontSize='1.2rem' textDecoration='underline'>
+                      Độc lập - Tự do - Hạnh phúc
+                    </Heading>
+                  </Box>
+
+                  <Box textAlign='center' py={8}>
+                    <Heading fontSize='1.2rem'>Bản sao kê</Heading>
+                  </Box>
+                  <Text fontSize='sm' mb={2}>
+                    Tên dự án: {name}
+                  </Text>
+                  <Text fontSize='sm' mb={2}>
+                    Chủ dự án: {author.name}
+                  </Text>
+                  <Text fontSize='sm' mb={2}>
+                    SĐT: {author.phoneNumber}
+                  </Text>
+                  <Text fontSize='sm' mb={2}>
+                    Địa chỉ: {addressString}
+                  </Text>
+                  <Text fontSize='sm' mb={2}>
+                    Ngày tạo: {DateUtils.toDate(new Date(createdAt))}{' '}
+                  </Text>
+                  <div className='pb-4' />
                   <table>
                     <thead>
                       <tr>
@@ -538,9 +558,9 @@ export default function Detail({ campaign }) {
                           >
                             <td>{DateUtils.toDate(createdAt)}</td>
                             <td>{message}</td>
-                            <td>{action === 'receipts' && toVND(amount)}</td>
+                            <td>{action === 'receipts' ? toVND(amount) : 0}</td>
                             <td>
-                              {action === 'expenditures' && toVND(amount)}
+                              {action === 'expenditures' ? toVND(amount) : 0}
                             </td>
                             <td>{toVND(lastBalance)}</td>
                           </tr>
@@ -580,7 +600,30 @@ export default function Detail({ campaign }) {
                       </tr>
                     </tfoot>
                   </table>
+                  <Flex flexDir='column' align='flex-end' my={4}>
+                    <Box mr={16}>
+                      <Heading fontSize='1.2rem'>
+                        Đà Nẵng, {DateUtils.toDate(new Date())}
+                      </Heading>
+                      <Heading my={2} fontSize='1rem' textAlign='center'>
+                        Chủ tịch
+                      </Heading>
+                    </Box>
+                    <Image src='/images/signature.png' alt='signature' w='60' />
+                    <Text mr={20}>Nguyễn Minh Hiếu</Text>
+                  </Flex>
                 </Box>
+                <style jsx>{`
+                  table,
+                  th,
+                  td {
+                    border: 1px solid black;
+                    padding: 0.5rem;
+                  }
+                  table {
+                    width: 100%;
+                  }
+                `}</style>
                 <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
                   <ModalContent py={4}>
