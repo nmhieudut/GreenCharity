@@ -535,6 +535,7 @@ export default function Detail({ campaign }) {
                   <table>
                     <thead>
                       <tr>
+                        <th>STT</th>
                         <th>Ngày</th>
                         <th>Diễn giải</th>
                         <th>Thu</th>
@@ -544,18 +545,22 @@ export default function Detail({ campaign }) {
                     </thead>
                     <tbody>
                       {disbursements?.map(
-                        ({
-                          createdAt,
-                          message,
-                          amount,
-                          action,
-                          lastBalance,
-                          _id
-                        }) => (
+                        (
+                          {
+                            createdAt,
+                            message,
+                            amount,
+                            action,
+                            lastBalance,
+                            _id
+                          },
+                          idx
+                        ) => (
                           <tr
                             key={_id}
                             bg={action === 'expenditures' && 'lightgray'}
                           >
+                            <td>{idx + 1}</td>
                             <td>{DateUtils.toDate(createdAt)}</td>
                             <td>{message}</td>
                             <td>{action === 'receipts' ? toVND(amount) : 0}</td>

@@ -1,8 +1,9 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { css, Global } from '@emotion/react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import 'flatpickr/dist/themes/material_green.css';
 import 'focus-visible/dist/focus-visible';
-import AOS from 'aos';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
@@ -63,7 +64,6 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     AOS.init({
       easing: 'ease-out-cubic',
-      once: true,
       offset: 50
     });
     const el = document.querySelector('.animate__item');

@@ -5,31 +5,50 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
   chakra,
   Flex,
+  FormControl,
+  FormLabel,
   Grid,
   Heading,
+  HStack,
+  IconButton,
   Image,
+  Input,
+  InputGroup,
+  InputLeftElement,
   SimpleGrid,
   Stack,
   Text,
-  useColorModeValue
+  Textarea,
+  useColorModeValue,
+  VStack,
+  Wrap,
+  WrapItem
 } from '@chakra-ui/react';
-import 'aos/dist/aos.css';
+import {
+  MdPhone,
+  MdEmail,
+  MdLocationOn,
+  MdFacebook,
+  MdOutlineEmail
+} from 'react-icons/md';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import CountUp from 'react-countup';
-import { AiOutlineTransaction } from 'react-icons/ai';
+import { AiFillDollarCircle, AiOutlineTransaction } from 'react-icons/ai';
+import { BiDonateHeart } from 'react-icons/bi';
 import { FaDonate } from 'react-icons/fa';
 import { FcConferenceCall, FcDonate, FcOnlineSupport } from 'react-icons/fc';
 import { FiExternalLink } from 'react-icons/fi';
 import { GiClick } from 'react-icons/gi';
+import { MdOutlineCampaign } from 'react-icons/md';
 import { RiAuctionFill } from 'react-icons/ri';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
-import Button from 'src/components/common/Button';
 import TitleLines from 'src/components/common/TitleLines';
 import CardSkeleton from 'src/components/core/Card/CardSkeleton';
 import NewsCard from 'src/components/core/Card/NewsCard';
@@ -38,6 +57,7 @@ import { partners } from 'src/constants/partner';
 import { qa } from 'src/constants/qa';
 import { CampaignService } from 'src/services/campaign';
 import { newsService } from 'src/services/news';
+import { BsGithub, BsDiscord, BsPerson } from 'react-icons/bs';
 
 const SectionContainer = dynamic(() =>
   import('src/components/common/SectionContainer')
@@ -171,34 +191,6 @@ export default function Home({
                   hàng triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả
                   nước.
                 </chakra.p>
-                <Flex
-                  justify='space-between'
-                  alignItems='center'
-                  mt={{ base: 3, sm: 5, md: 5 }}
-                >
-                  <Box>
-                    <Box color={color.PRIMARY} fontWeight={600}>
-                      <CountUp end={total_campaigns} duration={3} />
-                    </Box>
-                    <Text>Hoạt động</Text>
-                  </Box>
-                  <Box>
-                    <Box color={color.PRIMARY} fontWeight={600}>
-                      <CountUp separator=',' end={total_donors} duration={3} />
-                    </Box>
-                    <Text>Lượt quyên góp</Text>
-                  </Box>
-                  <Box>
-                    <Box color={color.PRIMARY} fontWeight={600}>
-                      <CountUp
-                        separator=','
-                        end={total_amount_donations}
-                        duration={3}
-                      />
-                    </Box>
-                    <Text>Đồng được quyên góp</Text>
-                  </Box>
-                </Flex>
                 <Stack
                   spacing={6}
                   mt={{ base: 5, sm: 8 }}
@@ -256,6 +248,58 @@ export default function Home({
             loading='lazy'
           />
         </SimpleGrid>
+      </SectionContainer>
+      <SectionContainer boxShadow='2xl'>
+        <Grid
+          templateColumns={[
+            'repeat(1, 1fr)',
+            'repeat(2, 1fr)',
+            'repeat(3, 1fr)'
+          ]}
+          gap={4}
+          w='full'
+          h='full'
+          px={4}
+          textAlign='center'
+        >
+          <Flex justify='center'>
+            <Box bg={'yellow.100'} rounded={'full'} p={2}>
+              <MdOutlineCampaign className='w-full h-full' color='purple' />
+            </Box>
+            <Flex direction='column' ml={4} align='flex-start'>
+              <Box color={color.PRIMARY} fontWeight={600} fontSize='3xl'>
+                <CountUp end={total_campaigns} duration={3} />
+              </Box>
+              <Text color='gray.400'>Hoạt động</Text>
+            </Flex>
+          </Flex>
+          <Flex justify='center'>
+            <Box bg={'red.100'} rounded={'full'} p={2}>
+              <BiDonateHeart className='w-full h-full' color='red' />
+            </Box>
+            <Flex direction='column' ml={4} align='flex-start'>
+              <Box color={color.PRIMARY} fontWeight={600} fontSize='3xl'>
+                <CountUp separator=',' end={total_donors} duration={3} />
+              </Box>
+              <Text color='gray.400'>Lượt quyên góp</Text>
+            </Flex>
+          </Flex>
+          <Flex justify='center'>
+            <Box bg={'green.100'} rounded={'full'} p={2}>
+              <AiFillDollarCircle className='w-full h-full' color='green' />
+            </Box>
+            <Flex direction='column' ml={4} align='flex-start'>
+              <Box color={color.PRIMARY} fontWeight={600} fontSize='3xl'>
+                <CountUp
+                  separator=','
+                  end={total_amount_donations}
+                  duration={3}
+                />
+              </Box>
+              <Text color='gray.400'>Đồng quyên góp</Text>
+            </Flex>
+          </Flex>
+        </Grid>
       </SectionContainer>
       <SectionContainer id='get-started' hasBg>
         <Heading
@@ -664,6 +708,146 @@ export default function Home({
             </Flex>
           ))}
         </Grid>
+      </SectionContainer>
+      <SectionContainer>
+        <Flex>
+          <Box
+            bg='#02054B'
+            color='white'
+            borderRadius='lg'
+            m={{ sm: 4, md: 16, lg: 10 }}
+            p={{ sm: 5, md: 5, lg: 16 }}
+          >
+            <Box p={4}>
+              <Wrap spacing={{ base: 20, sm: 3, md: 5, lg: 20 }}>
+                <WrapItem>
+                  <Box>
+                    <Heading>Contact</Heading>
+                    <Text mt={{ sm: 3, md: 3, lg: 5 }} color='gray.500'>
+                      Fill up the form below to contact
+                    </Text>
+                    <Box py={{ base: 5, sm: 5, md: 8, lg: 10 }}>
+                      <VStack pl={0} spacing={3} alignItems='flex-start'>
+                        <Button
+                          size='md'
+                          height='48px'
+                          width='200px'
+                          variant='ghost'
+                          color='#DCE2FF'
+                          _hover={{ border: '2px solid #1C6FEB' }}
+                          leftIcon={<MdPhone color='#1970F1' size='20px' />}
+                        >
+                          +91-988888888
+                        </Button>
+                        <Button
+                          size='md'
+                          height='48px'
+                          width='200px'
+                          variant='ghost'
+                          color='#DCE2FF'
+                          _hover={{ border: '2px solid #1C6FEB' }}
+                          leftIcon={<MdEmail color='#1970F1' size='20px' />}
+                        >
+                          hello@abc.com
+                        </Button>
+                        <Button
+                          size='md'
+                          height='48px'
+                          width='200px'
+                          variant='ghost'
+                          color='#DCE2FF'
+                          _hover={{ border: '2px solid #1C6FEB' }}
+                          leftIcon={
+                            <MdLocationOn color='#1970F1' size='20px' />
+                          }
+                        >
+                          Karnavati, India
+                        </Button>
+                      </VStack>
+                    </Box>
+                    <HStack
+                      mt={{ lg: 10, md: 10 }}
+                      spacing={5}
+                      px={5}
+                      alignItems='flex-start'
+                    >
+                      <IconButton
+                        aria-label='facebook'
+                        variant='ghost'
+                        size='lg'
+                        isRound={true}
+                        _hover={{ bg: '#0D74FF' }}
+                        icon={<MdFacebook size='28px' />}
+                      />
+                      <IconButton
+                        aria-label='github'
+                        variant='ghost'
+                        size='lg'
+                        isRound={true}
+                        _hover={{ bg: '#0D74FF' }}
+                        icon={<BsGithub size='28px' />}
+                      />
+                      <IconButton
+                        aria-label='discord'
+                        variant='ghost'
+                        size='lg'
+                        isRound={true}
+                        _hover={{ bg: '#0D74FF' }}
+                        icon={<BsDiscord size='28px' />}
+                      />
+                    </HStack>
+                  </Box>
+                </WrapItem>
+                <WrapItem>
+                  <Box bg='white' borderRadius='lg'>
+                    <Box m={8} color='#0B0E3F'>
+                      <VStack spacing={5}>
+                        <FormControl id='name'>
+                          <FormLabel>Your Name</FormLabel>
+                          <InputGroup borderColor='#E0E1E7'>
+                            <InputLeftElement pointerEvents='none'>
+                              <BsPerson color='gray.800' />{' '}
+                            </InputLeftElement>
+                            <Input type='text' size='md' />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl id='name'>
+                          <FormLabel>Mail</FormLabel>
+                          <InputGroup borderColor='#E0E1E7'>
+                            <InputLeftElement pointerEvents='none'>
+                              <MdOutlineEmail color='gray.800' />
+                            </InputLeftElement>
+                            <Input type='text' size='md' />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl id='name'>
+                          <FormLabel>Message</FormLabel>
+                          <Textarea
+                            borderColor='gray.300'
+                            _hover={{
+                              borderRadius: 'gray.300'
+                            }}
+                            placeholder='message'
+                          />
+                        </FormControl>
+                        <FormControl id='name' float='right'>
+                          <Button
+                            variant='solid'
+                            bg='#0D74FF'
+                            color='white'
+                            _hover={{}}
+                          >
+                            Send Message
+                          </Button>
+                        </FormControl>
+                      </VStack>
+                    </Box>
+                  </Box>
+                </WrapItem>
+              </Wrap>
+            </Box>
+          </Box>
+        </Flex>
       </SectionContainer>
     </>
   );
