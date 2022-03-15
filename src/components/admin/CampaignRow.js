@@ -70,9 +70,7 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
   const {
     _id,
     author,
-    content,
     name,
-    images,
     slug,
     donated_amount,
     goal,
@@ -126,7 +124,7 @@ function CampaignRow({ campaign, onRenewal, onActive, onEnd, onDelete }) {
             </MenuItem>
             {status !== 'pending' && (
               <CustomDrawer
-                size='sm'
+                size='lg'
                 showModalButtonText={
                   <MenuItem icon={<FaFileExport />}>Xuất sao kê</MenuItem>
                 }
@@ -453,7 +451,6 @@ function ER({ campaign }) {
         bottom={'-100%'}
         backgroundColor='white'
         left={0}
-        border='1px solid black'
         py={12}
         px={4}
       >

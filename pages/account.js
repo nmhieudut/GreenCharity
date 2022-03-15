@@ -48,10 +48,9 @@ function AccountPage(props) {
   const bg = useColorModeValue('white', 'gray.700');
   const [info, setInfo] = useState({
     name: user.name,
-    phoneNumber: user.phoneNumber,
-    dateOfBirth: user.dateOfBirth
+    phoneNumber: user.phoneNumber
   });
-  const { name, phoneNumber, dateOfBirth } = info;
+  const { name, phoneNumber } = info;
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
 
@@ -248,39 +247,6 @@ function AccountPage(props) {
                       onChange={e =>
                         handleChange('phoneNumber', e.target.value)
                       }
-                    />
-                  </InputGroup>
-                </FormControl>
-                <div className='my-8'></div>
-                <FormControl
-                  className='flex flex-col md:flex-row md:items-center md:justify-between'
-                  isRequired
-                >
-                  <FormLabel className='w-1/2 px-4 text-right text-sm'>
-                    Sinh nhật
-                  </FormLabel>
-                  <InputGroup className='max-w-xl'>
-                    <InputLeftElement pointerEvents='none'>
-                      <FcCalendar />
-                    </InputLeftElement>
-                    <Flatpickr
-                      options={{ dateFormat: 'Y/m/d' }}
-                      value={dateOfBirth}
-                      onChange={([date]) =>
-                        handleChange('dateOfBirth', format(date, 'yyyy/MM/dd'))
-                      }
-                      render={({ value, ...props }, ref) => {
-                        return (
-                          <Input
-                            isDisabled={loading}
-                            placeholder='Chọn ngày'
-                            focusBorderColor={color.PRIMARY}
-                            pl={10}
-                            value={value}
-                            ref={ref}
-                          />
-                        );
-                      }}
                     />
                   </InputGroup>
                 </FormControl>

@@ -60,11 +60,19 @@ export default function Auth() {
     const checkUserStage = async () => {
       try {
         firebase.auth().onAuthStateChanged(userCred => {
-          userCred?.getIdToken().then(async token => {
-            setIdToken(token);
-            const res = await AuthService.loginWithGoogle(token);
-            storage.setToken(res.token);
-            dispatch(AuthActions.setCurrentUserSuccessAction(res.user));
+          return new Promise((resolve, reject) => {
+            userCred
+              ?.getIdToken()
+              .then(async token => {
+                setIdToken(token);
+                const res = await AuthService.loginWithGoogle(token);
+                storage.setToken(res.token);
+                dispatch(AuthActions.setCurrentUserSuccessAction(res.user));
+                resolve();
+              })
+              .catch(e => {
+                reject(e);
+              });
           });
         });
       } catch (e) {

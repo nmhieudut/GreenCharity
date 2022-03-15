@@ -514,7 +514,7 @@ export default function Detail({ campaign }) {
                   </Box>
 
                   <Box textAlign='center' py={8}>
-                    <Heading fontSize='1.2rem'>Bản sao kê</Heading>
+                    <Heading fontSize='1.2rem'>Báo cáo tài chính</Heading>
                   </Box>
                   <Text fontSize='sm' mb={2}>
                     Tên dự án: {name}
@@ -575,6 +575,7 @@ export default function Detail({ campaign }) {
                     <tfoot>
                       <tr>
                         <th>Tổng</th>
+                        <th></th>
                         <th></th>
                         <th>
                           <b>
