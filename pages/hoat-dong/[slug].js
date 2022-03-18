@@ -109,7 +109,8 @@ export default function Detail({ campaign }) {
     ward,
     createdAt
   } = campaign;
-  const { data, isLoading } = useQuery(['disbursements'], () =>
+  const [refetch, setRefetch] = useState(0);
+  const { data, isLoading } = useQuery(['disbursements', refetch], () =>
     CampaignService.fetchRE(campaign._id)
   );
   const { disbursements } = data || [];
@@ -188,6 +189,11 @@ export default function Detail({ campaign }) {
         status: 'success',
         isClosable: true
       });
+      setDonatedInfo({
+        wished_amount: 0,
+        message: ''
+      });
+      setRefetch(r => r + 1);
       router.replace(router.asPath);
     } catch (e) {
       toast({
@@ -221,7 +227,7 @@ export default function Detail({ campaign }) {
                 leftIcon={<RiEditLine />}
                 onClick={() => setCanEdit(true)}
               >
-                Chỉnh sửa hoạt động
+                Chỉnh sửa
               </Button>
             )}
           </Flex>
@@ -497,8 +503,8 @@ export default function Detail({ campaign }) {
                   ref={ref}
                   position='fixed'
                   width='50%'
-                  height='100%'
-                  bottom={'-100%'}
+                  height='min-content'
+                  top={'100%'}
                   backgroundColor='white'
                   left={0}
                   py={12}
@@ -517,6 +523,9 @@ export default function Detail({ campaign }) {
                     <Heading fontSize='1.2rem'>Báo cáo tài chính</Heading>
                   </Box>
                   <Text fontSize='sm' mb={2}>
+                    Ngày thực hiện: {DateUtils.toDate(new Date())}
+                  </Text>
+                  <Text fontSize='sm' mb={2}>
                     Tên dự án: {name}
                   </Text>
                   <Text fontSize='sm' mb={2}>
@@ -529,7 +538,7 @@ export default function Detail({ campaign }) {
                     Địa chỉ: {addressString}
                   </Text>
                   <Text fontSize='sm' mb={2}>
-                    Ngày tạo: {DateUtils.toDate(new Date(createdAt))}{' '}
+                    Ngày vận động: {DateUtils.toDate(new Date(createdAt))}{' '}
                   </Text>
                   <div className='pb-4' />
                   <table>
@@ -537,7 +546,7 @@ export default function Detail({ campaign }) {
                       <tr>
                         <th>STT</th>
                         <th>Ngày</th>
-                        <th>Diễn giải</th>
+                        <th>Nội dung</th>
                         <th>Thu</th>
                         <th>Chi</th>
                         <th>Tồn</th>
@@ -781,7 +790,6 @@ function Donator({ campaignId }) {
 
   return (
     <Box>
-      {/* skeleton card loading */}
       {isLoading ? (
         <Box padding='4' rounded={'xl'} bg='gray.50' my={4}>
           <SkeletonCircle size='10' />

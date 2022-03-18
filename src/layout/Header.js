@@ -69,7 +69,6 @@ export default function Header() {
   const onLogout = async () => {
     try {
       await AuthService.logout();
-      window.open('/auth', '_self');
       storage.removeToken();
       dispatch(AuthActions.setCurrentUserSuccessAction(null));
       await firebase
@@ -81,7 +80,10 @@ export default function Header() {
         .catch(error => {
           // An error happened.
         });
-    } catch (e) {}
+      window.open('/auth', '_self');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onCreateCampaign = () => {

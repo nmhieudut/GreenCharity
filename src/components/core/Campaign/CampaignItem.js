@@ -51,7 +51,7 @@ export default function CampaignItem({
       <div className='grid grid-cols-1 sm:grid-cols-12 my-4 border-2 p-1'>
         <div className='col-span-0 sm:col-span-3 flex items-center justify-center'>
           <Image
-            className='w-full object-cover object-center h-full'
+            className='w-full object-cover object-center h-56'
             src={images[0]}
             alt={name}
             layout='fill'

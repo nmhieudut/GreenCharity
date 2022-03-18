@@ -63,12 +63,14 @@ export default function Auth() {
           return new Promise((resolve, reject) => {
             userCred
               ?.getIdToken()
-              .then(async token => {
-                setIdToken(token);
-                const res = await AuthService.loginWithGoogle(token);
-                storage.setToken(res.token);
-                dispatch(AuthActions.setCurrentUserSuccessAction(res.user));
-                resolve();
+              .then(async to => {
+                setIdToken(to);
+                if (to) {
+                  const res = await AuthService.loginWithGoogle(to);
+                  storage.setToken(res.token);
+                  dispatch(AuthActions.setCurrentUserSuccessAction(res.user));
+                  resolve();
+                }
               })
               .catch(e => {
                 reject(e);
@@ -148,7 +150,12 @@ export default function Auth() {
   };
 
   const loginWithGoogle = () => {
-    firebaseService.socialMediaAuth(googleProvider).then(userCred => {});
+    firebaseService
+      .socialMediaAuth(googleProvider)
+      .then(userCred => {})
+      .catch(e => {
+        console.log(e);
+      });
   };
 
   if (typeof window !== 'undefined' && user) {

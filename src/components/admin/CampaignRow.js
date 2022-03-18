@@ -447,7 +447,7 @@ function ER({ campaign }) {
         position='absolute'
         zIndex={100}
         width='100%'
-        height='100%'
+        height='min-content'
         bottom={'-100%'}
         backgroundColor='white'
         left={0}
@@ -467,26 +467,29 @@ function ER({ campaign }) {
           <Heading fontSize='1.2rem'>Báo cáo tài chính</Heading>
         </Box>
         <Text fontSize='sm' mb={2}>
-          Tên dự án: {campaign.name}
+          Ngày thực hiện: {DateUtils.toDate(new Date())}
         </Text>
         <Text fontSize='sm' mb={2}>
-          Chủ dự án: {campaign.author.name}
+          Tên dự án: {name}
         </Text>
         <Text fontSize='sm' mb={2}>
-          SĐT: {campaign.author.phoneNumber}
+          Chủ dự án: {author.name}
+        </Text>
+        <Text fontSize='sm' mb={2}>
+          SĐT: {author.phoneNumber}
         </Text>
         <Text fontSize='sm' mb={2}>
           Địa chỉ: {addressString}
         </Text>
         <Text fontSize='sm' mb={2}>
-          Ngày tạo: {DateUtils.toDate(new Date(campaign.createdAt))}{' '}
+          Ngày vận động: {DateUtils.toDate(new Date(createdAt))}{' '}
         </Text>
         <div className='pb-4' />
         <table>
           <thead>
             <tr>
               <th>Ngày</th>
-              <th>Diễn giải</th>
+              <th>Nội dung</th>
               <th>Thu</th>
               <th>Chi</th>
               <th>Tồn</th>
