@@ -621,7 +621,7 @@ export default function Detail({ campaign }) {
                         Đà Nẵng, {DateUtils.toDate(new Date())}
                       </Heading>
                       <Heading my={2} fontSize='1rem' textAlign='center'>
-                        Chủ tịch
+                        Giám đốc
                       </Heading>
                     </Box>
                     <Image src='/images/signature.png' alt='signature' w='60' />

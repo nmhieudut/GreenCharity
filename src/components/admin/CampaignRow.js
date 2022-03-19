@@ -394,7 +394,7 @@ function ER({ campaign }) {
     AdminService.getDonationsByCampaign(campaign._id, dateRange)
   );
   const { donations } = data || [];
-
+  const { name, author, createdAt } = campaign || {};
   const handleChange = e => {
     setDateRange(e.target.value);
   };
@@ -539,7 +539,7 @@ function ER({ campaign }) {
               Đà Nẵng, {DateUtils.toDate(new Date())}
             </Heading>
             <Heading my={2} fontSize='1rem' textAlign='center'>
-              Chủ tịch
+              Giám đốc
             </Heading>
           </Box>
           <Image src='/images/signature.png' alt='signature' w='60' />
