@@ -448,7 +448,7 @@ function ER({ campaign }) {
         zIndex={100}
         width='100%'
         height='min-content'
-        bottom={'-100%'}
+        top={'100%'}
         backgroundColor='white'
         left={0}
         py={12}
